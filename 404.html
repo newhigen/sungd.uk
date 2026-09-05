@@ -71,26 +71,6 @@
   }
   .intro a:hover { border-bottom-color: var(--text-tertiary); }
 
-  .jump {
-    display: none;
-    padding: 0.875rem 1rem;
-    border: 1px solid var(--border);
-    border-radius: 9px;
-    margin-bottom: 2.5rem;
-  }
-  .jump.on { display: block; }
-  .jump p {
-    font-size: 0.8125rem;
-    color: var(--text-tertiary);
-    margin: 0 0 0.25rem;
-  }
-  .jump a {
-    color: var(--text-primary);
-    text-decoration: none;
-    word-break: break-all;
-  }
-  .jump a:hover { text-decoration: underline; }
-
   .label {
     font-size: 0.8125rem;
     color: var(--text-tertiary);
@@ -138,6 +118,14 @@
   gtag('config', 'G-NM2EX11WS1');
   gtag('config', 'G-5LN80GCB37');
 </script>
+<script>
+  // 옛 글 주소는 writing.sungd.uk 의 같은 주소로 바로 넘긴다
+  (function () {
+    var path = location.pathname;
+    if (path === '/' || path === '' || path === '/404.html') return;
+    location.replace('https://writing.sungd.uk' + path + location.search + location.hash);
+  })();
+</script>
 </head>
 <body>
 <main>
@@ -147,11 +135,6 @@
     이 주소에 있던 글은 <a href="https://writing.sungd.uk">writing.sungd.uk</a> 로 옮겼습니다.
     예전 링크나 북마크로 오셨다면 그쪽에 그대로 있습니다.
   </p>
-
-  <div class="jump" id="jump">
-    <p>같은 주소를 writing 에서 열기</p>
-    <a id="jump-link" href="https://writing.sungd.uk">writing.sungd.uk</a>
-  </div>
 
   <p class="label">다른 곳</p>
   <ul>
@@ -176,17 +159,5 @@
   </ul>
 </main>
 
-<script>
-  (function () {
-    var path = location.pathname;
-    if (path === '/' || path === '' || path === '/404.html') return;
-    var box = document.getElementById('jump');
-    var link = document.getElementById('jump-link');
-    if (!box || !link) return;
-    link.href = 'https://writing.sungd.uk' + path;
-    link.textContent = 'writing.sungd.uk' + path;
-    box.classList.add('on');
-  })();
-</script>
 </body>
 </html>
