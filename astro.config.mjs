@@ -12,6 +12,7 @@ export default defineConfig({
   site: 'https://sungd.uk',
   redirects: {
     '/resume': '/cv',
+    '/en': '/cv/en',
   },
   vite: {
     plugins: [tailwindcss()],
@@ -19,7 +20,13 @@ export default defineConfig({
       allowedHosts: ['localhost', '127.0.0.1', '.ts.net'],
     },
   },
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    sitemap({
+      // public/ 아래 정적 페이지라 Astro 라우트로 안 잡힌다
+      customPages: ['https://sungd.uk/cv/', 'https://sungd.uk/cv/en/'],
+    }),
+  ],
   markdown: {
     remarkPlugins: [remarkBlogHide],
     rehypePlugins: [rehypeMermaid],
