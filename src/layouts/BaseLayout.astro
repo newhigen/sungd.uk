@@ -16,11 +16,14 @@ const { title, description = '조성덕 — 소개와 만든 것들' } = Astro.p
 <!DOCTYPE html>
 <html lang="ko">
   <head>
-    <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon-dark.png?v=4" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/png" href="/favicon-light.png?v=4" media="(prefers-color-scheme: light)" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=4" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=4" />
     <title>{title}</title>
 
     <ClientRouter />
