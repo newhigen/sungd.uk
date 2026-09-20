@@ -1,0 +1,125 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '../styles/global.css';
+import '../styles/post.css';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = '조성덕 — 소개와 만든 것들' } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+
+    <ClientRouter />
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG9YP9KQ4X"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // 내 기기 표시: 어느 사이트든 ?me=1 로 한 번 열면 .sungd.uk 쿠키가 심긴다 (?me=0 으로 해제)
+      (function(){
+        try {
+          var m = new URLSearchParams(location.search).get('me')
+          if (m === '1') document.cookie = 'sd_owner=1; domain=.sungd.uk; path=/; max-age=63072000; samesite=lax; secure'
+          if (m === '0') document.cookie = 'sd_owner=; domain=.sungd.uk; path=/; max-age=0; samesite=lax; secure'
+        } catch (e) {}
+        window.__sdOwner = /(?:^|;\s*)sd_owner=1(?:;|$)/.test(document.cookie)
+      })();
+      gtag('set', 'user_properties', { visitor_type: window.__sdOwner ? 'owner' : 'visitor' });
+
+      gtag('config', 'G-ZG9YP9KQ4X');
+      gtag('config', 'GT-KT4BFVVJ');
+      // 첫 로드는 위 config 가 이미 센다 — 새 태그는 중복을 안 걸러서 두 번 잡힌다
+      var firstLoad = true;
+      document.addEventListener('astro:page-load', () => {
+        if (firstLoad) { firstLoad = false; return; }
+        gtag('config', 'G-ZG9YP9KQ4X', { page_path: window.location.pathname });
+        gtag('config', 'GT-KT4BFVVJ', { page_path: window.location.pathname });
+      });
+    </script>
+
+    <script is:inline>
+      function applyTheme() {
+        const theme = localStorage.getItem('theme') ||
+          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+      }
+      applyTheme();
+      document.addEventListener('astro:after-swap', applyTheme);
+
+      function updateThemeIcons() {
+        const btn = document.getElementById('theme-toggle');
+        if (!btn) return;
+        const isDark = document.documentElement.classList.contains('dark');
+        const sun = btn.querySelector('.sun-icon');
+        const moon = btn.querySelector('.moon-icon');
+        if (sun) sun.style.display = isDark ? 'none' : 'block';
+        if (moon) moon.style.display = isDark ? 'block' : 'none';
+      }
+      document.addEventListener('astro:page-load', updateThemeIcons);
+
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('#theme-toggle')) {
+          const nowDark = document.documentElement.classList.toggle('dark');
+          localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+          updateThemeIcons();
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <Header />
+
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Mermaid Rendering -->
+    <script>
+      import mermaid from 'mermaid';
+      
+      const renderMermaid = async () => {
+        const diagrams = document.querySelectorAll('pre[data-language="mermaid"]');
+        if (diagrams.length === 0) return;
+        
+        mermaid.initialize({ 
+          startOnLoad: false,
+          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'default',
+          securityLevel: 'loose'
+        });
+        
+        for (const diagram of diagrams) {
+          const code = diagram.querySelector('code')?.textContent || '';
+          if (!code) continue;
+          
+          const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+          const { svg } = await mermaid.render(id, code);
+          
+          const wrapper = document.createElement('div');
+          wrapper.className = 'mermaid-diagram flex justify-center py-4 bg-white dark:bg-slate-900 rounded-lg my-4 border border-slate-200 dark:border-slate-800';
+          wrapper.innerHTML = svg;
+          diagram.parentNode.replaceChild(wrapper, diagram);
+        }
+      };
+      
+      document.addEventListener('astro:page-load', renderMermaid);
+      document.addEventListener('astro:after-swap', renderMermaid);
+    </script>
+</body>
+</html>

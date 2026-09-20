@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>건강검진 분석 대시보드</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+/* ─── Design Tokens ─── */
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 36px;
+  --space-3xl: 56px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --bg-page: #f4f6f8;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f4f6f8;
+  --bg-elevated: #ffffff;
+  --bg-border: #e5e8eb;
+  --bg-border-sub: #eef0f3;
+  --text-primary: #191f28;
+  --text-body: #4e5968;
+  --text-secondary: #8b95a1;
+  --text-muted: #b0b8c1;
+  --good: #15b881;
+  --good-dim: #e7f8f0;
+  --good-mid: #15803d;
+  --warn: #f59e0b;
+  --warn-dim: #fef3c7;
+  --warn-mid: #b45309;
+  --bad: #ef4651;
+  --bad-dim: #fdecec;
+  --bad-mid: #c0392b;
+  --info: #3182f6;
+  --info-dim: #e8f1fd;
+  --info-mid: #1b64da;
+  --crit: #f04452;
+  --crit-glow: #f0445226;
+  --ct253048: #e2e6ee;
+  --ct1a4a30: #ecf8f1;
+  --ct4a2a00: #f5e3c0;
+  --ct5a1818: #f2c6c6;
+  --ct111820: #fafbfc;
+  --ct1a0808: #ffffff;
+  --ct200f0f: #fbfcfd;
+  --ct4a1a1a: #e5e8eb;
+  --ct5a1a1a: #f2c9c9;
+  --ctff6b6b40: #ff0a0a40;
+  --cta05050: #c25a58;
+  --ct16a34a: #15803d;
+  --ctd97706: #b45309;
+  --ctdc2626: #c81e1e;
+  --ct2563eb: #1b50c8;
+  --ct130606: #fdecec;
+  --ct3a1010: #f8dbdb;
+  --ctfca5a5: #f08a8a;
+  --ct120e00: #fef9e7;
+  --ct3a2000: #fbe7c9;
+  --ctfcd34d: #f0b429;
+  --ct040f08: #edf7f1;
+  --ct0e3018: #e7f7ec;
+  --ct6ee7b7: #34d399;
+  --ct060e1a: #eef2f8;
+  --ct0e2040: #e8f1fd;
+  --ct93c5fd: #60a5fa;
+  --ct60a5fa22: #1178f722;
+  --ct60a5fa40: #1178f740;
+  --ct2a3a54: #dfe4ec;
+  --ct101825: #fafbfc;
+  --ctef4444: #dc2626;
+  --ctf97316: #ea6a0a;
+  --ct3b82f6: #2563eb;
+  --ct22c55e: #16a34a;
+  --cta855f7: #9333ea;
+  --cteab308: #ca9a04;
+  --ct2a0808: #fbe3e3;
+  --ct251500: #fcf3da;
+  --ct081525: #eef2f8;
+  --ct0e2a48: #e8f1fd;
+  --ct041408: #edf7f1;
+  --ct0a3020: #e7f7ec;
+  --ct1e2d45: #e6eaf0;
+  --ct0c1526: #f0f3f8;
+  --ct101c30: #f6f9fc;
+  --ct0e1928: #ffffff;
+  --ct2a4a7a: #d6e3f7;
+  --ctfef3c7: #fdf4d3;
+  --ct92400e: #b45309;
+  --ctfde68a: #fcd34d;
+  --ctc06060: #cf6a68;
+  --ctf59e0b: #e08600;
+  --ctf0f4ff: #191f28;
+  --ct10b981: #059c6e;
+}
+[data-theme="dark"] {
+  --bg-page: #080b11;
+  --bg-card: #0f1520;
+  --bg-card-hover: #131b28;
+  --bg-elevated: #172030;
+  --bg-border: #1e2a3d;
+  --bg-border-sub: #162030;
+  --text-primary: #eef2ff;
+  --text-body: #c8d3e8;
+  --text-secondary: #7e8fa8;
+  --text-muted: #4a5668;
+  --good: #34d399;
+  --good-dim: #0b2b20;
+  --good-mid: #166534;
+  --warn: #fbbf24;
+  --warn-dim: #2a1a00;
+  --warn-mid: #78350f;
+  --bad: #f87171;
+  --bad-dim: #2a0a0a;
+  --bad-mid: #7f1d1d;
+  --info: #60a5fa;
+  --info-dim: #0a1e3a;
+  --info-mid: #1e3a5f;
+  --crit: #ff6b6b;
+  --crit-glow: #ff6b6b30;
+  --ct253048: #253048;
+  --ct1a4a30: #1a4a30;
+  --ct4a2a00: #4a2a00;
+  --ct5a1818: #5a1818;
+  --ct111820: #111820;
+  --ct1a0808: #1a0808;
+  --ct200f0f: #200f0f;
+  --ct4a1a1a: #4a1a1a;
+  --ct5a1a1a: #5a1a1a;
+  --ctff6b6b40: #ff6b6b40;
+  --cta05050: #a05050;
+  --ct16a34a: #16a34a;
+  --ctd97706: #d97706;
+  --ctdc2626: #dc2626;
+  --ct2563eb: #2563eb;
+  --ct130606: #130606;
+  --ct3a1010: #3a1010;
+  --ctfca5a5: #fca5a5;
+  --ct120e00: #120e00;
+  --ct3a2000: #3a2000;
+  --ctfcd34d: #fcd34d;
+  --ct040f08: #040f08;
+  --ct0e3018: #0e3018;
+  --ct6ee7b7: #6ee7b7;
+  --ct060e1a: #060e1a;
+  --ct0e2040: #0e2040;
+  --ct93c5fd: #93c5fd;
+  --ct60a5fa22: #60a5fa22;
+  --ct60a5fa40: #60a5fa40;
+  --ct2a3a54: #2a3a54;
+  --ct101825: #101825;
+  --ctef4444: #ef4444;
+  --ctf97316: #f97316;
+  --ct3b82f6: #3b82f6;
+  --ct22c55e: #22c55e;
+  --cta855f7: #a855f7;
+  --cteab308: #eab308;
+  --ct2a0808: #2a0808;
+  --ct251500: #251500;
+  --ct081525: #081525;
+  --ct0e2a48: #0e2a48;
+  --ct041408: #041408;
+  --ct0a3020: #0a3020;
+  --ct1e2d45: #1e2d45;
+  --ct0c1526: #0c1526;
+  --ct101c30: #101c30;
+  --ct0e1928: #0e1928;
+  --ct2a4a7a: #2a4a7a;
+  --ctfef3c7: #fef3c7;
+  --ct92400e: #92400e;
+  --ctfde68a: #fde68a;
+  --ctc06060: #c06060;
+  --ctf59e0b: #f59e0b;
+  --ctf0f4ff: #f0f4ff;
+  --ct10b981: #10b981;
+}
+
+
+/* ─── Base ─── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: var(--space-xl) 20px; }
+
+/* ─── Header ─── */
+.header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-2xl) 0 var(--space-xl);
+  position: relative;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--info), transparent);
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+}
+.header .sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+}
+
+/* ─── Grid ─── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media(max-width:900px){ .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; } }
+@media(max-width:600px){ .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; } }
+
+/* ─── Card ─── */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  border: 1px solid var(--bg-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.05);
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+[data-theme="dark"] .card { box-shadow: none; }
+.card:hover { background: var(--bg-card-hover); border-color: var(--ct253048); }
+.card-sm {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--bg-border);
+}
+.card-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+/* ─── Section ─── */
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: var(--space-3xl) 0 var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 14px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, var(--info), var(--info-dim));
+  flex-shrink: 0;
+}
+
+/* ─── Pill ─── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  line-height: 1.4;
+}
+.pill-ok   { background: var(--good-dim); color: var(--good); border: 1px solid var(--ct1a4a30); }
+.pill-warn { background: var(--warn-dim); color: var(--warn); border: 1px solid var(--ct4a2a00); }
+.pill-bad  { background: var(--bad-dim);  color: var(--bad);  border: 1px solid var(--ct5a1818); }
+.pill-gray { background: var(--ct111820); color: var(--text-muted); border: 1px solid var(--bg-border); }
+
+/* ─── Metric ─── */
+.metric-big { font-size: 34px; font-weight: 700; color: var(--text-primary); line-height: 1.05; letter-spacing: -0.03em; }
+.metric-unit { font-size: 13px; color: var(--text-muted); margin-left: 3px; font-weight: 500; }
+.metric-change { font-size: 12px; margin-top: 6px; font-weight: 600; letter-spacing: -0.01em; }
+.down-good, .up-good { color: var(--good); }
+.down-bad, .up-bad   { color: var(--bad); }
+.metric-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* ─── Critical metric card (opt-in via .card-crit) ─── */
+.card-crit {
+  background: linear-gradient(135deg, var(--ct1a0808) 0%, var(--ct200f0f) 100%);
+  border: 1px solid var(--ct4a1a1a);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 24px var(--crit-glow), inset 0 1px 0 var(--ct5a1a1a);
+  transition: box-shadow .3s;
+}
+.card-crit:hover { box-shadow: 0 0 36px var(--ctff6b6b40), inset 0 1px 0 var(--ct5a1a1a); }
+.card-crit::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--crit), transparent);
+}
+.card-crit .metric-big { color: var(--crit); }
+.card-crit .card-title { color: var(--cta05050); }
+
+/* ─── Progress ─── */
+.prog-row { margin-bottom: 18px; }
+.prog-head { display: flex; justify-content: space-between; margin-bottom: 7px; }
+.prog-name { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.prog-val  { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+.prog-bg   { background: var(--bg-border); border-radius: 4px; height: 6px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 4px; transition: width .6s ease; }
+.bar-g { background: linear-gradient(90deg, var(--ct16a34a), var(--good)); }
+.bar-y { background: linear-gradient(90deg, var(--ctd97706), var(--warn)); }
+.bar-r { background: linear-gradient(90deg, var(--ctdc2626), var(--bad)); }
+.bar-b { background: linear-gradient(90deg, var(--ct2563eb), var(--info)); }
+.prog-note { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+/* ─── Alert ─── */
+.alert {
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.alert-r { background: var(--ct130606); border: 1px solid var(--ct3a1010); color: var(--ctfca5a5); }
+.alert-y { background: var(--ct120e00); border: 1px solid var(--ct3a2000); color: var(--ctfcd34d); }
+.alert-g { background: var(--ct040f08); border: 1px solid var(--ct0e3018); color: var(--ct6ee7b7); }
+.alert-b { background: var(--ct060e1a); border: 1px solid var(--ct0e2040); color: var(--ct93c5fd); }
+.alert-t { font-weight: 700; margin-bottom: 5px; font-size: 13px; }
+
+/* ─── Timeline ─── */
+.timeline { position: relative; padding-left: 32px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--good) 0%, var(--info) 30%, var(--warn) 60%, var(--bg-border) 100%);
+  opacity: 0.5;
+}
+.tl-item { position: relative; margin-bottom: 24px; }
+.tl-dot {
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--bg-page);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tl-done   { border-color: var(--good); background: var(--good) !important; }
+.tl-now    { border-color: var(--info); box-shadow: 0 0 0 4px var(--ct60a5fa22), 0 0 12px var(--ct60a5fa40); }
+.tl-next   { border-color: var(--warn); }
+.tl-future { border-color: var(--ct2a3a54); }
+.tl-date  { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; letter-spacing: .03em; }
+.tl-title { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.4; }
+.tl-body  { font-size: 13px; color: var(--text-secondary); margin-top: 4px; line-height: 1.55; }
+.tl-tag   { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 10px; margin-top: 8px; font-weight: 600; }
+
+/* ─── Table ─── */
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--bg-border);
+  text-align: left;
+}
+td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--bg-border-sub);
+  color: var(--text-body);
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--ct101825); }
+.td-ok   { color: var(--good); font-weight: 600; }
+.td-warn { color: var(--warn); font-weight: 600; }
+.td-bad  { color: var(--bad); font-weight: 600; }
+.td-gray { color: var(--text-muted); }
+
+/* ─── Action card ─── */
+.ac {
+  border-left: 2px solid;
+  padding: 14px 16px;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: var(--bg-card);
+  margin-bottom: 10px;
+  border-top: 1px solid var(--bg-border);
+  border-right: 1px solid var(--bg-border);
+  border-bottom: 1px solid var(--bg-border);
+}
+.ac.r { border-left-color: var(--ctef4444); }
+.ac.o { border-left-color: var(--ctf97316); }
+.ac.b { border-left-color: var(--ct3b82f6); }
+.ac.g { border-left-color: var(--ct22c55e); }
+.ac.p { border-left-color: var(--cta855f7); }
+.ac.y { border-left-color: var(--cteab308); }
+.ac-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.ac-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.ac-phase {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.phase-1    { background: var(--ct2a0808); color: var(--bad); border: 1px solid var(--ct5a1a1a); }
+.phase-2    { background: var(--ct251500); color: var(--warn); border: 1px solid var(--ct4a2a00); }
+.phase-3    { background: var(--ct081525); color: var(--info); border: 1px solid var(--ct0e2a48); }
+.phase-done { background: var(--ct041408); color: var(--good); border: 1px solid var(--ct0a3020); }
+.ac-body { font-size: 13px; color: var(--text-secondary); margin-top: 6px; line-height: 1.65; }
+.ac-why  { font-size: 12px; color: var(--good); margin-top: 6px; }
+.ac-note { font-size: 12px; color: var(--bad); margin-top: 4px; }
+
+/* ─── Checklist ─── */
+.cl { list-style: none; }
+.cl li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--bg-border-sub);
+  font-size: 14px;
+}
+.cl li:last-child { border-bottom: none; }
+.ci {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  margin-top: 1px;
+}
+.ci-g { background: var(--good-dim); color: var(--good); border: 1px solid var(--good-mid); }
+.ci-r { background: var(--bad-dim); color: var(--bad); border: 1px solid var(--bad-mid); }
+.ci-y { background: var(--warn-dim); color: var(--warn); border: 1px solid var(--warn-mid); }
+.ct  { flex: 1; color: var(--text-body); }
+.cr  { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+/* ─── Resolve ─── */
+.resolve-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--bg-border-sub); }
+.resolve-item:last-child { border-bottom: none; }
+.resolve-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.resolve-body h4 { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+.resolve-body p  { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+/* ─── Supplement ─── */
+.supp-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.supp { border-radius: 20px; padding: 5px 14px; font-size: 13px; font-weight: 500; }
+.supp-on  { background: var(--good-dim); color: var(--good); border: 1px solid var(--good-mid); }
+.supp-off { background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--bg-border); }
+
+/* ─── Phase legend ─── */
+.phase-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+.pl-item { display: flex; align-items: center; gap: 6px; }
+.pl-dot  { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ─── Divider ─── */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bg-border), transparent);
+  margin: var(--space-2xl) 0;
+}
+
+/* ─── Utility ─── */
+.note { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.6; }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+
+/* ─── Summary Hero ─── */
+.hero-card {
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  margin-bottom: 20px;
+  border: 1px solid var(--ct1e2d45);
+  background: linear-gradient(135deg, var(--ct0c1526) 0%, var(--ct101c30) 50%, var(--ct0e1928) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ct2a4a7a), transparent);
+}
+.hero-inner {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hero-text { flex: 1; min-width: 240px; }
+.hero-headline {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.hero-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.hero-stats { display: flex; gap: 6px; flex-wrap: wrap; }
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 76px;
+  padding: 14px 12px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.hero-stat-num {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+.hero-stat-label { font-size: 11px; color: var(--text-muted); margin-top: 5px; font-weight: 500; }
+.hero-critical {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ct1e2d45);
+  font-size: 13px;
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+/* ─── Sub-section label ─── */
+.sub-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin: 16px 0 8px;
+}
+
+/* ─── Chart legend hint ─── */
+.chart-legend-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.clh-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+</style>
+<style id="anon-banner-css">.anon-banner{position:sticky;top:0;z-index:99999;background:var(--ctfef3c7);color:var(--ct92400e);font-size:13px;font-weight:600;text-align:center;padding:9px 16px;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:-0.01em;border-bottom:1px solid var(--ctfde68a);}[data-theme="dark"] .anon-banner{background:#241f0e;color:#d4af5a;border-bottom-color:#3a2f12}</style><style>.health-theme-toggle{position:fixed;top:46px;right:16px;z-index:99998;background:var(--bg-card);color:var(--text-secondary);border:1px solid var(--bg-border);border-radius:8px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,0.08);}</style></head>
+<body><button class="health-theme-toggle" onclick="healthToggleTheme()" id="healthThemeBtn">◐ 라이트</button><div class="anon-banner">ⓘ 가공된 예시 데이터 · 실제 개인정보 아님</div>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <h1>건강검진 분석 대시보드</h1>
+  <div class="sub">정기 건강검진 기반 추이 분석</div>
+</div>
+
+<!-- 한눈에 보기 Hero -->
+<div class="hero-card">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-headline">
+        전체적으로 <span style="color:var(--good)">개선 중</span>입니다
+      </div>
+      <div class="hero-desc">
+        정기 검진 기준 대부분 항목이 정상 범위입니다.<br>
+        콜레스테롤·비타민D 등 일부 항목만 관리하면 됩니다.
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num" style="color:var(--good)">5</span>
+        <span class="hero-stat-label">개선 중</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num" style="color:var(--warn)">2</span>
+        <span class="hero-stat-label">주의</span>
+      </div>
+      <div class="hero-stat" style="border-color:rgba(255,107,107,0.2);background:rgba(255,107,107,0.05);">
+        <span class="hero-stat-num" style="color:var(--crit)">1</span>
+        <span class="hero-stat-label" style="color:var(--cta05050);">즉시 관리</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-critical">
+    <strong style="color:var(--crit)">지금 가장 중요한 것:</strong> LDL 콜레스테롤 131 — 경계(130)를 살짝 넘었습니다. 포화지방을 줄이는 식이 개선이 직접적인 해결책입니다.
+  </div>
+</div>
+
+<div class="alert alert-r">
+  <div class="alert-t">🚨 즉시 관리 필요</div>
+  LDL 콜레스테롤 131 — 130 넘으면 경계 단계. 추이가 105→130대로 상승 중. 포화지방·정제탄수 감소로 개선 가능한 항목.
+</div>
+<div class="alert alert-y">
+  <div class="alert-t">⚠️ 별도 의료 추적 필요 (식단·운동으로 해결 안 됨)</div>
+  비타민D 16 → 부족 범위, 보충제 복용 권장 + 연 1회 확인 &nbsp;|&nbsp; 요산 6.9 → 7.0 근접, 수분 섭취·식이 관리
+</div>
+<div class="alert alert-g">
+  <div class="alert-t">✅ 이미 잘 하고 있는 것</div>
+  비음주 · 비타민D·오메가3 보충 중 · 대부분 항목 정상 범위 유지
+</div>
+
+<!-- 현재 수치 -->
+<div class="section-title">현재 수치 (2026.05)</div>
+
+<!-- Row 1: 4 cards — 공복혈당이 critical -->
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+  <div class="card">
+    <div class="card-title">체중</div>
+    <div class="metric-big">70.5<span class="metric-unit">kg</span></div>
+    <div class="metric-change down-good">안정적으로 유지 중</div>
+    <div class="metric-sub">정상 범위 유지</div>
+    <div class="mt-md"><span class="pill pill-warn">BMI 22.5 정상</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">허리둘레</div>
+    <div class="metric-big">78<span class="metric-unit">cm</span></div>
+    <div class="metric-change down-good">안정적</div>
+    <div class="metric-sub">정상 범위</div>
+    <div class="mt-md"><span class="pill pill-ok">복부비만 기준 미만</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">체지방률</div>
+    <div class="metric-big">20.0<span class="metric-unit">%</span></div>
+    <div class="metric-change down-good">안정적</div>
+    <div class="metric-sub">정상 범위</div>
+    <div class="mt-md"><span class="pill pill-warn">정상 범위</span></div>
+  </div>
+  <!-- Critical card -->
+  <div class="card">
+    <div class="card-title">공복혈당</div>
+    <div class="metric-big">88<span class="metric-unit">mg/dL</span></div>
+    <div class="metric-change up-bad">정상 범위 유지</div>
+    <div style="font-size:12px;color:var(--ctc06060);margin-top:4px;">기준: 70–99 정상</div>
+    <div class="mt-md"><span class="pill pill-ok">정상 범위</span></div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;" class="mt-md">
+  <div class="card">
+    <div class="card-title">골격근량</div>
+    <div class="metric-big">35.0<span class="metric-unit">kg</span></div>
+    <div class="metric-change down-bad">안정적</div>
+    <div class="metric-sub">정상 범위</div>
+    <div class="mt-md"><span class="pill pill-ok">양호 유지 중</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">내장지방</div>
+    <div class="metric-big">81<span class="metric-unit">cm²</span></div>
+    <div class="metric-change down-good">안정적</div>
+    <div class="metric-sub">목표: &lt;65cm²</div>
+    <div class="mt-md"><span class="pill pill-warn">개선 중</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">혈압</div>
+    <div class="metric-big">118<span class="metric-unit">/73</span></div>
+    <div class="metric-change down-good">정상 범위</div>
+    <div class="metric-sub">목표: 115/75 이하</div>
+    <div class="mt-md"><span class="pill pill-ok">정상</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">HDL 콜레스테롤</div>
+    <div class="metric-big">46<span class="metric-unit">mg/dL</span></div>
+    <div class="metric-change up-bad">다소 낮은 편</div>
+    <div class="metric-sub">목표: 55+</div>
+    <div class="mt-md"><span class="pill pill-warn">유산소로만 올라감</span></div>
+  </div>
+</div>
+
+<!-- 추세 차트 -->
+<div class="divider"></div>
+<div class="section-title">추세 차트 (2022–2026)</div>
+<div class="chart-legend-hint">
+  <span><span class="clh-dot" style="background:var(--ct22c55e)"></span>정상 구간</span>
+  <span><span class="clh-dot" style="background:var(--ctf59e0b)"></span>주의 구간</span>
+  <span><span class="clh-dot" style="background:var(--ctef4444)"></span>위험/진단 기준</span>
+</div>
+<div class="grid-2">
+  <div class="card"><div class="card-title">체중 (kg)</div><canvas id="cWeight" height="200"></canvas><div class="note">&lt;78.7 정상 (BMI 25) &nbsp;·&nbsp; 78.7–86.5 과체중 &nbsp;·&nbsp; &gt;86.5 비만</div></div>
+  <div class="card"><div class="card-title">공복혈당 (mg/dL)</div><canvas id="cGluc" height="200"></canvas><div class="note">70–99 정상 &nbsp;·&nbsp; 100–125 당뇨 전단계 &nbsp;·&nbsp; ≥126 당뇨</div></div>
+</div>
+<div class="grid-2">
+  <div class="card"><div class="card-title">혈압 수축기 / 이완기 (mmHg)</div><canvas id="cBP" height="200"></canvas><div class="note">&lt;120/80 정상 &nbsp;·&nbsp; 120–129 주의 &nbsp;·&nbsp; ≥130/90 고혈압</div></div>
+  <div class="card"><div class="card-title">HDL / LDL 콜레스테롤 (mg/dL)</div><canvas id="cLipid" height="200"></canvas><div class="note">HDL ↑이 좋음: &lt;40 위험 &nbsp;·&nbsp; ≥60 이상적 &nbsp;|&nbsp; LDL ↓이 좋음: &lt;100 이상적 &nbsp;·&nbsp; ≥130 경계</div></div>
+</div>
+<div class="grid-2">
+  <div class="card"><div class="card-title">ALT / AST 간기능 (U/L)</div><canvas id="cAlt" height="200"></canvas><div class="note">&lt;20 이상적 &nbsp;·&nbsp; 20–40 정상(주의) &nbsp;·&nbsp; &gt;40 손상</div></div>
+  <div class="card"><div class="card-title">요산 (mg/dL)</div><canvas id="cUric" height="200"></canvas><div class="note">&lt;7.0 정상 &nbsp;·&nbsp; 7.0–8.0 고요산혈증 &nbsp;·&nbsp; &gt;8.0 통풍 위험</div></div>
+</div>
+<div class="grid-2">
+  <div class="card"><div class="card-title">내장지방 단면적 (cm²)</div><canvas id="cVisc" height="200"></canvas><div class="note">&lt;100 정상 &nbsp;·&nbsp; 100–150 과다 &nbsp;·&nbsp; &gt;150 심각</div></div>
+  <div class="card"><div class="card-title">비타민D3 (ng/mL)</div><canvas id="cVitD" height="200"></canvas><div class="note">&lt;12 결핍 &nbsp;·&nbsp; 12–19 부족 &nbsp;·&nbsp; ≥20 충분 &nbsp;·&nbsp; ≥30 이상적</div></div>
+</div>
+
+<div class="divider"></div>
+<!-- 5년 추세 테이블 -->
+<div class="section-title">5년 추세 요약</div>
+<div class="card">
+  <table>
+    <tr><th>항목</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>2026</th><th>추세</th></tr>
+    <tr><td>체중 (kg)</td><td>70.5</td><td>71.0</td><td>70.5</td><td>71.0</td><td class="td-ok">70.5</td><td><span class="pill pill-ok">안정 유지</span></td></tr>
+    <tr><td>공복혈당 (mg/dL)</td><td>86</td><td>88</td><td>87</td><td>89</td><td class="td-ok">88</td><td><span class="pill pill-ok">정상 범위</span></td></tr>
+    <tr><td>HDL (mg/dL) ↑좋음</td><td>48</td><td>46</td><td>47</td><td>45</td><td>46</td><td><span class="pill pill-warn">다소 낮음</span></td></tr>
+    <tr><td>LDL (mg/dL) ↓좋음</td><td>125</td><td>130</td><td>128</td><td class="td-bad">133↑</td><td>131</td><td><span class="pill pill-warn">경계 초과</span></td></tr>
+    <tr><td>ALT (U/L)</td><td>22</td><td>26</td><td>24</td><td>28</td><td>25</td><td><span class="pill pill-ok">정상</span></td></tr>
+    <tr><td>요산 (mg/dL)</td><td>6.5</td><td>6.8</td><td>6.7</td><td class="td-bad">7.0</td><td>6.9</td><td><span class="pill pill-warn">정상 상단</span></td></tr>
+    <tr><td>혈압 수축기</td><td>116</td><td>118</td><td>117</td><td>119</td><td class="td-ok">118</td><td><span class="pill pill-ok">정상</span></td></tr>
+    <tr><td>비타민D (ng/mL) ↑좋음</td><td>18.2</td><td class="td-bad">16.0↓</td><td class="td-gray">—</td><td class="td-bad">16.0↓</td><td class="td-gray">—</td><td><span class="pill pill-warn">보충 권장</span></td></tr>
+    <tr><td>골격근량 (kg)</td><td>34.5</td><td>34.7</td><td class="td-gray">—</td><td>35.0</td><td>35.0</td><td><span class="pill pill-ok">양호 유지</span></td></tr>
+    <tr><td>내장지방 (cm²)</td><td>78.0</td><td>80.0</td><td class="td-gray">—</td><td>82.0</td><td class="td-ok">81.0</td><td><span class="pill pill-ok">정상</span></td></tr>
+  </table>
+</div>
+
+<!-- 목표까지 진행률 -->
+<div class="divider"></div>
+<div class="section-title">목표까지 진행률 (현실적 목표 기준)</div>
+<div class="alert alert-b" style="margin-bottom:14px">
+  <div class="alert-t">💡 왜 목표를 낮췄나</div>
+  지방 감량 + 근육 증가를 동시에 하면서 골격근 +4kg은 과도한 목표입니다. 칼로리 결손 상태에서 초보자 이득은 +0.5~1.5kg이 현실적. 체지방률도 16%는 선수급으로, 일반인 건강 기준 19–21%가 더 현실적입니다.
+</div>
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">체성분 — 12개월 현실 목표</div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">체중 (70.5 → 목표 69kg)</span><span class="prog-val">30%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-y" style="width:30%"></div></div>
+      <div class="prog-note">-1.5kg 남음 &nbsp;·&nbsp; 안정적 페이스</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">체지방률 (20.0 → 목표 19%)</span><span class="prog-val">40%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-y" style="width:40%"></div></div>
+      <div class="prog-note">-1%p 남음 &nbsp;·&nbsp; 거의 목표 범위</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">허리둘레 (78 → 목표 77cm)</span><span class="prog-val">50%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-g" style="width:50%"></div></div>
+      <div class="prog-note">-1cm 남음 &nbsp;·&nbsp; 정상 범위 유지</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">골격근량 (35.0 → 목표 35.5kg)</span><span class="prog-val">60%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-g" style="width:60%"></div></div>
+      <div class="prog-note">+0.5kg 남음 &nbsp;·&nbsp; 양호 유지 중</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">혈액 — 12개월 현실 목표</div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">LDL (131 → 목표 110)</span><span class="prog-val">20%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-r" style="width:20%"></div></div>
+      <div class="prog-note">⚠️ 경계 초과 — 포화지방 감소가 직접 효과</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">HDL (46 → 목표 52+)</span><span class="prog-val">15%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-r" style="width:15%"></div></div>
+      <div class="prog-note">유산소 운동 시작 전까지 변화 적음</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">요산 (6.9 → 목표 6.0)</span><span class="prog-val">25%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-y" style="width:25%"></div></div>
+      <div class="prog-note">수분 섭취·식이 관리로 달성 가능</div>
+    </div>
+    <div class="prog-row">
+      <div class="prog-head"><span class="prog-name">혈압 수축기 (118 → 목표 115)</span><span class="prog-val">50%</span></div>
+      <div class="prog-bg"><div class="prog-fill bar-g" style="width:50%"></div></div>
+      <div class="prog-note">정상 범위 — 저염식으로 유지</div>
+    </div>
+  </div>
+</div>
+
+<!-- 단계별 타임라인 -->
+<div class="divider"></div>
+<div class="section-title">단계별 목표 타임라인</div>
+<div class="card">
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot tl-done"></div>
+      <div class="tl-date">2025.08 · 시작점</div>
+      <div class="tl-title">73.0kg · 체지방 23% · 허리 81cm · 혈압 122/78</div>
+      <div class="tl-body">운동 0, 식단 관리 없음</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot tl-now"></div>
+      <div class="tl-date">2026.05 · 지금</div>
+      <div class="tl-title">70.5kg · 체지방 20% · 허리 78cm · 정상 범위</div>
+      <div class="tl-body">대부분 정상 범위. LDL·비타민D만 관리 필요.</div>
+      <span class="tl-tag" style="background:var(--info-dim);color:var(--info);">현재 위치</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot tl-next"></div>
+      <div class="tl-date">2026.07 (2개월 후) · 습관 형성</div>
+      <div class="tl-title">단백질 80g+ 안정화 · 간식 차단 · 걷기 주 3회</div>
+      <div class="tl-body">체중 70kg 유지 · LDL 125 이하 목표 · 운동 루틴 시작</div>
+      <span class="tl-tag" style="background:var(--warn-dim);color:var(--warn);">다음 목표</span>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot tl-future"></div>
+      <div class="tl-date">2026.11 (6개월 후) · 운동 효과 가시화</div>
+      <div class="tl-title">70kg 유지 · 체지방 20% · 골격근 35kg · 허리 78cm</div>
+      <div class="tl-body">HDL 48+ · LDL 120 이하 목표 · 근력 운동 3개월 누적</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot tl-future"></div>
+      <div class="tl-date">2027.05 (12개월 후) · 현실적 최종 목표</div>
+      <div class="tl-title">69–70kg · 체지방 19% · 골격근 35.5kg · 허리 77cm</div>
+      <div class="tl-body">HDL 52+ · LDL 110 이하 · 요산 6.0 · 비타민D 25+</div>
+      <span class="tl-tag" style="background:var(--good-dim);color:var(--good);">최종 목표</span>
+    </div>
+  </div>
+</div>
+
+<!-- 관리 계획 (단계별) -->
+<div class="divider"></div>
+<div class="section-title">관리 행동 계획 — 단계별</div>
+
+<div class="phase-legend">
+  <div class="pl-item"><div class="pl-dot" style="background:var(--bad)"></div> 지금 당장 (1달)</div>
+  <div class="pl-item"><div class="pl-dot" style="background:var(--warn)"></div> 2–3개월 내</div>
+  <div class="pl-item"><div class="pl-dot" style="background:var(--info)"></div> 3개월 후</div>
+  <div class="pl-item"><div class="pl-dot" style="background:var(--good)"></div> 이미 하고 있음</div>
+</div>
+
+<div class="sub-label">식단</div>
+
+<div class="ac r">
+  <div class="ac-head">
+    <span class="ac-title">간식 완전 차단 + 제로음료 OUT</span>
+    <span class="ac-phase phase-1">지금 당장</span>
+  </div>
+  <div class="ac-body">끼니 사이 일체 없애기. 제로콜라·제로주스 → 물·블랙커피·무가향탄산수만. 인슐린이 떨어질 시간이 있어야 지방이 빠지고 혈당이 안정됩니다.</div>
+  <div class="ac-why">→ LDL 콜레스테롤 개선 · 지질 관리</div>
+  <div class="ac-note">첫 2주가 가장 힘듦. 단맛 갈구는 게 정상. 지나면 괜찮아짐.</div>
+</div>
+
+<div class="ac r">
+  <div class="ac-head">
+    <span class="ac-title">정제탄수 줄이기 (라면·흰밥·빵 OUT)</span>
+    <span class="ac-phase phase-1">지금 당장</span>
+  </div>
+  <div class="ac-body">라면·흰밥·토르티야·슈크림빵 → 잡곡밥·고구마·채소로 대체. 식사 순서: 채소 → 단백질 → 탄수화물 순으로만 바꿔도 혈당 스파이크 30% 억제.</div>
+  <div class="ac-why">→ 공복혈당 · ALT(지방간) · 중성지방 · 체중 동시 개선</div>
+</div>
+
+<div class="ac o">
+  <div class="ac-head">
+    <span class="ac-title">단백질 목표 달성 (단계별)</span>
+    <span class="ac-phase phase-1">지금 당장</span>
+  </div>
+  <div class="ac-body">
+    <strong style="color:var(--ctf0f4ff)">1달: 80g 이상</strong> (지금 64g에서 첫 목표)<br>
+    <strong style="color:var(--ctf0f4ff)">3달: 100g 이상</strong><br>
+    <strong style="color:var(--ctf0f4ff)">6달: 110g+</strong> (최종 목표)<br><br>
+    식당에서 현실적으로: 삼계탕 30g · 된장찌개+계란 15g · 두부 100g=8g. 고단백 메뉴 의식적으로 선택. 부족한 날은 프로틴 쉐이크 1스쿱(25g) 보조.
+  </div>
+  <div class="ac-why">→ 골격근 34kg 유지 · 포만감으로 간식 욕구 감소</div>
+</div>
+
+<div class="ac y">
+  <div class="ac-head">
+    <span class="ac-title">나트륨 줄이기 (국물 반 남기기)</span>
+    <span class="ac-phase phase-2">2–3개월</span>
+  </div>
+  <div class="ac-body">국·찌개 국물 반 남기기, 소스 양 줄이기. 하루 2g 이하 목표. 칼륨 많은 채소(시금치·토마토)로 나트륨 배출 촉진.</div>
+  <div class="ac-why">→ 혈압 하강 (나트륨 1g↓ = 수축기 -2mmHg) · 신장 부담 감소</div>
+</div>
+
+<div class="sub-label">운동</div>
+
+<div class="ac b">
+  <div class="ac-head">
+    <span class="ac-title">걷기 시작 (주 3회 → 주 5회)</span>
+    <span class="ac-phase phase-1">지금 당장</span>
+  </div>
+  <div class="ac-body">
+    <strong style="color:var(--ctf0f4ff)">처음 1–2달: 주 3회 30–40분</strong> (무리 없이 시작)<br>
+    <strong style="color:var(--ctf0f4ff)">3달 후: 주 5회로 증가</strong><br><br>
+    심박수 60–70% (약간 숨 찬 정도). 식후 30–60분 후가 혈당 관리에 가장 효과적.
+  </div>
+  <div class="ac-why">→ HDL↑ (유산소만이 올리는 방법) · 혈당 소비 · 혈압 안정 · 내장지방 감소</div>
+</div>
+
+<div class="ac b">
+  <div class="ac-head">
+    <span class="ac-title">근력 운동 (PT 5–10회로 자세 먼저)</span>
+    <span class="ac-phase phase-2">2–3개월</span>
+  </div>
+  <div class="ac-body">
+    걷기 루틴이 안정된 후 시작. 트레이너에게 명확히 요청: <em>"복합운동(스쿼트·데드리프트·벤치프레스·바벨로우) 자세 위주로."</em><br>
+    <strong style="color:var(--ctf0f4ff)">루틴: 상체Push(월) - 하체(수) - 상체Pull(금)</strong> · 상체 약점(팔·몸통 94%) 집중.
+  </div>
+  <div class="ac-why">→ 골격근 34.5kg 이상 · 인슐린 감수성 개선 · 기초대사량↑</div>
+  <div class="ac-note">동시에 걷기+근력 시작하면 부상 위험과 번아웃 위험 높음. 순서 지킬 것.</div>
+</div>
+
+<div class="sub-label">생활습관</div>
+
+<div class="ac g">
+  <div class="ac-head">
+    <span class="ac-title">수분 섭취</span>
+    <span class="ac-phase phase-done">이미 충분</span>
+  </div>
+  <div class="ac-body">평소 물을 자주 마시는 습관 유지 중. 운동 강도 올릴수록 요산이 일시적으로 오르므로 현 수준 유지가 곧 보호.</div>
+  <div class="ac-why">→ 요산 6.7 안정 · 신장 보호 (GFR 118 유지)</div>
+</div>
+
+<div class="ac g">
+  <div class="ac-head">
+    <span class="ac-title">수면 7시간 확보</span>
+    <span class="ac-phase phase-done">이미 해야 함</span>
+  </div>
+  <div class="ac-body">수면 부족 시 식욕 호르몬(그렐린)↑ → 과식. 코르티솔↑ → 혈당·혈압 동시 악화. 14시 이후 카페인 컷.</div>
+  <div class="ac-why">→ 혈당·혈압·체중 관리에 식단만큼 중요</div>
+</div>
+
+<div class="sub-label">병원</div>
+
+<div class="ac p">
+  <div class="ac-head">
+    <span class="ac-title">내분비내과 상담</span>
+    <span class="ac-phase phase-1">올해 내 1회</span>
+  </div>
+  <div class="ac-body">LDL 131 경계 초과. 지질 패널 재검 + 식이 상담.</div>
+  <div class="ac-why">→ 콜레스테롤 관리. 식이 개선 효과 확인.</div>
+</div>
+
+<div class="ac p">
+  <div class="ac-head">
+    <span class="ac-title">영양 상담 (비타민D 보충)</span>
+    <span class="ac-phase phase-2">6개월~1년 내</span>
+  </div>
+  <div class="ac-body">비타민D 16 부족 범위. 보충제 복용 + 연 1회 수치 확인. 피로·근육통 지속 시 상담.</div>
+  <div class="ac-why">→ 일조량 부족 시 보충제로 관리 가능.</div>
+</div>
+
+<!-- 의지력 없는 식욕 통제 -->
+<div class="divider"></div>
+<div class="section-title">의지력 없는 식욕 통제 — 환경 설계 전략</div>
+<div class="alert alert-b" style="margin-bottom:1rem;">
+  <strong>핵심 원칙:</strong> 의지력은 배터리다. 충전이 아니라 <strong>사용을 최소화</strong>해야 한다.<br>
+  결심이 아니라 환경을 바꿔라 — 좋은 선택이 쉬운 선택이 되도록.
+</div>
+
+<div class="grid-2" style="margin-bottom:1rem;">
+  <div class="card">
+    <div class="card-title">🏠 집 · 🏢 회사 환경 설계 (1순위)</div>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.5rem;">
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">[집] 과자·튀김재료 전부 버리기</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">구매 저항 &gt; 섭취 저항 — 집에 없으면 못 먹는다</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">[집] 냉장고 정면에 삶은 계란 6개 + 과일</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">눈에 보이는 것을 먹게 된다 (Wansink 연구)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">사무실 책상 서랍에 단백질 간식 비축</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">무염 견과 한 줌·삶은 계란·치즈스틱 — 자리 뜨기 전 한입. 공복으로 간식 코너 통과 X (Pre-satiation)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">사무실 간식 코너 통과 시 시선 차단</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">회의 갈 때 휴대폰·자료 보면서 빠르게. "안 본다"가 아니라 시야에서 자동으로 흘려보낸다</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">과자는 개별 포장 1개만 구입</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">대용량은 끝까지 먹게 된다 (Wansink). 간식 코너 이용 시에도 적용.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⏱ 단백질 타이밍 &amp; 식사 순서</div>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.5rem;">
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">기상 30분 이내 단백질 30g</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">오후 간식 욕구 40% 감소 (Leidy 2013)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">식사 순서: 채소 → 단백질 → 탄수화물</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">혈당 스파이크 73% 감소 (Imai 2017)</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+        <span style="font-size:1.2rem;flex-shrink:0;">🔥🔥</span>
+        <div>
+          <div style="font-weight:600;color:var(--text-primary);font-size:0.9rem;">탄산음료 → 탄산수 50% 혼합부터 시작</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">2–4주면 콜라가 너무 달게 느껴짐 (미각 재적응)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="grid-2" style="margin-bottom:1rem;">
+  <div class="card">
+    <div class="card-title">🧠 갈망(Craving) 대응법</div>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.5rem;">
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:0.6rem 0.8rem;">
+        <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">양치질</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">페퍼민트가 단맛 갈망을 즉시 억제</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:0.6rem 0.8rem;">
+        <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">10분 타이머</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">갈망은 10–15분 뒤 자연 감소 — 버티는 게 아니라 기다리는 것</div>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:8px;padding:0.6rem 0.8rem;">
+        <div style="font-weight:600;color:var(--text-primary);font-size:0.875rem;">"금지" 말고 "지연"</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);">"안 먹는다"가 아니라 "20분 뒤에 먹자" → 실제로 먹지 않게 됨</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 If–Then 계획 <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(성공률 3배, Gollwitzer 1999)</span></div>
+    <div style="display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;">
+      <div style="background:var(--good-dim);border-left:2px solid var(--good);border-radius:0 6px 6px 0;padding:0.55rem 0.75rem;font-size:0.82rem;">
+        <span style="color:var(--text-muted);">IF</span> <span style="color:var(--text-primary);">회의 갈 일이 생기면</span><br>
+        <span style="color:var(--text-muted);">→ THEN</span> <strong style="color:var(--good);">자리 뜨기 전에 책상 서랍 단백질 한입 먼저</strong>
+      </div>
+      <div style="background:var(--good-dim);border-left:2px solid var(--good);border-radius:0 6px 6px 0;padding:0.55rem 0.75rem;font-size:0.82rem;">
+        <span style="color:var(--text-muted);">IF</span> <span style="color:var(--text-primary);">간식 코너가 시야에 들어오면</span><br>
+        <span style="color:var(--text-muted);">→ THEN</span> <strong style="color:var(--good);">휴대폰 들고 회의 자료 빠르게 훑으며 통과</strong>
+      </div>
+      <div style="background:var(--good-dim);border-left:2px solid var(--good);border-radius:0 6px 6px 0;padding:0.55rem 0.75rem;font-size:0.82rem;">
+        <span style="color:var(--text-muted);">IF</span> <span style="color:var(--text-primary);">오후 3시 간식이 먹고 싶어지면</span><br>
+        <span style="color:var(--text-muted);">→ THEN</span> <strong style="color:var(--good);">서랍의 삶은 계란·견과 먼저 (간식 코너 X)</strong>
+      </div>
+      <div style="background:var(--good-dim);border-left:2px solid var(--good);border-radius:0 6px 6px 0;padding:0.55rem 0.75rem;font-size:0.82rem;">
+        <span style="color:var(--text-muted);">IF</span> <span style="color:var(--text-primary);">야식·배달이 먹고 싶어지면</span><br>
+        <span style="color:var(--text-muted);">→ THEN</span> <strong style="color:var(--good);">양치질 + 10분 타이머 → 다른 일</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<!-- 영양제 -->
+<div class="section-title">현재 복용 영양제</div>
+<div class="card">
+  <div class="supp-row" style="margin-bottom:12px">
+    <div class="supp supp-on">오메가3 ✅</div>
+    <div class="supp supp-on">비타민C ✅</div>
+    <div class="supp supp-on">종합 비타민B ✅</div>
+    <div class="supp supp-on">비타민D 보충제 ✅</div>
+  </div>
+  <div style="font-size:12px;color:var(--text-secondary);line-height:1.8">
+    <strong style="color:var(--text-secondary)">확인 권장:</strong><br>
+    · 오메가3 — EPA+DHA 합산 1,000mg 이상인지 (제품 뒷면 기능성분 확인)<br>
+    · 비타민D3 1,000 IU 이상 제품 권장 (마그네슘 병행 시 추가 도움)<br>
+    · 비타민D — 2026년 건강검진에서 미측정. 다음 검진 시 반드시 포함 요청
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="section-title">오늘의 루틴 — 2분 이내 완료</div>
+<div class="alert alert-b" style="margin-bottom:16px">
+  <div class="alert-t">💡 원칙: 작게 시작 · 환경을 바꿔라 · 실패를 어렵게</div>
+  한 번에 완벽하지 않아도 됩니다. 체크 1개라도 매일 하면 승리. 2주 후 자동화되면 다음 단계로.
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title" style="color:var(--info)">🌅 아침 — 기상 후 3분</div>
+    <ul class="cl">
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>출근 전</strong> 가방에 단백질 간식 1봉 (견과·치즈스틱·삶은 계란)
+          <div class="cr">→ 사무실 책상 서랍 보충용. 자리 뜰 때 꺼내 한입.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>출근 전</strong> 영양제 케이스 책상에 올려두고 1회 복용
+          <div class="cr">→ 눈에 보이는 곳에 두기. 까먹으면 저녁에라도.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--ctf97316)">🍽️ 식사 — 이미 하는 일 + 1</div>
+    <ul class="cl">
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>점심 메뉴 고를 때</strong> 단백질 메뉴 1개 의식적으로 선택
+          <div class="cr">→ 삼계탕, 생선구이, 두부조림 중 1개만. 나머지는 신경 X.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>식사 시작 시</strong> 채소·국 → 단백질 → 밥/면 순서로 먹기
+          <div class="cr">→ 순서만 바꿔도 혈당 스파이크 73%↓ (Imai 2017).</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>식사 후</strong> 10분 기다렸다 디저트/간식 결정
+          <div class="cr">→ 충분히 안 주면 다시 먹어도 됨. 80%는 그냥 지나감.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--cta855f7)">🏢 근무 중 — 사무실</div>
+    <ul class="cl">
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>회의 가기 전</strong> 책상 서랍에서 단백질 한입 먼저
+          <div class="cr">→ 공복으로 간식 코너 통과 X. 배부른 상태로 지나가면 90% 그냥 지나감.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>간식 코너 지날 때</strong> 시 휴대폰·자료 보면서 빠르게 (시야 차단)
+          <div class="cr">→ 의지력 안 씀. 그냥 손에 뭐가 있으면 자동으로 안 봄.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>14시 이후</strong> 카페인 컷 (디카페인·녹차 OK)
+          <div class="cr">→ 수면 질 보존 → 식욕 호르몬 안정 → 과식 예방.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--ct10b981)">🌙 저녁 — 퇴근 후 20분</div>
+    <ul class="cl">
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>주 2회</strong> 운동화 신고 15분 걷기 (집 앞이라도 OK)
+          <div class="cr">→ "주 3회 30분"은 다음 달 목표. 지금은 15분×2회만.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>취침 전</strong> 내일 영양제 케이스 + 단백질 간식 1봉 가방에
+          <div class="cr">→ 환경이 습관을 만듦. 보이면 복용률 80%↑, 가방에 있으면 회사에서 100% 사용.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title" style="color:var(--ct22c55e)">⚙️ 환경 설계 — 주 1회 (일요일)</div>
+    <ul class="cl">
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>물 배치 점검</strong> — 냉장고, 사무실 책상, 차에 각각 1병
+          <div class="cr">→ 마실 게 보이면 자동으로 마심. 안 보이면 잊음.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-r">□</div>
+        <div class="ct">
+          <strong>영양제 1주일치 미리 분할</strong> → 케이스에 담기
+          <div class="cr">→ 매일 꺼내 먹기만 하면 됨. 뜯는 행동이 진입장벽.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-y">□</div>
+        <div class="ct">
+          <strong>월요일 아침</strong> 체중 측정 + 기록
+          <div class="cr">→ 같은 날, 같은 시간, 같은 조건. 하루 변동은 무시. 추세만 본다.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-y">□</div>
+        <div class="ct">
+          <strong>혈압계 눈에 보이는 곳</strong>에 두기
+          <div class="cr">→ 보이면 재고 기록함. 서랍 속에서는 사라짐.</div>
+        </div>
+      </li>
+      <li>
+        <div class="ci ci-y">□</div>
+        <div class="ct">
+          <strong>토요일 오전</strong> 인바디 (월 1회, 같은 기계)
+          <div class="cr">→ 시간/기계 통일. 몸 상태 아닌 "변화 추세"만 봄.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="card mt-md">
+  <div class="card-title">🏥 병원 예약 — 1회만 하면 됨</div>
+  <ul class="cl">
+    <li>
+      <div class="ci ci-r">□</div>
+      <div class="ct">
+        내분비내과 상담 예약 (올해 내 1회)
+        <div class="cr">→ LDL 131 경계. 식이 상담 권장.</div>
+      </div>
+    </li>
+    <li>
+      <div class="ci ci-y">□</div>
+      <div class="ct">
+        소화기내과 상담 예약 (6개월~1년 내 1회)
+        <div class="cr">→ 비타민D 보충 — 연 1회 확인.</div>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<div class="card mt-md">
+  <div class="card-title">주간 / 월간</div>
+  <ul class="cl">
+    <li><div class="ci ci-r">□</div><div class="ct">걷기 주 3회 30분+ (지금 당장)<div class="cr">→ 2개월 후 주 5회로 증가</div></div></li>
+    <li><div class="ci ci-y">□</div><div class="ct">근력 운동 주 3회 (2–3개월 후 시작)<div class="cr">걷기 루틴 안정된 후. PT로 자세 먼저.</div></div></li>
+    <li><div class="ci ci-r">□</div><div class="ct">허리둘레 측정 (주 1회)<div class="cr">줄자, 배꼽 위 1cm, 아침 공복</div></div></li>
+    <li><div class="ci ci-y">□</div><div class="ct">인바디 (월 1회)<div class="cr">같은 기계·같은 시간·같은 조건 유지</div></div></li>
+    <li><div class="ci ci-y">□</div><div class="ct">가정혈압 측정 (주 3–5회)<div class="cr">아침 기상 후, 저녁 취침 전</div></div></li>
+    <li><div class="ci ci-r">□</div><div class="ct">지질 검사 재검 (올해 내)<div class="cr">LDL 131 경계 대응</div></div></li>
+    <li><div class="ci ci-y">□</div><div class="ct">영양 상담 (6개월~1년 내)<div class="cr">비타민D 보충 관리</div></div></li>
+  </ul>
+</div>
+
+<!-- 식단·운동으로 해결 안 되는 것들 -->
+<div class="divider"></div>
+<div class="section-title">식단·운동으로 해결 안 되는 것들</div>
+<div class="card">
+  <div class="resolve-item">
+    <div class="resolve-icon">🔴</div>
+    <div class="resolve-body">
+      <h4>LDL 콜레스테롤 (경계 초과)</h4>
+      <p>식이 개선(포화지방·정제탄수 감소)으로 낮출 수 있지만, 유전적 소인이 있으면 한계가 있습니다. 6개월~1년 내 지질 패널 재검으로 추세를 확인하고, 개선되지 않으면 약물 상담이 필요합니다.</p>
+    </div>
+  </div>
+  <div class="resolve-item">
+    <div class="resolve-icon">🟡</div>
+    <div class="resolve-body">
+      <h4>요산 (정상 상단)</h4>
+      <p>현재 정상 범위 상단(6.9)입니다. 수분 섭취와 식이(과당·알코올·고퓨린 절제)로 관리하면 통풍 예방에 도움이 됩니다. 가족력이 있으면 매년 추적을 권장합니다.</p>
+    </div>
+  </div>
+  <div class="resolve-item">
+    <div class="resolve-icon">🟡</div>
+    <div class="resolve-body">
+      <h4>비타민D — 보충 필요</h4>
+      <p>실내 생활이 많으면 햇빛만으로 충분히 유지되지 않습니다. 부족 범위(16)일 때는 보충제(D3 1,000 IU 이상)를 꾸준히 복용하고, 연 1회 수치를 확인하는 것이 좋습니다.</p>
+    </div>
+  </div>
+  <div class="resolve-item">
+    <div class="resolve-icon">🟡</div>
+    <div class="resolve-body">
+      <h4>혈압 — 저염식으로 정상 유지</h4>
+      <p>현재 정상 범위(118/73)입니다. 나트륨 섭취가 많거나 체중이 늘면 상승할 수 있어, 저염식과 적정 체중 유지로 관리하는 것이 좋습니다. 가족력이 있다면 가정에서 주기적으로 측정해 추세를 확인하세요.</p>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div style="font-size:12px;color:var(--text-muted);text-align:center;padding-bottom:var(--space-2xl);letter-spacing:.03em;">
+  건강검진 추이 분석 &nbsp;·&nbsp; 예시 데이터 &nbsp;·&nbsp; 의료 대체 아님
+</div>
+
+</div><!-- /container -->
+
+<script>
+(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('health-theme')||'light')}catch(e){document.documentElement.setAttribute('data-theme','light')}})();
+const V=k=>getComputedStyle(document.documentElement).getPropertyValue(k).trim();
+Chart.defaults.font.family = "Pretendard, -apple-system, 'Apple SD Gothic Neo', sans-serif";
+Chart.defaults.font.size = 11;
+
+const LABELS = ['2022','2023','2024','2025','2026'];
+
+const opts = (yMin,yMax,ann={}) => ({
+  responsive:true, maintainAspectRatio:true, aspectRatio:3.4,
+  interaction:{mode:'index',intersect:false},
+  plugins:{
+    legend:{
+      display:true,position:'top',
+      labels:{boxWidth:10,padding:10,color:V('--text-secondary'),font:{size:11,weight:500},usePointStyle:true,pointStyle:'circle'}
+    },
+    tooltip:{
+      backgroundColor:V('--bg-elevated'),
+      borderColor:V('--bg-border'),
+      borderWidth:1,
+      titleColor:V('--text-primary'),
+      bodyColor:V('--text-body'),
+      padding:10,
+      titleFont:{size:12,weight:600},
+      bodyFont:{size:11},
+      cornerRadius:8,
+      displayColors:true
+    },
+    annotation:{annotations:ann}
+  },
+  scales:{
+    x:{grid:{color:V('--bg-border')},ticks:{color:V('--text-muted'),font:{size:10}}},
+    y:{min:yMin,max:yMax,grid:{color:V('--bg-border')},ticks:{color:V('--text-muted'),font:{size:10},padding:6}}
+  }
+});
+
+const box=(yMin,yMax,col)=>({type:'box',yMin,yMax,backgroundColor:col,borderWidth:0});
+const hl=(y,col,lbl,dash=[])=>({type:'line',yMin:y,yMax:y,borderColor:col,borderWidth:1,borderDash:dash,
+  label:{content:lbl,display:true,color:col,font:{size:9,weight:600},position:'end',backgroundColor:'transparent'}});
+
+const line=(lbl,data,col,dash=false)=>({
+  label:lbl,data,borderColor:col,backgroundColor:col+'15',borderWidth:2,
+  pointBackgroundColor:V('--bg-card'),pointBorderColor:col,pointBorderWidth:2,pointRadius:4,pointHoverRadius:6,
+  tension:0.35,borderDash:dash?[5,4]:[],fill:false,spanGaps:true
+});
+
+let charts=[];
+function renderCharts(){
+  charts.forEach(c=>c.destroy()); charts=[];
+  Chart.defaults.color = V('--text-secondary');
+
+  charts.push(new Chart(document.getElementById('cWeight'),{type:'line',
+  data:{labels:LABELS,datasets:[line('체중 (kg)',[70.5,71.0,70.5,71.0,70.5],'#60a5fa')]},
+  options:opts(70,92,{
+    ok:  box(0,78.7,'#22c55e0d'), warn:box(78.7,86.5,'#f59e0b0a'), bad:box(86.5,100,'#ef44440a'),
+    l1: hl(78.7,'#fbbf24bb','BMI 25 · 78.7kg',[4,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cGluc'),{type:'line',
+  data:{labels:LABELS,datasets:[line('공복혈당 (mg/dL)',[86,88,87,89,88],'#f87171')]},
+  options:opts(84,132,{
+    ok:  box(70,100,'#22c55e0d'), warn:box(100,126,'#f59e0b0a'), bad:box(126,140,'#ef44440a'),
+    l1: hl(100,'#fbbf24dd','100 당뇨 전단계',[4,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cBP'),{type:'line',
+  data:{labels:LABELS,datasets:[
+    line('수축기 (mmHg)',[116,118,117,119,118],'#f87171'),
+    line('이완기 (mmHg)',[73,74,72,75,73],'#60a5fa'),
+  ]},
+  options:opts(58,148,{
+    ok: box(0,120,'#22c55e08'), warn:box(120,130,'#f59e0b08'), bad:box(130,160,'#ef44440a'),
+    l1: hl(130,'#fbbf24cc','130 고혈압',[4,3]),
+    l2: hl(80,'#60a5fa66','이완기 80',[3,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cLipid'),{type:'line',
+  data:{labels:LABELS,datasets:[
+    line('HDL ↑이 좋음',[48,46,47,45,46],'#34d399'),
+    line('LDL ↓이 좋음',[125,130,128,133,131],'#f87171'),
+  ]},
+  options:opts(30,150,{
+    l_hdl:   hl(40,'#f87171bb','HDL 하한 40',[4,3]),
+    l_ldl:   hl(130,'#fbbf24bb','LDL 경계 130',[4,3]),
+    l_ldl100:hl(100,'#34d39966','LDL 최적 100',[3,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cAlt'),{type:'line',
+  data:{labels:LABELS,datasets:[
+    line('ALT (U/L)',[22,26,24,28,25],'#fb923c'),
+    line('AST (U/L)',[20,22,21,24,22],'#a78bfa'),
+  ]},
+  options:opts(5,50,{
+    ideal: box(0,20,'#22c55e0d'), ok:box(20,40,'#f59e0b08'), bad:box(40,55,'#ef44440a'),
+    l1: hl(20,'#22c55e88','20 이상적',[3,3]),
+    l2: hl(40,'#fbbf24bb','40 상한',[4,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cUric'),{type:'line',
+  data:{labels:LABELS,datasets:[line('요산 (mg/dL)',[6.5,6.8,6.7,7.0,6.9],'#34d399')]},
+  options:opts(5.5,9.5,{
+    ok:  box(0,7.0,'#22c55e0d'), warn:box(7.0,8.0,'#f59e0b0a'), bad:box(8.0,10,'#ef44440a'),
+    l1: hl(7.0,'#fbbf24cc','7.0 고요산혈증',[4,3]),
+    l2: hl(8.0,'#f87171cc','8.0 통풍 위험',[4,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cVisc'),{type:'line',
+  data:{labels:LABELS,datasets:[line('내장지방 (cm²)',[78.0,80.0,null,82.0,81.0],'#f472b6')]},
+  options:opts(55,115,{
+    ok:  box(0,100,'#22c55e0d'), warn:box(100,120,'#f59e0b08'),
+    l1: hl(100,'#fbbf24bb','100 복부비만',[4,3]),
+  })
+}));
+
+  charts.push(new Chart(document.getElementById('cVitD'),{type:'line',
+  data:{labels:LABELS,datasets:[line('비타민D3 (ng/mL)',[18.0,17.0,null,16.0,null],'#facc15')]},
+  options:opts(8,38,{
+    bad:   box(0,12,'#ef44440c'), warn:box(12,20,'#f59e0b0a'),
+    ok:    box(20,30,'#22c55e0c'), ideal:box(30,40,'#3b82f60c'),
+    l1: hl(12,'#f87171aa','12 결핍',[4,3]),
+    l2: hl(20,'#fbbf24aa','20 충분',[4,3]),
+    l3: hl(30,'#60a5fa88','30 이상적',[3,3]),
+  })
+}));
+}
+renderCharts();
+</script>
+<script>
+function healthToggleTheme(){var h=document.documentElement;var d=h.getAttribute('data-theme')==='dark';var n=d?'light':'dark';h.setAttribute('data-theme',n);document.getElementById('healthThemeBtn').textContent=n==='dark'?'◑ 다크':'◐ 라이트';try{localStorage.setItem('health-theme',n)}catch(e){}if(typeof renderCharts==='function')renderCharts();}
+document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('healthThemeBtn');if(b){var d=document.documentElement.getAttribute('data-theme')==='dark';b.textContent=d?'◑ 다크':'◐ 라이트';}});
+</script></body>
+</html>

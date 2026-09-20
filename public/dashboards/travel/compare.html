@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 가족여행 — 스위스 (+파리)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+
+    :root{
+      --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+      --border:#ececeb; --line-strong:#e0e0de;
+      --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+      --pick:#6b4cff; --pick-bg:#f0edff;
+      --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+      --mono:'Google Sans Code',ui-monospace,'SF Mono',Menlo,monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--sans); letter-spacing:-.01em; -webkit-font-smoothing:antialiased;
+      background: #f4f4f2;
+      color: #1a1a18;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    /* ── HEADER ───────────────────────────── */
+    .hdr { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; }
+    .hdr h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+    .hdr h1 em { color: #6b4cff; font-style: normal; }
+    .hdr-meta { font-size: 12px; color: #9a9a94; }
+    .tag { display: inline-block; background: #f0edff; color: #6b4cff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+    .tag.orange { background: #FEF3C7; color: #D97706; }
+    .tag.green  { background: #f0edff; color: #6b4cff; }
+
+    /* ── CARDS ───────────────────────────── */
+    .card { background: #fff; border-radius: 14px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+
+    /* ── GRID LAYOUTS ───────────────────── */
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .g5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .g-main { display: grid; grid-template-columns: 58% 1fr; gap: 10px; }
+
+    /* ── SECTION LABEL ───────────────────── */
+    .sec { margin-bottom: 10px; }
+    .sec-title { font-size: 11px; font-weight: 700; color: #9a9a94; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+
+    /* ── STAT CARDS ───────────────────────── */
+    .stat-card { background: #fff; border-radius: 14px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .stat-label { font-size: 11px; color: #9a9a94; margin-bottom: 4px; }
+    .stat-val { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .stat-sub { font-size: 11px; color: #9a9a94; margin-top: 2px; }
+
+    /* ── MEMBER ───────────────────────────── */
+    .member { background: #fff; border-radius: 12px; padding: 12px 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); text-align: center; }
+    .member-role { font-size: 10px; color: #9a9a94; margin-bottom: 2px; }
+    .member-yr { font-size: 13px; font-weight: 700; }
+    .member-age { font-size: 11px; color: #6b6b66; }
+    .member.elder .member-yr { color: #E95F2A; }
+    .member.young .member-yr { color: #6b4cff; }
+
+    /* ── COST TABLE ───────────────────────── */
+    .cost-table { width: 100%; border-collapse: collapse; }
+    .cost-table th { font-size: 11px; font-weight: 600; color: #9a9a94; text-align: left; padding: 0 0 8px; border-bottom: 1px solid #ececeb; }
+    .cost-table td { padding: 9px 0; border-bottom: 1px solid #f4f4f2; vertical-align: middle; }
+    .cost-table tr:last-child td { border-bottom: none; }
+    .cost-table tr.hl td { background: #f0edff; }
+    .cost-table tr.hl td:first-child { border-radius: 8px 0 0 8px; padding-left: 8px; }
+    .cost-table tr.hl td:last-child { border-radius: 0 8px 8px 0; padding-right: 8px; }
+    .cost-group-label { font-size: 10px; font-weight: 700; color: #b3b3ad; text-transform: uppercase; padding: 10px 0 4px !important; border-bottom: none !important; }
+    .cost-name { font-size: 13px; }
+    .cost-days { font-size: 11px; color: #9a9a94; }
+    .bar-wrap { width: 120px; }
+    .bar-bg { height: 6px; background: #f4f4f2; border-radius: 3px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 3px; }
+    .b-blue { background: #6b4cff; }
+    .b-indigo { background: #6b4cff; }
+    .b-gray { background: #b3b3ad; }
+    .cost-val { font-size: 13px; font-weight: 700; text-align: right; white-space: nowrap; }
+    .cost-5p { font-size: 11px; color: #9a9a94; text-align: right; white-space: nowrap; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+    .badge-rec { background: #6b4cff; color: #fff; }
+    .badge-paris { background: #6b4cff; color: #fff; }
+
+    /* ── FLIGHT ───────────────────────────── */
+    .flight-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f4f4f2; }
+    .flight-row:last-child { border-bottom: none; }
+    .flight-route { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; }
+    .flight-route .sep { font-size: 11px; color: #b3b3ad; }
+    .flight-price { font-size: 16px; font-weight: 800; color: #6b4cff; }
+    .flight-note { font-size: 11px; color: #9a9a94; }
+    .info-box { background: #f0edff; border-left: 3px solid #6b4cff; border-radius: 0 8px 8px 0; padding: 10px 12px; margin-top: 10px; font-size: 12px; color: #5b3fe0; }
+
+    /* ── CALENDAR ─────────────────────────── */
+    .cal-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .cal-month { background: #fff; border-radius: 14px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .cal-month-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .cal-month-name { font-size: 15px; font-weight: 800; }
+    .cal-dow { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; margin-bottom: 4px; }
+    .cal-dow span { font-size: 11px; font-weight: 600; color: #9a9a94; padding: 4px 0; }
+    .cal-dow span:first-child { color: #F04452; }
+    .cal-dow span:last-child { color: #6b4cff; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-day {
+      aspect-ratio: 1;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: default;
+      position: relative;
+    }
+    .cal-day.empty { pointer-events: none; }
+    .cal-day.sun { color: #F04452; }
+    .cal-day.sat { color: #6b4cff; }
+    .cal-day.holiday { background: #FFF0F0; }
+    .cal-day.holiday .day-num { color: #F04452; }
+    .cal-day.substitute { background: #FFF7ED; }
+    .cal-day.substitute .day-num { color: #D97706; }
+    .cal-day.travel-window { background: #f0edff; }
+    .cal-day.chuseok { background: #FEE2E2; }
+    .cal-day.chuseok .day-num { color: #DC2626; font-weight: 800; }
+    .cal-day.today-marker { outline: 2px solid #6b4cff; }
+    .day-num { font-size: 13px; line-height: 1; }
+    .day-label { font-size: 9px; color: #6b6b66; margin-top: 1px; line-height: 1; white-space: nowrap; }
+    .day-label.red { color: #F04452; }
+    .day-label.orange { color: #D97706; }
+    .day-label.blue { color: #6b4cff; }
+    .day-label.green { color: #6b4cff; }
+
+    /* ── WEATHER STRIP ───────────────────── */
+    .weather-strip { margin-top: 10px; border-top: 1px solid #f4f4f2; padding-top: 10px; }
+    .weather-strip-title { font-size: 10px; font-weight: 700; color: #9a9a94; text-transform: uppercase; margin-bottom: 6px; }
+    .weather-rows { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .w-cell { background: #f6f6f5; border-radius: 8px; padding: 7px 8px; }
+    .w-period { font-size: 10px; color: #9a9a94; margin-bottom: 3px; }
+    .w-icon { font-size: 16px; }
+    .w-temp { font-size: 12px; font-weight: 700; color: #1a1a18; }
+    .w-desc { font-size: 10px; color: #6b6b66; margin-top: 1px; }
+
+    /* ── LEGEND ──────────────────────────── */
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #4a4a46; }
+    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    /* ── ITINERARY ───────────────────────── */
+    .itin-card { background: #fff; border-radius: 14px; padding: 14px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .itin-card h3 { font-size: 14px; font-weight: 800; margin-bottom: 10px; }
+    .itin-day { display: flex; gap: 8px; margin-bottom: 7px; align-items: flex-start; }
+    .day-pill { flex-shrink: 0; font-size: 10px; font-weight: 700; color: #fff; background: #6b4cff; padding: 2px 7px; border-radius: 20px; margin-top: 1px; }
+    .day-pill.p { background: #6b4cff; }
+    .itin-text { font-size: 12px; color: #4a4a46; }
+    .itin-note { font-size: 11px; color: #b3b3ad; margin-top: 6px; border-top: 1px solid #f4f4f2; padding-top: 6px; }
+
+    /* ── CONCERNS ────────────────────────── */
+    .concern { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f4f4f2; align-items: flex-start; }
+    .concern:last-child { border-bottom: none; }
+    .c-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .c-title { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .c-desc { font-size: 12px; color: #6b6b66; }
+
+    /* ── TODO ────────────────────────────── */
+    .todo { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f4f4f2; }
+    .todo:last-child { border-bottom: none; }
+    .todo-circle { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #e0e0de; flex-shrink: 0; }
+    .todo-text { font-size: 13px; flex: 1; }
+    .ttag { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; flex-shrink: 0; }
+    .ttag.r { background: #FEE2E2; color: #DC2626; }
+    .ttag.y { background: #FEF3C7; color: #D97706; }
+    .ttag.g { background: #f0edff; color: #6b4cff; }
+
+    .mb10 { margin-bottom: 10px; }
+    .mb16 { margin-bottom: 16px; }
+    .mb28 { margin-bottom: 28px; }
+
+    /* ── TOC ─────────────────────────────── */
+    .toc { display: flex; gap: 6px; flex-wrap: wrap; background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 24px; align-items: center; }
+    .toc-label { font-size: 10px; font-weight: 700; color: #b3b3ad; margin-right: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .toc a { display: flex; align-items: center; gap: 4px; text-decoration: none; color: #4a4a46; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: #f4f4f2; white-space: nowrap; }
+    .toc a:hover { background: #f0edff; color: #6b4cff; }
+    .toc-n { font-size: 10px; color: #b3b3ad; font-weight: 700; }
+
+    /* ── SECTION HEADER ─────────────────── */
+    .shdr { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 2px solid #ececeb; }
+    .shdr-n { font-size: 30px; font-weight: 900; color: #ececeb; line-height: 1; min-width: 42px; letter-spacing: -1px; }
+    .shdr-title { font-size: 16px; font-weight: 800; color: #1a1a18; }
+    .shdr-sub { font-size: 12px; color: #9a9a94; margin-top: 2px; }
+
+    /* ── TABS ────────────────────────────── */
+    .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .tab-btn { padding: 9px 16px; border-radius: 10px; background: #fff; border: 1.5px solid #ececeb; font-size: 13px; font-weight: 700; color: #9a9a94; cursor: pointer; transition: all 0.15s; }
+    .tab-btn:hover { border-color: #cfcfca; }
+    .tab-btn .tb-sub { font-size: 11px; font-weight: 600; opacity: 0.8; }
+    .tab-btn.active { color: #fff; }
+    .tab-btn.active[data-c="green"] { background: #6b4cff; border-color: #6b4cff; }
+    .tab-btn.active[data-c="blue"]  { background: #6b4cff; border-color: #6b4cff; }
+    .tab-btn.active[data-c="red"]   { background: #DC2626; border-color: #DC2626; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+    .tab-detail { display: flex; flex-direction: column; gap: 10px; }
+    .pbox { border-radius: 12px; padding: 13px 15px; }
+    .pbox-label { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+
+    /* ── RESPONSIVE ──────────────────────── */
+    @media (max-width: 960px) {
+      .g-main { grid-template-columns: 1fr; }
+      .g4 { grid-template-columns: 1fr 1fr; }
+      #s05 > div[style*="grid-template-columns:1fr 2fr 1fr"] { grid-template-columns: 1fr !important; }
+      .cal-wrap { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap { padding: 16px 14px 40px; }
+      .hdr { flex-wrap: wrap; gap: 8px; }
+      .g3, .g4, .g5, .g2 { grid-template-columns: 1fr 1fr; }
+      .weather-rows { grid-template-columns: 1fr 1fr !important; }
+      .toc { gap: 4px; }
+      .toc a { font-size: 11px; padding: 3px 8px; }
+      .shdr-n { font-size: 24px; min-width: 32px; }
+      .shdr-title { font-size: 15px; }
+      /* 카드 내부 2-컬럼 → 1-컬럼 */
+      .card div[style*="grid-template-columns:1fr 1fr"],
+      #s01 .card > div[style*="grid-template-columns:1fr 1fr"],
+      #s04 .card + div[style*="grid-template-columns:1fr 1fr 1fr"],
+      div[style*="grid-template-columns:repeat(4,1fr)"] { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <h1>2027 가족여행 — <em>스위스</em> (+파리 검토)</h1>
+    <span class="tag">5인</span>
+    <span class="tag">이코노미</span>
+    <span class="tag green">9월 하순 추천</span>
+    <span class="hdr-meta">우선순위: 날씨 &gt; 비용 &gt; 공휴일 · 검증 완료</span>
+  </div>
+
+  <!-- STATS -->
+  <div class="g4 mb16">
+    <div class="stat-card">
+      <div class="stat-label">인원 구성</div>
+      <div class="stat-val">5인</div>
+      <div class="stat-sub">성인 5인 · 3방</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">추천 시기 (날씨·비용 우선)</div>
+      <div class="stat-val" style="font-size:17px;color:#6b4cff;">9월 하순</div>
+      <div class="stat-sub">스위스 최적 날씨 + 어깨철 저렴 (추석만 회피)</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">스위스만 · 1인</div>
+      <div class="stat-val" style="color:#b3b3ad;">340~410만</div>
+      <div class="stat-sub">4박 5일 · 취리히 왕복 · 평일 어깨철</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">스위스+파리 · 1인 ★</div>
+      <div class="stat-val" style="color:#6b4cff;">410~540만</div>
+      <div class="stat-sub">4박+3박 · 9월 하순 평일 기준</div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <span class="toc-label">목차</span>
+    <a href="#s01"><span class="toc-n">01</span> 비용 변수</a>
+    <a href="#s02"><span class="toc-n">02</span> 비용 비교</a>
+    <a href="#s03"><span class="toc-n">03</span> 여행 시기</a>
+    <a href="#s04"><span class="toc-n">04</span> 시기 비교표</a>
+    <a href="#s05"><span class="toc-n">05</span> 일정 초안</a>
+    <a href="#s06"><span class="toc-n">06</span> 체크리스트</a>
+  </div>
+
+  <!-- COST VARIABLES -->
+  <div class="sec mb28" id="s01">
+    <div class="shdr">
+      <span class="shdr-n">01</span>
+      <div>
+        <div class="shdr-title">비용 변수</div>
+        <div class="shdr-sub">시기·예약 타이밍에 따라 5인 기준 최대 1,000만원 이상 차이</div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+
+        <!-- 시즌별 항공 비교 -->
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:10px;">시즌별 항공권 (이코노미, 인천→취리히 왕복, 1인)</div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid #ececeb;">
+                <th style="text-align:left;padding:0 0 6px;color:#9a9a94;font-weight:600;">시기</th>
+                <th style="text-align:right;padding:0 0 6px;color:#9a9a94;font-weight:600;">1인</th>
+                <th style="text-align:right;padding:0 0 6px;color:#9a9a94;font-weight:600;">5인 합계</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;"><span style="color:#6b4cff;font-weight:600;">비수기</span> <span style="color:#9a9a94;font-size:11px;">11~3월, 10월 하순~</span></td>
+                <td style="text-align:right;font-weight:700;color:#6b4cff;">100~150만</td>
+                <td style="text-align:right;color:#6b6b66;">500~750만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;"><span style="color:#6b4cff;font-weight:600;">어깨철</span> <span style="color:#9a9a94;font-size:11px;">4~6월, 10월 초중순</span></td>
+                <td style="text-align:right;font-weight:700;color:#6b4cff;">150~210만</td>
+                <td style="text-align:right;color:#6b6b66;">750~1,050만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;"><span style="color:#D97706;font-weight:600;">여름 성수기</span> <span style="color:#9a9a94;font-size:11px;">7~8월</span></td>
+                <td style="text-align:right;font-weight:700;color:#D97706;">200~280만</td>
+                <td style="text-align:right;color:#6b6b66;">1,000~1,400만</td>
+              </tr>
+              <tr style="background:#FEF2F2;border-radius:8px;">
+                <td style="padding:8px 6px;border-radius:8px 0 0 8px;"><span style="color:#DC2626;font-weight:700;">⚠️ 추석 연휴</span> <span style="color:#9a9a94;font-size:11px;">9/14~16, 명절 프리미엄</span></td>
+                <td style="text-align:right;font-weight:800;color:#DC2626;padding:8px 6px;">220~320만</td>
+                <td style="text-align:right;font-weight:700;color:#DC2626;border-radius:0 8px 8px 0;padding:8px 6px;">1,100~1,600만</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:11px;color:#9a9a94;margin-top:8px;">추석 vs 어깨철 차이: 항공만 5인 기준 <strong style="color:#1a1a18;">약 350~550만원</strong> · <span style="color:#b3b3ad;">유럽 장거리는 동남아처럼 폭등하진 않음</span></div>
+        </div>
+
+        <!-- 예약 타이밍 + 시기별 추천 -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">예약 타이밍 (기준가 대비)</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+              <div style="background:#f0edff;border-radius:8px;padding:8px 10px;">
+                <div style="font-size:11px;color:#6b4cff;font-weight:700;">6개월 전 얼리버드</div>
+                <div style="font-size:14px;font-weight:800;color:#6b4cff;">기준가</div>
+              </div>
+              <div style="background:#f0edff;border-radius:8px;padding:8px 10px;">
+                <div style="font-size:11px;color:#6b4cff;font-weight:700;">3개월 전</div>
+                <div style="font-size:14px;font-weight:800;color:#6b4cff;">+10~20%</div>
+              </div>
+              <div style="background:#FEF3C7;border-radius:8px;padding:8px 10px;">
+                <div style="font-size:11px;color:#D97706;font-weight:700;">1개월 전</div>
+                <div style="font-size:14px;font-weight:800;color:#D97706;">+30~50%</div>
+              </div>
+              <div style="background:#FEF2F2;border-radius:8px;padding:8px 10px;">
+                <div style="font-size:11px;color:#DC2626;font-weight:700;">1주 전</div>
+                <div style="font-size:14px;font-weight:800;color:#DC2626;">+100%↑</div>
+              </div>
+            </div>
+          </div>
+          <div style="background:#f6f6f5;border-radius:10px;padding:12px;">
+            <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">시기별 추천 요약</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+              <div style="display:flex;gap:8px;align-items:flex-start;">
+                <span style="flex-shrink:0;background:#6b4cff;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;">추천</span>
+                <span><strong>9월 하순 (추석 회피 평일)</strong> — 스위스 최적 날씨 + 어깨철 저렴 + 산악 완전 개방. 연차 5일</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-start;">
+                <span style="flex-shrink:0;background:#6b4cff;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;">대안</span>
+                <span><strong>10월 초중순</strong> — 단풍 절정. 9월보다 쌀쌀·비. 개천절·한글날 끼면 연차 4일</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-start;">
+                <span style="flex-shrink:0;background:#6b4cff;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;">대안</span>
+                <span><strong>5월 중순</strong> — 파리 봄 최고, 9월과 동급 저렴. 단 스위스 고산 일부 잔설</span>
+              </div>
+              <div style="display:flex;gap:8px;align-items:flex-start;">
+                <span style="flex-shrink:0;background:#DC2626;color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;">회피</span>
+                <span><strong>추석 주간 (9/14~16)</strong> — 항공 폭등. 9월 가되 이 주만 피할 것</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN 2COL -->
+  <div class="mb28" id="s02">
+    <div class="shdr">
+      <span class="shdr-n">02</span>
+      <div>
+        <div class="shdr-title">비용 비교 & 항공 전략</div>
+        <div class="shdr-sub">조합별 1인·5인 추산 / 취리히 왕복 vs 오픈조 선택 기준</div>
+      </div>
+    </div>
+  </div>
+  <div class="g-main mb28">
+
+    <!-- LEFT: Cost -->
+    <div class="sec">
+      <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:4px;">조합별 1인 비용 (이코노미, 어깨철 평일 기준, 3방 쉐어)</div>
+      <div style="font-size:11px;color:#DC2626;margin-bottom:8px;">⚠️ 추석 출발 시 항공+숙박 약 +130~160만원/인 추가</div>
+      <div class="card">
+        <table class="cost-table">
+          <thead>
+            <tr>
+              <th style="width:42%">조합</th>
+              <th style="width:18%">바</th>
+              <th style="width:20%">1인</th>
+              <th style="width:20%">5인 합계</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" class="cost-group-label">스위스만 (취리히 in/out)</td>
+            </tr>
+            <tr>
+              <td><div class="cost-name">3박 4일</div></td>
+              <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill b-gray" style="width:58%"></div></div></div></td>
+              <td class="cost-val">320~390만</td>
+              <td class="cost-5p">1,600~1,950만</td>
+            </tr>
+            <tr>
+              <td><div class="cost-name">4박 5일</div></td>
+              <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill b-gray" style="width:64%"></div></div></div></td>
+              <td class="cost-val">360~430만</td>
+              <td class="cost-5p">1,800~2,150만</td>
+            </tr>
+            <tr>
+              <td colspan="4" class="cost-group-label">스위스+파리 (취리히 in / 파리 out, 오픈조)</td>
+            </tr>
+            <tr>
+              <td><div class="cost-name">스위스 3박 + 파리 3박<span class="badge badge-paris">+파리</span></div><div class="cost-days">6박 7일</div></td>
+              <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill b-indigo" style="width:74%"></div></div></div></td>
+              <td class="cost-val">400~500만</td>
+              <td class="cost-5p">2,000~2,500만</td>
+            </tr>
+            <tr>
+              <td><div class="cost-name">스위스 3박 + 파리 4박<span class="badge badge-paris">+파리</span></div><div class="cost-days">7박 8일</div></td>
+              <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill b-indigo" style="width:78%"></div></div></div></td>
+              <td class="cost-val">420~520만</td>
+              <td class="cost-5p">2,100~2,600만</td>
+            </tr>
+            <tr class="hl">
+              <td><div class="cost-name">스위스 4박 + 파리 3박<span class="badge badge-rec">추천</span></div><div class="cost-days">7박 8일</div></td>
+              <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill b-blue" style="width:82%"></div></div></div></td>
+              <td class="cost-val" style="color:#6b4cff;">430~560만</td>
+              <td class="cost-5p">2,150~2,800만</td>
+            </tr>
+            <tr>
+              <td><div class="cost-name">스위스 4박 + 파리 4박<span class="badge badge-paris">+파리</span></div><div class="cost-days">8박 9일</div></td>
+              <td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill b-indigo" style="width:88%"></div></div></div></td>
+              <td class="cost-val">450~560만</td>
+              <td class="cost-5p">2,250~2,800만</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:#6b6b66;margin-top:10px;padding-top:8px;border-top:1px solid #f4f4f2;">
+          파리 추가 비용 <strong style="color:#1a1a18;">1인 +100~120만원</strong> · 5인 +500~600만원 &nbsp;|&nbsp; 항공 오픈조 차이 20~30만원 → 포함 가성비 ○
+          &nbsp;&nbsp;<span style="color:#DC2626;">추석 출발 시 +130~160만/인</span> &nbsp;<span style="color:#b3b3ad;">· 트립스토어 가족여행 실측 1인 400~600만과 정합</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Members + Flight -->
+    <div>
+      <div class="sec mb10">
+        <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">인원</div>
+        <div class="g5">
+          <div class="member"><div class="member-role">성인 ①</div><div class="member-yr">&nbsp;</div><div class="member-age">&nbsp;</div></div>
+          <div class="member"><div class="member-role">성인 ②</div><div class="member-yr">&nbsp;</div><div class="member-age">&nbsp;</div></div>
+          <div class="member"><div class="member-role">성인 ③</div><div class="member-yr">&nbsp;</div><div class="member-age">&nbsp;</div></div>
+          <div class="member"><div class="member-role">성인 ④</div><div class="member-yr">&nbsp;</div><div class="member-age">&nbsp;</div></div>
+          <div class="member"><div class="member-role">성인 ⑤</div><div class="member-yr">&nbsp;</div><div class="member-age">&nbsp;</div></div>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">항공 전략</div>
+        <div class="card">
+          <div class="flight-row">
+            <div>
+              <div class="flight-route">
+                <span>ICN</span><span class="sep">→</span><span>ZRH</span><span class="sep">→</span><span>ICN</span>
+              </div>
+              <div class="flight-note">스위스만 · 왕복 · 경유 1회 · 13~15시간</div>
+            </div>
+            <div style="text-align:right">
+              <div class="flight-price">130~190만</div>
+              <div class="flight-note">1인 · 어깨철</div>
+            </div>
+          </div>
+          <div class="flight-row">
+            <div>
+              <div class="flight-route">
+                <span>ICN</span><span class="sep">→</span><span>ZRH</span><span class="sep">···</span><span>CDG</span><span class="sep">→</span><span>ICN</span>
+              </div>
+              <div class="flight-note">스위스+파리 · 오픈조 · 취리히 IN / 파리 OUT</div>
+            </div>
+            <div style="text-align:right">
+              <div class="flight-price">150~210만</div>
+              <div class="flight-note">왕복比 +20~30만/인</div>
+            </div>
+          </div>
+          <div class="info-box">
+            2027년 3~4월 항공권 오픈 즉시 비교 → 차이 30만원 이하면 오픈조 선택
+          </div>
+          <div style="font-size:10px;color:#b3b3ad;margin-top:6px;">직항(여름) 180~220만 기준, 어깨철 경유로 할인 · 출처: 트립스토어</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COST BREAKDOWN -->
+  <div class="sec mb28">
+    <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">세부 내역 — 추천 조합(스위스 4박 + 파리 3박, 7박 8일) · 1인 · 9월 하순 어깨철 평일</div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;">
+
+        <!-- 항목별 내역 -->
+        <div>
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid #ececeb;">
+                <th style="text-align:left;padding:0 0 6px;color:#9a9a94;font-weight:600;">항목</th>
+                <th style="text-align:left;padding:0 6px 6px;color:#9a9a94;font-weight:600;">산출 근거</th>
+                <th style="text-align:right;padding:0 0 6px;color:#9a9a94;font-weight:600;">1인</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">✈️ 항공</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">오픈조 경유, 9월 하순 평일(추석 회피). 직항 여름 180~220만 기준 할인<sup style="color:#6b4cff;">1</sup></td>
+                <td style="text-align:right;font-weight:700;">140~190만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">🏨 스위스 숙박</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">3방×4박×30~45만 ÷5인. 호텔 1박 30~50만<sup style="color:#6b4cff;">1,2</sup></td>
+                <td style="text-align:right;font-weight:700;">72~108만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">🏨 파리 숙박</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">3방×3박×20~30만 ÷5인</td>
+                <td style="text-align:right;font-weight:700;">36~54만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">🍽️ 식비</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">스위스 4일×10만+파리 3일×8만. 한끼 4~6만<sup style="color:#6b4cff;">1,4</sup></td>
+                <td style="text-align:right;font-weight:700;">60~70만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">🚆 스위스 교통</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">스위스트래블패스 6일권, 약 CHF419~469<sup style="color:#6b4cff;">3</sup></td>
+                <td style="text-align:right;font-weight:700;">55~70만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">🏔️ 융프라우요흐</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">정가 224CHF → 동신항운 쿠폰+STP 145CHF<sup style="color:#6b4cff;">3</sup></td>
+                <td style="text-align:right;font-weight:700;">22만</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f4f4f2;">
+                <td style="padding:8px 0;font-weight:700;">🎫 파리 교통·입장</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">나비고 패스 + 루브르·베르사유 입장</td>
+                <td style="text-align:right;font-weight:700;">13~18만</td>
+              </tr>
+              <tr style="border-bottom:2px solid #ececeb;">
+                <td style="padding:8px 0;font-weight:700;">🩺 여행자보험</td>
+                <td style="padding:8px 6px;color:#6b6b66;font-size:11px;">60대 포함, 8일</td>
+                <td style="text-align:right;font-weight:700;">8~15만</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;font-weight:800;color:#6b4cff;">합계</td>
+                <td style="padding:10px 6px;color:#9a9a94;font-size:11px;">5인 = 2,050~2,700만</td>
+                <td style="text-align:right;font-weight:800;color:#6b4cff;font-size:14px;">약 410~540만</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:10px;color:#b3b3ad;margin-top:8px;line-height:1.6;">
+            <strong>출처</strong>
+            <sup style="color:#6b4cff;">1</sup> 트립스토어 (스위스 가족여행·가족여행 경비)
+            · <sup style="color:#6b4cff;">2</sup> Booking.com 인터라켄
+            · <sup style="color:#6b4cff;">3</sup> KKday·스위스트래블패스·동신항운 쿠폰
+            · <sup style="color:#6b4cff;">4</sup> brunch (2023 스위스 여행경비)
+          </div>
+        </div>
+
+        <!-- 절약 팁 + 비중 -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="background:#f6f6f5;border-radius:10px;padding:12px;">
+            <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">비용 비중 (중간값 기준)</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;">
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span>항공</span><span style="font-weight:700;">36%</span></div><div class="bar-bg"><div class="bar-fill b-blue" style="width:36%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span>숙박 (스위스+파리)</span><span style="font-weight:700;">27%</span></div><div class="bar-bg"><div class="bar-fill b-indigo" style="width:27%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span>교통 (STP+융프라우)</span><span style="font-weight:700;">18%</span></div><div class="bar-bg"><div class="bar-fill" style="width:18%;background:#9d86ff;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span>식비</span><span style="font-weight:700;">13%</span></div><div class="bar-bg"><div class="bar-fill b-gray" style="width:13%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:2px;"><span>기타·보험</span><span style="font-weight:700;">6%</span></div><div class="bar-bg"><div class="bar-fill b-gray" style="width:6%"></div></div></div>
+            </div>
+            <div style="font-size:10px;color:#b3b3ad;margin-top:8px;">항공+숙박이 전체의 63% — 이 둘의 시기·예약 타이밍이 총비용을 좌우</div>
+          </div>
+
+          <div style="background:#f0edff;border-radius:10px;padding:12px;">
+            <div style="font-size:11px;font-weight:700;color:#6b4cff;margin-bottom:8px;">💡 절약 포인트 (블로그 실측)</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:11px;color:#4a35b0;">
+              <div>• <strong>융프라우 동신항운 쿠폰</strong> — 정가比 -34% (34만→22만)</div>
+              <div>• <strong>샬레/아파트(주방O)</strong> — 5인이면 호텔보다 유리 + 식비 절감</div>
+              <div>• <strong>Coop·Migros 마트</strong> — 샌드위치 1~2만, 점심 도시락 7천원도 가능</div>
+              <div>• <strong>STP vs 하프페어카드(18만)</strong> — 일정 짧으면 하프페어+개별권이 쌀 수도</div>
+              <div>• <strong>항공 3~4월 얼리버드</strong> — 1주 전 예약比 최대 -33%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAVEL TIMING (TABBED) -->
+  <div class="sec mb28" id="s03">
+    <div class="shdr">
+      <span class="shdr-n">03</span>
+      <div>
+        <div class="shdr-title">여행 시기 — 시기별 상세</div>
+        <div class="shdr-sub">탭 전환: 9월 하순(추천) · 10월(단풍) · 5월(봄). 공휴일 무관, 추석 주간만 회피. 각 시기 캘린더·날씨·윈도우·비용</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-c="green" onclick="showTab('tab-sep', this)">🌤️ 9월 하순 <span class="tb-sub">· ★ 추천 (날씨·비용 최적)</span></button>
+      <button class="tab-btn" data-c="blue" onclick="showTab('tab-oct', this)">🍂 10월 초중순 <span class="tb-sub">· 단풍 대안</span></button>
+      <button class="tab-btn" data-c="blue" onclick="showTab('tab-may', this)">🌸 5월 중순 <span class="tb-sub">· 봄·파리 대안</span></button>
+    </div>
+
+    <!-- ===== TAB: SEPTEMBER (★ 추천) ===== -->
+    <div class="tab-panel active" id="tab-sep">
+      <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:10px;">
+        <div class="cal-month">
+          <div class="cal-month-header">
+            <span class="cal-month-name">9월 September 2027</span>
+            <span class="tag green">★ 추천</span>
+          </div>
+          <div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+          <div class="cal-grid">
+            <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+            <div class="cal-day"><span class="day-num">1</span></div><div class="cal-day"><span class="day-num">2</span></div><div class="cal-day"><span class="day-num">3</span></div>
+            <div class="cal-day sat"><span class="day-num">4</span></div>
+            <div class="cal-day sun"><span class="day-num">5</span></div>
+            <div class="cal-day"><span class="day-num">6</span></div><div class="cal-day"><span class="day-num">7</span></div><div class="cal-day"><span class="day-num">8</span></div><div class="cal-day"><span class="day-num">9</span></div><div class="cal-day"><span class="day-num">10</span></div>
+            <div class="cal-day sat"><span class="day-num">11</span></div>
+            <div class="cal-day sun"><span class="day-num">12</span></div>
+            <div class="cal-day"><span class="day-num">13</span></div>
+            <div class="cal-day chuseok"><span class="day-num">14</span><span class="day-label red">추석·회피</span></div>
+            <div class="cal-day chuseok"><span class="day-num">15</span><span class="day-label red">추석·회피</span></div>
+            <div class="cal-day chuseok"><span class="day-num">16</span><span class="day-label red">추석·회피</span></div>
+            <div class="cal-day"><span class="day-num">17</span></div>
+            <div class="cal-day sat travel-window"><span class="day-num">18</span><span class="day-label green">출발 →</span></div>
+            <div class="cal-day sun travel-window"><span class="day-num">19</span></div>
+            <div class="cal-day travel-window"><span class="day-num">20</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">21</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">22</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">23</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">24</span><span class="day-label green">연차</span></div>
+            <div class="cal-day sat travel-window"><span class="day-num">25</span><span class="day-label green">← 귀국</span></div>
+            <div class="cal-day sun"><span class="day-num">26</span></div>
+            <div class="cal-day"><span class="day-num">27</span></div><div class="cal-day"><span class="day-num">28</span></div><div class="cal-day"><span class="day-num">29</span></div><div class="cal-day"><span class="day-num">30</span></div>
+            <div class="cal-day empty"></div><div class="cal-day empty"></div>
+          </div>
+          <div class="legend" style="margin-top:10px;">
+            <div class="legend-item"><div class="legend-dot" style="background:#f0edff;border:1px solid #b9a8ff;"></div>추천 윈도우 9/18~25 (평일·저렴)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FEE2E2;"></div>추석 9/14~16 (항공 폭등·회피)</div>
+          </div>
+        </div>
+
+        <div class="tab-detail">
+          <div class="pbox" style="background:#f0edff;border:1px solid #d9d2ff;">
+            <div class="pbox-label" style="color:#6b4cff;">★ 추천 윈도우 (날씨·비용 최적)</div>
+            <div style="font-size:18px;font-weight:800;color:#6b4cff;">9/18(토) ~ 25(토)</div>
+            <div style="font-size:12px;color:#4a35b0;margin-top:4px;">7박 8일 · 연차 5일(9/20~24)<br>추석 직후 평일 = 어깨철 저렴 / 날짜는 9월 하순 내 자유 조정</div>
+          </div>
+          <div class="pbox" style="background:#f6f6f5;">
+            <div class="pbox-label" style="color:#9a9a94;">예상 날씨 — 스위스 최적 시즌 🏆</div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+              <div>🌤️ <strong>스위스</strong> 9~18°C · 초가을, 온화·맑음, 산악 완전 개방</div>
+              <div>☀️ <strong>파리</strong> 14~21°C · 화창, 쾌적</div>
+              <div>🏔️ <strong>융프라우요흐</strong> -5~2°C · 방한 필수</div>
+            </div>
+          </div>
+          <div class="pbox" style="background:#f0edff;">
+            <div class="pbox-label" style="color:#6b4cff;">비용 (추석 회피 평일)</div>
+            <div style="font-size:12px;color:#5b3fe0;">항공 <strong>140~190만/인</strong> · 추천조합 <strong>410~540만/인</strong> · 5인 2,050~2,700만</div>
+          </div>
+          <div style="font-size:11px;color:#6b4cff;font-weight:600;">→ 스위스 최고 날씨 + 가장 저렴. 단 공휴일 없어 연차 5일 필요. <span style="color:#DC2626;">추석 주간(9/14~16)은 220~320만으로 폭등 → 회피</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: OCTOBER (단풍 대안) ===== -->
+    <div class="tab-panel" id="tab-oct">
+      <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:10px;">
+        <div class="cal-month">
+          <div class="cal-month-header">
+            <span class="cal-month-name">10월 October 2027</span>
+            <span class="tag">단풍 대안</span>
+          </div>
+          <div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+          <div class="cal-grid">
+            <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+            <div class="cal-day"><span class="day-num">1</span></div>
+            <div class="cal-day sat travel-window"><span class="day-num">2</span><span class="day-label green">출발 →</span></div>
+            <div class="cal-day sun holiday travel-window"><span class="day-num">3</span><span class="day-label red">개천절</span></div>
+            <div class="cal-day substitute travel-window"><span class="day-num">4</span><span class="day-label orange">대체</span></div>
+            <div class="cal-day travel-window"><span class="day-num">5</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">6</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">7</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">8</span><span class="day-label green">연차</span></div>
+            <div class="cal-day sat holiday travel-window"><span class="day-num">9</span><span class="day-label red">한글날·귀국</span></div>
+            <div class="cal-day sun"><span class="day-num">10</span></div>
+            <div class="cal-day substitute"><span class="day-num">11</span><span class="day-label orange">대체</span></div>
+            <div class="cal-day"><span class="day-num">12</span></div>
+            <div class="cal-day"><span class="day-num">13</span></div>
+            <div class="cal-day"><span class="day-num">14</span></div>
+            <div class="cal-day"><span class="day-num">15</span></div>
+            <div class="cal-day sat"><span class="day-num">16</span></div>
+            <div class="cal-day sun"><span class="day-num">17</span></div>
+            <div class="cal-day"><span class="day-num">18</span></div><div class="cal-day"><span class="day-num">19</span></div><div class="cal-day"><span class="day-num">20</span></div><div class="cal-day"><span class="day-num">21</span></div><div class="cal-day"><span class="day-num">22</span></div>
+            <div class="cal-day sat"><span class="day-num">23</span></div>
+            <div class="cal-day sun"><span class="day-num">24</span></div>
+            <div class="cal-day"><span class="day-num">25</span></div><div class="cal-day"><span class="day-num">26</span></div><div class="cal-day"><span class="day-num">27</span></div><div class="cal-day"><span class="day-num">28</span></div><div class="cal-day"><span class="day-num">29</span></div>
+            <div class="cal-day sat"><span class="day-num">30</span></div>
+            <div class="cal-day sun"><span class="day-num">31</span></div>
+          </div>
+          <div class="legend" style="margin-top:10px;">
+            <div class="legend-item"><div class="legend-dot" style="background:#f0edff;border:1px solid #b9a8ff;"></div>윈도우 10/2~9 (개천절·한글날 보너스)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FFF0F0;border:1px solid #FCA5A5;"></div>공휴일</div>
+          </div>
+        </div>
+
+        <div class="tab-detail">
+          <div class="pbox" style="background:#f0edff;border:1px solid #d9d2ff;">
+            <div class="pbox-label" style="color:#6b4cff;">여행 윈도우</div>
+            <div style="font-size:18px;font-weight:800;color:#6b4cff;">10/2(토) ~ 9(토)</div>
+            <div style="font-size:12px;color:#5b3fe0;margin-top:4px;">7박 8일 · 연차 4일(10/5~8)<br>개천절·한글날 끼면 연차 절약 보너스 / 10/11까지 9박 연장 가능</div>
+          </div>
+          <div class="pbox" style="background:#f6f6f5;">
+            <div class="pbox-label" style="color:#9a9a94;">예상 날씨</div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+              <div>🍂 <strong>스위스</strong> 5~14°C · 단풍 절정, 비 잦음, 점점 쌀쌀</div>
+              <div>⛅ <strong>파리</strong> 11~18°C · 선선한 가을</div>
+              <div>🏔️ <strong>융프라우요흐</strong> -5~2°C · 방한 필수</div>
+            </div>
+          </div>
+          <div class="pbox" style="background:#f0edff;">
+            <div class="pbox-label" style="color:#6b4cff;">비용 (어깨철)</div>
+            <div style="font-size:12px;color:#5b3fe0;">항공 <strong>150~210만/인</strong> · 추천조합 <strong>430~560만/인</strong> · 5인 2,150~2,800만</div>
+          </div>
+          <div style="font-size:11px;color:#6b4cff;font-weight:600;">→ <strong>단풍 절정</strong>이 매력. 9월보다 쌀쌀·비 잦지만 공휴일 보너스로 연차 절약. 단풍이 목적이면 선택</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: MAY (봄·파리 대안) ===== -->
+    <div class="tab-panel" id="tab-may">
+      <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:10px;">
+        <div class="cal-month">
+          <div class="cal-month-header">
+            <span class="cal-month-name">5월 May 2027</span>
+            <span class="tag">봄·파리 대안</span>
+          </div>
+          <div class="cal-dow"><span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span></div>
+          <div class="cal-grid">
+            <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div>
+            <div class="cal-day sat"><span class="day-num">1</span></div>
+            <div class="cal-day sun"><span class="day-num">2</span></div>
+            <div class="cal-day"><span class="day-num">3</span></div>
+            <div class="cal-day"><span class="day-num">4</span></div>
+            <div class="cal-day holiday"><span class="day-num">5</span><span class="day-label red">어린이날</span></div>
+            <div class="cal-day"><span class="day-num">6</span></div>
+            <div class="cal-day"><span class="day-num">7</span></div>
+            <div class="cal-day sat"><span class="day-num">8</span></div>
+            <div class="cal-day sun"><span class="day-num">9</span></div>
+            <div class="cal-day"><span class="day-num">10</span></div>
+            <div class="cal-day"><span class="day-num">11</span></div>
+            <div class="cal-day"><span class="day-num">12</span></div>
+            <div class="cal-day holiday"><span class="day-num">13</span><span class="day-label red">석탄일</span></div>
+            <div class="cal-day"><span class="day-num">14</span></div>
+            <div class="cal-day sat travel-window"><span class="day-num">15</span><span class="day-label green">출발 →</span></div>
+            <div class="cal-day sun travel-window"><span class="day-num">16</span></div>
+            <div class="cal-day travel-window"><span class="day-num">17</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">18</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">19</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">20</span><span class="day-label green">연차</span></div>
+            <div class="cal-day travel-window"><span class="day-num">21</span><span class="day-label green">연차</span></div>
+            <div class="cal-day sat travel-window"><span class="day-num">22</span><span class="day-label green">← 귀국</span></div>
+            <div class="cal-day sun"><span class="day-num">23</span></div>
+            <div class="cal-day"><span class="day-num">24</span></div><div class="cal-day"><span class="day-num">25</span></div><div class="cal-day"><span class="day-num">26</span></div><div class="cal-day"><span class="day-num">27</span></div><div class="cal-day"><span class="day-num">28</span></div>
+            <div class="cal-day sat"><span class="day-num">29</span></div>
+            <div class="cal-day sun"><span class="day-num">30</span></div>
+            <div class="cal-day"><span class="day-num">31</span></div>
+          </div>
+          <div class="legend" style="margin-top:10px;">
+            <div class="legend-item"><div class="legend-dot" style="background:#f0edff;border:1px solid #b9a8ff;"></div>윈도우 5/15~22 (중순·저렴)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FFF0F0;border:1px solid #FCA5A5;"></div>공휴일(연휴 회피)</div>
+          </div>
+        </div>
+
+        <div class="tab-detail">
+          <div class="pbox" style="background:#f0edff;border:1px solid #d9d2ff;">
+            <div class="pbox-label" style="color:#6b4cff;">여행 윈도우 (중순·연휴 회피)</div>
+            <div style="font-size:18px;font-weight:800;color:#6b4cff;">5/15(토) ~ 22(토)</div>
+            <div style="font-size:12px;color:#5b3fe0;margin-top:4px;">7박 8일 · 연차 5일(5/17~21)<br>어린이날·석탄일 연휴 피해 항공 저렴 / 하순일수록 잔설↓</div>
+          </div>
+          <div class="pbox" style="background:#f6f6f5;">
+            <div class="pbox-label" style="color:#9a9a94;">예상 날씨</div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:12px;">
+              <div>🌸 <strong>스위스</strong> 9~19°C · 봄, 야생화 / 고산 일부 잔설</div>
+              <div>☀️ <strong>파리</strong> 14~20°C · 1년 중 가장 아름다운 봄</div>
+              <div>🏔️ <strong>융프라우요흐</strong> -5~2°C · 방한 필수</div>
+            </div>
+          </div>
+          <div class="pbox" style="background:#f0edff;">
+            <div class="pbox-label" style="color:#6b4cff;">비용 (중순 평일)</div>
+            <div style="font-size:12px;color:#5b3fe0;">항공 <strong>140~190만/인</strong> · 추천조합 <strong>410~540만/인</strong> · 5인 2,050~2,700만</div>
+            <div style="font-size:11px;color:#9a9a94;margin-top:4px;">어린이날 연휴(5월 초) 출발은 170~230만으로 ↑</div>
+          </div>
+          <div style="font-size:11px;color:#6b4cff;font-weight:600;">→ 파리 봄이 최고. 비용은 9월과 동급. 단 스위스 고산 일부 잔설(하순일수록 개선). <span style="color:#9a9a94;">파리 비중 크면 매력적</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TIMING COMPARISON -->
+  <div class="sec mb28" id="s04">
+    <div class="shdr">
+      <span class="shdr-n">04</span>
+      <div>
+        <div class="shdr-title">시기 비교표</div>
+        <div class="shdr-sub">9월 하순(추천) vs 10월(단풍) vs 5월(봄) — 공휴일 무관, 모두 평일 어깨철 기준</div>
+      </div>
+    </div>
+
+    <!-- 비교 테이블 -->
+    <div class="card mb10">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead>
+          <tr style="border-bottom:2px solid #ececeb;">
+            <th style="text-align:left;padding:0 0 8px;color:#9a9a94;font-weight:600;width:18%">항목</th>
+            <th style="text-align:center;padding:0 8px 8px;color:#6b4cff;font-weight:700;width:28%">9월 하순 ★<br><span style="font-size:10px;font-weight:400;">(추석 회피)</span></th>
+            <th style="text-align:center;padding:0 8px 8px;color:#6b4cff;font-weight:700;width:27%">10월 초중순<br><span style="font-size:10px;font-weight:400;">(단풍)</span></th>
+            <th style="text-align:center;padding:0 8px 8px;color:#6b6b66;font-weight:700;width:27%">5월 중순<br><span style="font-size:10px;font-weight:400;">(봄)</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">항공 1인</td>
+            <td style="text-align:center;padding:8px;font-weight:700;color:#6b4cff;background:#f5f3ff;">140~190만</td>
+            <td style="text-align:center;padding:8px;font-weight:700;color:#6b4cff;">150~210만</td>
+            <td style="text-align:center;padding:8px;font-weight:700;color:#6b4cff;">140~190만<br><span style="font-size:10px;font-weight:400;color:#9a9a94;">어린이날 연휴 170~230</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">숙박/방/박</td>
+            <td style="text-align:center;padding:8px;background:#f5f3ff;">25~35만</td>
+            <td style="text-align:center;padding:8px;">25~35만</td>
+            <td style="text-align:center;padding:8px;">25~35만</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">스위스 날씨<br><span style="font-size:10px;font-weight:400;">(인터라켄)</span></td>
+            <td style="text-align:center;padding:8px;background:#f5f3ff;">🌤️ 9~18°C<br><span style="color:#6b4cff;font-size:11px;">초가을, 가장 온화 🏆</span></td>
+            <td style="text-align:center;padding:8px;">🍂 5~14°C<br><span style="color:#9a9a94;font-size:11px;">단풍, 비 잦음·쌀쌀</span></td>
+            <td style="text-align:center;padding:8px;">🌸 9~19°C<br><span style="color:#9a9a94;font-size:11px;">봄, 야생화</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">파리 날씨</td>
+            <td style="text-align:center;padding:8px;background:#f5f3ff;">☀️ 14~21°C<br><span style="color:#9a9a94;font-size:11px;">화창, 쾌적</span></td>
+            <td style="text-align:center;padding:8px;">⛅ 11~18°C<br><span style="color:#9a9a94;font-size:11px;">선선한 가을</span></td>
+            <td style="text-align:center;padding:8px;">☀️ 14~20°C<br><span style="color:#9a9a94;font-size:11px;">파리 최고의 봄</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">산악 개방</td>
+            <td style="text-align:center;padding:8px;background:#f5f3ff;">✅ 완전 개방</td>
+            <td style="text-align:center;padding:8px;">✅ 완전 개방</td>
+            <td style="text-align:center;padding:8px;">⚠️ 일부 제한<br><span style="color:#9a9a94;font-size:11px;">고산 잔설</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">관광객 밀도</td>
+            <td style="text-align:center;padding:8px;background:#f5f3ff;">중간</td>
+            <td style="text-align:center;padding:8px;">적음 (비수기 진입)</td>
+            <td style="text-align:center;padding:8px;">중간</td>
+          </tr>
+          <tr style="border-bottom:1px solid #f4f4f2;">
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">연차 (7박8일)</td>
+            <td style="text-align:center;padding:8px;background:#f5f3ff;">5일<br><span style="color:#9a9a94;font-size:11px;">공휴일 없음</span></td>
+            <td style="text-align:center;padding:8px;">4일<br><span style="color:#9a9a94;font-size:11px;">개천절·한글날 보너스</span></td>
+            <td style="text-align:center;padding:8px;">5일<br><span style="color:#9a9a94;font-size:11px;">중순 기준</span></td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0;font-weight:600;color:#9a9a94;">현지 행사</td>
+            <td style="text-align:center;padding:8px;font-size:11px;background:#f5f3ff;">🍇 포도수확 시작<br>🏛️ 문화유산의 날 (파리)<br><span style="color:#b3b3ad;">알마브트리프 9월 말~</span></td>
+            <td style="text-align:center;padding:8px;font-size:11px;">🐄 알마브트리프 (소 하산)<br>🍂 단풍 + 포도수확 축제<br>🎭 파리 가을 문화 시즌</td>
+            <td style="text-align:center;padding:8px;font-size:11px;">🎾 롤랑가로스 (파리)<br>🌙 박물관의 밤 (파리)<br>🌸 스위스 봄 축제들</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 최종 결론 -->
+    <div style="display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:10px;">
+      <div class="card" style="background:#f5f3ff;border:1px solid #d9d2ff;">
+        <div style="font-size:12px;font-weight:800;margin-bottom:10px;color:#6b4cff;">🌤️ 9월 하순 — 1순위 ★</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;">
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span><strong>스위스 최고의 날씨 시즌</strong> — 온화·맑음, 산악 완전 개방</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span><strong>어깨철 평일로 가장 저렴</strong> — 추석 주간만 피하면 OK</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span><strong>관광객도 여름 성수기보다 적음</strong></span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">−</span><span>공휴일 없어 연차 5일 / 추석 주간(9/14~16)은 폭등 회피</span></div>
+        </div>
+        <div style="font-size:11px;color:#6b4cff;font-weight:700;margin-top:8px;padding-top:8px;border-top:1px solid #d9d2ff;">날씨·비용 둘 다 최상 → 최종 추천</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:12px;font-weight:800;margin-bottom:10px;color:#6b4cff;">🍂 10월 초중순 — 단풍 대안</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;">
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span><strong>단풍 절정</strong> + 알마브트리프(소 하산 축제)</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span>개천절·한글날 끼면 <strong>연차 4일</strong>로 절약</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">−</span><span>9월보다 쌀쌀(5~14°C)·비 잦음</span></div>
+        </div>
+        <div style="font-size:11px;color:#6b4cff;font-weight:700;margin-top:8px;padding-top:8px;border-top:1px solid #f4f4f2;">단풍 풍경이 목적이면 선택</div>
+      </div>
+
+      <div class="card">
+        <div style="font-size:12px;font-weight:800;margin-bottom:10px;color:#6b4cff;">🌸 5월 중순 — 봄·파리 대안</div>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;">
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span><strong>파리가 가장 아름다운 계절</strong> + 긴 낮(일몰 21시)</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#6b4cff;font-weight:700;flex-shrink:0;">✓</span><span>중순 평일이면 9월과 동급 저렴</span></div>
+          <div style="display:flex;gap:8px;"><span style="color:#DC2626;font-weight:700;flex-shrink:0;">−</span><span>스위스 고산 일부 잔설(하순일수록 개선)·단풍 없음</span></div>
+        </div>
+        <div style="font-size:11px;color:#6b4cff;font-weight:700;margin-top:8px;padding-top:8px;border-top:1px solid #f4f4f2;">파리 비중 크면 선택</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="sec mb28" id="s05">
+    <div class="shdr">
+      <span class="shdr-n">05</span>
+      <div>
+        <div class="shdr-title">일정 초안</div>
+        <div class="shdr-sub">추천 조합(스위스 4박+파리 3박) 및 대안 옵션 · 추천 이유 포함</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 2fr 1fr;gap:10px;">
+
+      <!-- 비추천 옵션 -->
+      <div class="itin-card" style="opacity:0.75;">
+        <div style="font-size:10px;font-weight:700;color:#b3b3ad;margin-bottom:8px;">스위스만 선택 시</div>
+        <h3 style="font-size:13px;">스위스 3박 4일</h3>
+        <div class="itin-day"><div class="day-pill">Day1</div><div class="itin-text">취리히 도착 → 루체른 이동</div></div>
+        <div class="itin-day"><div class="day-pill">Day2</div><div class="itin-text">루체른 + 필라투스 or 리기산</div></div>
+        <div class="itin-day"><div class="day-pill">Day3</div><div class="itin-text">인터라켄 → 융프라우요흐</div></div>
+        <div class="itin-day"><div class="day-pill">Day4</div><div class="itin-text">귀국</div></div>
+        <div class="itin-note">체르마트/마터호른 포기 · 인터라켄 집중</div>
+      </div>
+
+      <!-- 추천 조합 묶음 -->
+      <div style="background:#f0edff;border:2px solid #6b4cff;border-radius:16px;padding:10px;display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;font-size:12px;font-weight:800;color:#6b4cff;margin-bottom:4px;">★ 추천 조합 — 스위스 4박 + 파리 3박 (7박 8일)</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:4px;">
+          <div style="background:#fff;border-radius:8px;padding:7px 8px;font-size:11px;">
+            <div style="font-weight:700;color:#6b4cff;margin-bottom:2px;">스위스 4박 이유</div>
+            <div style="color:#4a4a46;">산악 이동이 많아 체력 소모 큼. 3박은 빡빡, 시니어 안배 위해 하루 더 필요</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:7px 8px;font-size:11px;">
+            <div style="font-weight:700;color:#6b4cff;margin-bottom:2px;">파리 3박으로 충분</div>
+            <div style="color:#4a4a46;">에펠탑·루브르·베르사유 핵심은 3박에 다 됨. 4박은 여유지만 필수 아님</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:7px 8px;font-size:11px;">
+            <div style="font-weight:700;color:#6b4cff;margin-bottom:2px;">오픈조 항공 효율</div>
+            <div style="color:#4a4a46;">취리히 왕복 vs 오픈조 차이 +20~30만원/인. 파리 3박 추가비용 대비 경험 가성비 ○</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:7px 8px;font-size:11px;">
+            <div style="font-weight:700;color:#6b4cff;margin-bottom:2px;">7박 8일 적정 길이</div>
+            <div style="color:#4a4a46;">8박 이상은 시니어 피로 누적. 6박은 이동 빡빡. 7박이 체력·일정 균형</div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div class="itin-card">
+            <h3>스위스 4박 5일</h3>
+            <div class="itin-day"><div class="day-pill">Day1</div><div class="itin-text">취리히 도착 → 루체른 이동</div></div>
+            <div class="itin-day"><div class="day-pill">Day2</div><div class="itin-text">루체른 + 필라투스</div></div>
+            <div class="itin-day"><div class="day-pill">Day3</div><div class="itin-text">인터라켄</div></div>
+            <div class="itin-day"><div class="day-pill">Day4</div><div class="itin-text">융프라우요흐 (하루 종일)</div></div>
+            <div class="itin-day"><div class="day-pill">Day5</div><div class="itin-text">→ 파리 이동</div></div>
+            <div class="itin-note">부모님 체력 안배 · 여유 일정</div>
+          </div>
+          <div class="itin-card">
+            <h3>파리 3박 4일</h3>
+            <div class="itin-day"><div class="day-pill p">Day5</div><div class="itin-text">파리 도착 + 세느강 유람선</div></div>
+            <div class="itin-day"><div class="day-pill p">Day6</div><div class="itin-text">에펠탑 + 루브르 or 오르세</div></div>
+            <div class="itin-day"><div class="day-pill p">Day7</div><div class="itin-text">베르사유 궁전 or 몽마르뜨</div></div>
+            <div class="itin-day"><div class="day-pill p">Day8</div><div class="itin-text">귀국</div></div>
+            <div class="itin-note">핵심 하이라이트 커버 가능</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 파리 연장 옵션 -->
+      <div class="itin-card" style="opacity:0.75;">
+        <div style="font-size:10px;font-weight:700;color:#b3b3ad;margin-bottom:8px;">파리 연장 시 (+1박)</div>
+        <h3 style="font-size:13px;">파리 4박 5일</h3>
+        <div class="itin-day"><div class="day-pill p">Day5</div><div class="itin-text">파리 도착 + 세느강 유람선</div></div>
+        <div class="itin-day"><div class="day-pill p">Day6</div><div class="itin-text">에펠탑 + 루브르</div></div>
+        <div class="itin-day"><div class="day-pill p">Day7</div><div class="itin-text">베르사유 궁전</div></div>
+        <div class="itin-day"><div class="day-pill p">Day8</div><div class="itin-text">쇼핑 (갤러리 라파예트)</div></div>
+        <div class="itin-day"><div class="day-pill p">Day9</div><div class="itin-text">귀국</div></div>
+        <div class="itin-note">여유 있는 파리 · +1인 약 30만원</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM 2COL -->
+  <div class="mb28" id="s06">
+    <div class="shdr">
+      <span class="shdr-n">06</span>
+      <div>
+        <div class="shdr-title">체크리스트</div>
+        <div class="shdr-sub">결정 전 고민 포인트 · 예약 전 확인 TODO</div>
+      </div>
+    </div>
+  </div>
+  <div class="g2">
+    <div class="sec">
+      <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">핵심 고민 포인트</div>
+      <div class="card">
+        <div class="concern">
+          <div class="c-icon">✈️</div>
+          <div><div class="c-title">파리 포함 여부</div><div class="c-desc">오픈조 차이 확인 후 결정. 1인 30만 이하면 포함 추천. 추가 비용은 사실상 숙식비만.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">📅</div>
+          <div><div class="c-title">일정 길이 가성비</div><div class="c-desc">일정 늘릴수록 항공비 비중 낮아짐. 줄이거나 늘리는 것 모두 고려 가능.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">🏔️</div>
+          <div><div class="c-title">융프라우요흐 고산증</div><div class="c-desc">해발 3,454m. 특히 고령자 건강 상태 사전 확인 필수.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">🩺</div>
+          <div><div class="c-title">여행자 보험</div><div class="c-desc">60대 이상 보험료 높음. 시니어 사전 비교 필요.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">🎟️</div>
+          <div><div class="c-title">패키지 vs 자유여행</div><div class="c-desc">5인 자유여행은 예약·이동 복잡. 가족여행 패키지 견적 병행 비교.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">🛂</div>
+          <div><div class="c-title">여권 유효기간</div><div class="c-desc">셰겐 입국 시 잔여 6개월+ 필요. 시니어 여권 만료일 미리 확인, 필요시 갱신.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">🌧️</div>
+          <div><div class="c-title">10월 우천 대비</div><div class="c-desc">인터라켄 10월 강수 80~120mm로 비 잦음. 우비·방수 신발 + 융프라우 날씨 변동 시 대체 일정.</div></div>
+        </div>
+        <div class="concern">
+          <div class="c-icon">🕐</div>
+          <div><div class="c-title">시차 적응</div><div class="c-desc">한국-스위스 7시간(서머타임). 시니어 첫 1~2일 무리한 일정 지양, 도착일 여유.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec">
+      <div style="font-size:11px;font-weight:700;color:#9a9a94;margin-bottom:8px;">TODO</div>
+      <div class="card">
+        <div class="todo"><div class="todo-circle"></div><div class="todo-text">2027년 3~4월: 취리히 왕복 vs 오픈조 항공권 즉시 비교</div><span class="ttag y">3~4월</span></div>
+        <div class="todo"><div class="todo-circle"></div><div class="todo-text">패키지 가족여행 견적 비교 (모두투어·하나투어)</div><span class="ttag y">3~4월</span></div>
+        <div class="todo"><div class="todo-circle"></div><div class="todo-text">시니어 여권 유효기간 확인 (잔여 6개월+)</div><span class="ttag r">사전 필수</span></div>
+        <div class="todo"><div class="todo-circle"></div><div class="todo-text">시니어 건강 상태 확인 (고산증·장거리 비행)</div><span class="ttag r">사전 필수</span></div>
+        <div class="todo"><div class="todo-circle"></div><div class="todo-text">여행자 보험 사전 비교 (60대 이상 보험료)</div><span class="ttag g">사전 확인</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+function showTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>

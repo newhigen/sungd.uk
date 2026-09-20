@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 가족여행 — 상세 일정 (Day-by-Day)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+
+    :root{
+      --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+      --border:#ececeb; --line-strong:#e0e0de;
+      --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+      --pick:#6b4cff; --pick-bg:#f0edff;
+      --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+      --mono:'Google Sans Code',ui-monospace,'SF Mono',Menlo,monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--sans); letter-spacing:-.01em; -webkit-font-smoothing:antialiased; background: #f4f4f2; color: #1a1a18; font-size: 13px; line-height: 1.5; }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .hdr { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+    .hdr h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+    .hdr h1 em { color: #6b4cff; font-style: normal; }
+    .hdr-meta { font-size: 12px; color: #9a9a94; }
+    .tag { display: inline-block; background: #f0edff; color: #6b4cff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+    .tag.green { background: #f0edff; color: #6b4cff; }
+    .tag.orange { background: #FEF3C7; color: #D97706; }
+    .intro { font-size: 12px; color: #6b6b66; margin-bottom: 20px; max-width: 900px; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .sec-title { font-size: 11px; font-weight: 700; color: #9a9a94; letter-spacing: 0.5px; text-transform: uppercase; margin: 24px 0 10px; }
+
+    /* 여정 요약 바 */
+    .route { display: flex; align-items: stretch; gap: 0; background: #fff; border-radius: 14px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 8px; flex-wrap: wrap; }
+    .route-node { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 4px; }
+    .route-city { font-size: 13px; font-weight: 800; }
+    .route-nights { font-size: 10px; color: #9a9a94; }
+    .route-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; color: #b3b3ad; }
+    .route-arrow .mode { font-size: 9px; color: #9a9a94; white-space: nowrap; }
+
+    /* Day 카드 */
+    .day { background: #fff; border-radius: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 12px; overflow: hidden; }
+    .day-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #f4f4f2; flex-wrap: wrap; }
+    .day-badge { background: #6b4cff; color: #fff; font-size: 13px; font-weight: 800; padding: 4px 12px; border-radius: 10px; }
+    .day-badge.sw { background: #6b4cff; }
+    .day-badge.pa { background: #6b4cff; }
+    .day-badge.fly { background: #9a9a94; }
+    .day-date { font-size: 12px; color: #9a9a94; font-weight: 600; }
+    .day-title { font-size: 15px; font-weight: 800; }
+    .day-meta { margin-left: auto; display: flex; gap: 14px; align-items: center; }
+    .day-stay { font-size: 11px; color: #6b6b66; }
+    .day-cost { font-size: 12px; font-weight: 700; color: #6b4cff; }
+
+    .day-body { display: grid; grid-template-columns: 1.7fr 1fr; gap: 0; }
+    .timeline { padding: 14px 18px; border-right: 1px solid #f4f4f2; }
+    .tl-row { display: flex; gap: 12px; padding: 7px 0; align-items: flex-start; }
+    .tl-time { flex: 0 0 64px; font-size: 11px; font-weight: 700; color: #9a9a94; padding-top: 1px; }
+    .tl-act { font-size: 12.5px; color: #1a1a18; }
+    .tl-act .sub { font-size: 11px; color: #9a9a94; display: block; margin-top: 1px; }
+    .tl-act .mv { color: #6b4cff; font-weight: 600; }
+
+    .day-side { padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+    .side-block .sb-label { font-size: 10px; font-weight: 700; color: #9a9a94; text-transform: uppercase; margin-bottom: 5px; }
+    .meal { font-size: 12px; color: #4a4a46; margin-bottom: 3px; }
+    .meal b { color: #1a1a18; }
+    .stamina { background: #FFF7ED; border-radius: 8px; padding: 8px 10px; font-size: 11.5px; color: #9A3412; }
+    .stamina.easy { background: #f0edff; color: #4a35b0; }
+    .stamina.hard { background: #FEF2F2; color: #991B1B; }
+    .tip { background: #f0edff; border-radius: 8px; padding: 8px 10px; font-size: 11.5px; color: #5b3fe0; }
+
+    /* 점검 */
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check-item { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f4f4f2; align-items: flex-start; }
+    .check-item:last-child { border-bottom: none; }
+    .ci-ic { font-size: 15px; flex-shrink: 0; }
+    .ci-t { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .ci-d { font-size: 12px; color: #6b6b66; }
+    .pad { padding: 14px 18px; }
+
+    /* 비용 */
+    .cost-table { width: 100%; border-collapse: collapse; }
+    .cost-table th { font-size: 11px; font-weight: 600; color: #9a9a94; text-align: left; padding: 0 8px 8px 0; border-bottom: 1px solid #ececeb; }
+    .cost-table td { padding: 8px 8px 8px 0; border-bottom: 1px solid #f4f4f2; font-size: 12px; vertical-align: top; }
+    .cost-table tr:last-child td { border-bottom: none; }
+    .ct-num { text-align: right; font-weight: 700; white-space: nowrap; }
+    .ct-src { font-size: 11px; color: #9a9a94; }
+
+    .tier { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .tier-card { border-radius: 12px; padding: 14px 16px; }
+    .tier-card .tt { font-size: 12px; font-weight: 800; margin-bottom: 6px; }
+    .tier-card .tv { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .tier-card .tv small { font-size: 12px; font-weight: 600; color: #9a9a94; }
+    .tier-card .td { font-size: 11px; margin-top: 6px; line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .day-body { grid-template-columns: 1fr; }
+      .timeline { border-right: none; border-bottom: 1px solid #f4f4f2; }
+      .check-grid, .tier { grid-template-columns: 1fr; }
+      .route { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <h1>2027 가족여행 상세 일정 — <em>스위스 4박 + 파리 3박</em></h1>
+    <span class="tag green">9월 하순 추천</span>
+    <span class="tag">5인 · 7박 8일</span>
+    <span class="hdr-meta">예시 날짜 9/18(토)~9/25(토) · 9월 하순 내 자유 조정</span>
+  </div>
+  <div class="intro">
+    인원: 성인 5인. 교통은 <b>스위스 트래블 패스(STP)</b> + <b>취리히↔파리 TGV Lyria</b> + 파리 대중교통.
+    숙박 3방(3방(5인)). 환율 가정 <b>1 CHF≈1,550원, 1 EUR≈1,450원</b>(2027 추정, 변동 주의). 모든 금액은 1인 기준이며 항공·STP 등은 총비용 표에 별도 집계.
+  </div>
+
+  <!-- 여정 요약 -->
+  <div class="route">
+    <div class="route-node"><span class="route-city">인천</span><span class="route-nights">9/18 출발</span></div>
+    <div class="route-arrow"><span>✈</span><span class="mode">경유 13~15h</span></div>
+    <div class="route-node"><span class="route-city">취리히</span><span class="route-nights">도착·경유</span></div>
+    <div class="route-arrow"><span>🚆</span><span class="mode">IR 1시간</span></div>
+    <div class="route-node"><span class="route-city">루체른</span><span class="route-nights">2박</span></div>
+    <div class="route-arrow"><span>🚆</span><span class="mode">파노라마 1:50</span></div>
+    <div class="route-node"><span class="route-city">인터라켄</span><span class="route-nights">2박</span></div>
+    <div class="route-arrow"><span>🚆</span><span class="mode">TGV ~6h</span></div>
+    <div class="route-node"><span class="route-city">파리</span><span class="route-nights">3박</span></div>
+    <div class="route-arrow"><span>✈</span><span class="mode">직항 ~12h</span></div>
+    <div class="route-node"><span class="route-city">인천</span><span class="route-nights">9/26 도착</span></div>
+  </div>
+
+  <!-- ============ DAY 1 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge fly">Day 1</span>
+      <span class="day-date">9/18 토</span>
+      <span class="day-title">인천 → 취리히 → 루체른</span>
+      <div class="day-meta"><span class="day-stay">🏨 루체른</span><span class="day-cost">~3만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">오전</div><div class="tl-act">인천공항(ICN) 출발 <span class="sub">경유 1회(도하/이스탄불 등), 총 13~15시간. 시차 -7h</span></div></div>
+        <div class="tl-row"><div class="tl-time">오후~저녁</div><div class="tl-act">취리히공항(ZRH) 도착 · 입국·수하물</div></div>
+        <div class="tl-row"><div class="tl-time">저녁</div><div class="tl-act"><span class="mv">🚆 공항역→루체른 IR 직행 1시간</span> (STP 1일차 개시)<span class="sub">취리히 시내 안 거치고 공항역에서 바로 탑승</span></div></div>
+        <div class="tl-row"><div class="tl-time">밤</div><div class="tl-act">루체른 호텔 체크인 · 가벼운 저녁 후 취침</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사</div>
+          <div class="meal"><b>점심·저녁</b> 기내식</div>
+          <div class="meal"><b>도착 후</b> 루체른 역 근처 간단히 (25~35 CHF) 또는 호텔</div>
+        </div>
+        <div class="stamina">🪫 <b>체력: 회복일</b> — 장거리 비행 직후. 관광 없이 이동·취침만. 무리 금지.</div>
+        <div class="tip">💡 기내에서 스위스 시간 기준으로 수면 조절. 도착일은 절대 일정 욕심 X.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 2 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge sw">Day 2</span>
+      <span class="day-date">9/19 일</span>
+      <span class="day-title">루체른 구시가 + 필라투스</span>
+      <div class="day-meta"><span class="day-stay">🏨 루체른</span><span class="day-cost">~13만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">08:30</div><div class="tl-act">호텔 조식</div></div>
+        <div class="tl-row"><div class="tl-time">09:30</div><div class="tl-act">루체른 구시가 도보 <span class="sub">카펠교(Kapellbrücke) · 빈사의 사자상 · 무제크 성벽. 평지 위주, 시니어 부담 적음</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:00</div><div class="tl-act">호반 점심</div></div>
+        <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act"><span class="mv">🚢🚠 필라투스 골든 라운드</span> <span class="sub">유람선+코그휠열차 또는 곤돌라. STP 50% 할인. 정상(2,132m) 전망. 교통수단 위주라 걷기 적음</span></div></div>
+        <div class="tl-row"><div class="tl-time">17:30</div><div class="tl-act">루체른 복귀 · 휴식</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁: 스위스 음식 또는 한식당</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔 조식 (포함)</div>
+          <div class="meal"><b>점심</b> 호반 식당 30~45 CHF</div>
+          <div class="meal"><b>저녁</b> 뢰스티/퐁뒤 또는 한식 30~45 CHF</div>
+        </div>
+        <div class="stamina">🔋 <b>체력: 보통</b> — 시차 적응 둘째날. 필라투스는 탈것 위주라 무난. 오후 한 차례 휴식 확보.</div>
+        <div class="tip">💡 필라투스 vs 리기: 시니어은 <b>필라투스 곤돌라</b>가 멀미 적고 편함. 날씨 흐리면 실내 위주로 조정.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 3 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge sw">Day 3</span>
+      <span class="day-date">9/20 월</span>
+      <span class="day-title">루체른 → 인터라켄 (파노라마 열차)</span>
+      <div class="day-meta"><span class="day-stay">🏨 인터라켄</span><span class="day-cost">~11만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:00</div><div class="tl-act">조식 · 체크아웃</div></div>
+        <div class="tl-row"><div class="tl-time">10:00</div><div class="tl-act"><span class="mv">🚆 루체른-인터라켄 익스프레스 1시간 50분</span> <span class="sub">브뤼니히 고개·호수·산 파노라마. 앉아서 경치 감상 → 시니어 만족도 높음. STP 포함</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:00</div><div class="tl-act">인터라켄 도착 · 호텔 짐 보관/체크인 · 점심</div></div>
+        <div class="tl-row"><div class="tl-time">14:30</div><div class="tl-act"><span class="mv">🚠 하더쿨름 전망대</span> <span class="sub">푸니쿨라 8분(STP 50%). 인터라켄·호수 2개 조망. 또는 회에마테 공원 산책</span></div></div>
+        <div class="tl-row"><div class="tl-time">17:00</div><div class="tl-act">휴식 (다음날 융프라우 대비 컨디션 관리)</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁 · 다음날 도시락(신라면/물) 준비</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔 조식</div>
+          <div class="meal"><b>점심</b> 인터라켄 시내 25~40 CHF</div>
+          <div class="meal"><b>저녁</b> 레스토랑 30~45 CHF</div>
+        </div>
+        <div class="stamina easy">🟢 <b>체력: 여유</b> — 이동일. 기차는 앉아서 이동. 오후 가볍게 + 충분한 휴식으로 융프라우 대비.</div>
+        <div class="tip">💡 Coop/Migros에서 다음날 융프라우 점심 도시락·물·간식 미리 구매(정상 식당 매우 비쌈).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 4 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge sw">Day 4</span>
+      <span class="day-date">9/21 화</span>
+      <span class="day-title">융프라우요흐 — Top of Europe ⭐ 하이라이트</span>
+      <div class="day-meta"><span class="day-stay">🏨 인터라켄</span><span class="day-cost">~30만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">07:00</div><div class="tl-act">이른 조식 (오전 날씨·시야 좋을 때 출발)</div></div>
+        <div class="tl-row"><div class="tl-time">08:00</div><div class="tl-act"><span class="mv">🚆 인터라켄동역→그린델발트 터미널</span> <span class="sub">약 35분</span></div></div>
+        <div class="tl-row"><div class="tl-time">08:45</div><div class="tl-act"><span class="mv">🚠 아이거 익스프레스 곤돌라 15분 → 아이거글레처 → 🚆 융프라우요흐</span> <span class="sub">편도 총 ~1시간 30분. 3,454m</span></div></div>
+        <div class="tl-row"><div class="tl-time">10:30</div><div class="tl-act">정상: 스핑크스 전망대 · 얼음궁전 · 알레치 빙하 <span class="sub">체류 1.5~2시간. 천천히, 수분 섭취, 무리 금지</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:30</div><div class="tl-act">점심 (도시락 또는 정상 식당)</div></div>
+        <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act"><span class="mv">하산</span> · 클라이네 샤이덱/그린델발트 잠깐 경유</div></div>
+        <div class="tl-row"><div class="tl-time">16:30</div><div class="tl-act">인터라켄 복귀 · 휴식</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔 조식 (이른 시간)</div>
+          <div class="meal"><b>점심</b> 도시락 권장 (정상 식당 30~40 CHF로 비쌈)</div>
+          <div class="meal"><b>저녁</b> 인터라켄 30~45 CHF</div>
+        </div>
+        <div class="stamina hard">🔴 <b>체력: 최대 부담</b> — 고산(3,454m). 고산증(두통·메스꺼움) 가능. 천천히 이동, 수분, 정상 체류 짧게. 시니어 컨디션 최우선.</div>
+        <div class="tip">💡 <b>날씨 유연 배정</b>: 인터라켄 2박 중 시야 좋은 날 선택. 융프라우 티켓은 1~2일 전 날씨 보고 확정 권장. 흐리면 쉴트호른·피르스트 등 대안.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 5 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge fly">Day 5</span>
+      <span class="day-date">9/22 수</span>
+      <span class="day-title">인터라켄 → 파리 (TGV Lyria)</span>
+      <div class="day-meta"><span class="day-stay">🏨 파리</span><span class="day-cost">~12만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">08:00</div><div class="tl-act">조식 · 체크아웃</div></div>
+        <div class="tl-row"><div class="tl-time">09:00</div><div class="tl-act"><span class="mv">🚆 인터라켄→취리히 HB 약 2시간</span> (STP)</div></div>
+        <div class="tl-row"><div class="tl-time">11:30</div><div class="tl-act"><span class="mv">🚄 취리히 HB→파리 Gare de Lyon · TGV Lyria 4시간 4분</span> <span class="sub">시내-시내, 환승 없음. 좌석 사전 예약 필수(€49~). 1등석 권장(시니어)</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:30</div><div class="tl-act">기차 내 점심 (도시락 또는 식당칸)</div></div>
+        <div class="tl-row"><div class="tl-time">15:30</div><div class="tl-act">파리 도착 <span class="mv">🚕 택시/RER로 호텔</span> · 체크인</div></div>
+        <div class="tl-row"><div class="tl-time">18:00</div><div class="tl-act">가벼운 산책(세느강 근처) · 저녁</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔 조식</div>
+          <div class="meal"><b>점심</b> 기차 도시락 또는 식당칸 10~25€</div>
+          <div class="meal"><b>저녁</b> 파리 비스트로 25~40€</div>
+        </div>
+        <div class="stamina">🟡 <b>체력: 종일 이동</b> — 총 6시간+(앉아서). 길지만 환승 적어 부담 적음. 첫날 파리 관광은 최소화.</div>
+        <div class="tip">💡 TGV는 항공보다 도심접근·짐·환승에서 유리. 5인 좌석은 조기 예약(3~4월). 파리 호텔은 Gare de Lyon/중심부 추천.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 6 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge pa">Day 6</span>
+      <span class="day-date">9/23 목</span>
+      <span class="day-title">파리: 루브르 + 에펠탑 + 세느강</span>
+      <div class="day-meta"><span class="day-stay">🏨 파리</span><span class="day-cost">~16만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:00</div><div class="tl-act">조식</div></div>
+        <div class="tl-row"><div class="tl-time">10:00</div><div class="tl-act">루브르 박물관 <span class="sub">예약 필수(€22). 모나리자·비너스 등 핵심 위주 2~2.5시간. 벤치·휴식 활용</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:30</div><div class="tl-act">튈르리 정원 근처 점심</div></div>
+        <div class="tl-row"><div class="tl-time">14:30</div><div class="tl-act"><span class="mv">🚇 에펠탑</span> <span class="sub">예약(€30, 2층). 트로카데로 포토존. 시니어은 2층까지만도 충분</span></div></div>
+        <div class="tl-row"><div class="tl-time">17:30</div><div class="tl-act">휴식 · 호텔 잠깐</div></div>
+        <div class="tl-row"><div class="tl-time">19:30</div><div class="tl-act"><span class="mv">🚢 세느강 디너 크루즈 또는 바토무슈 유람선</span> <span class="sub">야경. 앉아서 주요 명소 감상</span></div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔/카페 크루아상</div>
+          <div class="meal"><b>점심</b> 비스트로 15~25€</div>
+          <div class="meal"><b>저녁</b> 디너크루즈 60~90€ 또는 일반 25~40€</div>
+        </div>
+        <div class="stamina hard">🔴 <b>체력: 도보 많음</b> — 박물관·전망대. 루브르는 핵심만, 동선 짧게. 중간 카페 휴식 필수.</div>
+        <div class="tip">💡 파리 뮤지엄 패스 고려(루브르·오르세 등 포함, 줄 단축). 디너크루즈는 미리 예약. 소매치기 주의.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 7 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge pa">Day 7</span>
+      <span class="day-date">9/24 금</span>
+      <span class="day-title">파리: 베르사유 궁전 (또는 오르세+몽마르뜨)</span>
+      <div class="day-meta"><span class="day-stay">🏨 파리</span><span class="day-cost">~15만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:00</div><div class="tl-act">조식</div></div>
+        <div class="tl-row"><div class="tl-time">10:00</div><div class="tl-act"><span class="mv">🚆 RER C → 베르사유 약 1시간</span> <span class="sub">Versailles Château Rive Gauche역 하차, 도보 15분. 통합권 €32 예약</span></div></div>
+        <div class="tl-row"><div class="tl-time">11:30</div><div class="tl-act">궁전 내부 (거울의 방 등) · 정원 산책 <span class="sub">정원 넓음·자갈길 — 편한 신발. 무리하면 정원 일부만</span></div></div>
+        <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act">베르사유 점심</div></div>
+        <div class="tl-row"><div class="tl-time">15:30</div><div class="tl-act"><span class="mv">🚆 파리 복귀</span> · 휴식</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">파리 마지막 밤 — 분위기 있는 비스트로</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔/카페</div>
+          <div class="meal"><b>점심</b> 베르사유 인근 18~28€</div>
+          <div class="meal"><b>저녁</b> 비스트로 30~45€</div>
+        </div>
+        <div class="stamina">🟡 <b>체력: 컨디션 따라 선택</b> — 베르사유는 걷기 많음. 시니어 힘들면 <b>오르세+몽마르뜨(오전, 계단)</b>로 대체해 이동 줄이기.</div>
+        <div class="tip">💡 베르사유 오전 입장이 덜 붐빔. 정원 트램(유료)으로 도보 절약 가능. 컨디션 보고 정원 범위 조절.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DAY 8 ============ -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge fly">Day 8</span>
+      <span class="day-date">9/25 토</span>
+      <span class="day-title">파리 → 인천 (직항)</span>
+      <div class="day-meta"><span class="day-stay">✈ 기내 1박</span><span class="day-cost">~8만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:00</div><div class="tl-act">조식 · 체크아웃 · 짐 보관</div></div>
+        <div class="tl-row"><div class="tl-time">10:00</div><div class="tl-act">갤러리 라파예트 쇼핑 또는 카페 <span class="sub">출발 시각 따라 조정</span></div></div>
+        <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act"><span class="mv">🚆 RER/택시 → 샤를드골(CDG) 공항</span> · 체크인·면세</div></div>
+        <div class="tl-row"><div class="tl-time">오후</div><div class="tl-act"><span class="mv">✈ 파리→인천 직항 약 12시간</span> <span class="sub">대한항공/에어프랑스. 취리히와 달리 파리는 직항 → 귀국 편함(오픈조 장점)</span></div></div>
+        <div class="tl-row"><div class="tl-time">9/26</div><div class="tl-act">인천 도착 (현지 +7h)</div></div>
+      </div>
+      <div class="day-side">
+        <div class="side-block">
+          <div class="sb-label">식사 (1인)</div>
+          <div class="meal"><b>아침</b> 호텔</div>
+          <div class="meal"><b>점심</b> 공항/시내 15~25€</div>
+          <div class="meal"><b>저녁</b> 기내식</div>
+        </div>
+        <div class="stamina">🟡 <b>체력: 귀국 이동</b> — 직항이라 환승 부담 없음. 공항 여유 있게(3시간 전).</div>
+        <div class="tip">💡 파리 아웃은 직항 가능해 귀국이 편함. CDG 면세 환급(텍스리펀) 시간 여유 두기.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 전체 점검 ============ -->
+  <div class="sec-title">전체 점검 — 시간 · 체력 · 리스크</div>
+  <div class="card pad">
+    <div class="check-grid">
+      <div class="check-item"><div class="ci-ic">🟢</div><div><div class="ci-t">완급 리듬 양호</div><div class="ci-d">회복일(D1) → 관광(D2) → 이동여유(D3) → 빡셈(D4 융프라우) → 이동(D5 앉아서) → 빡셈(D6) → 선택(D7) → 귀국(D8). 힘든 날 사이에 앉아 가는 이동일이 끼어 체력 분산.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟡</div><div><div class="ci-t">Day 5 이동이 가장 김 (6시간+)</div><div class="ci-d">인터라켄→취리히→파리. 환승 1회·앉아서지만 길다. <b>1등석 권장</b>, 오전 출발로 파리 오후 도착·휴식 확보.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟡</div><div><div class="ci-t">융프라우 날씨 리스크</div><div class="ci-d">인터라켄 2박 중 시야 좋은 날 선택. 흐리면 쉴트호른·피르스트로 대안. 티켓은 1~2일 전 확정 권장.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟡</div><div><div class="ci-t">짐 이동 2회 (5인 대량)</div><div class="ci-d">루체른→인터라켄, 인터라켄→파리. 기차 짐칸·캐리어 관리. 역 계단 시 엘리베이터·포터 활용.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🔴</div><div><div class="ci-t">고산증 (Day 4)</div><div class="ci-d">3,454m. 연령·체력 무관하게 발생 가능. 정상 체류 짧게, 수분, 천천히. 두통약 지참. 심하면 즉시 하산.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🔴</div><div><div class="ci-t">파리 도보·소매치기</div><div class="ci-d">루브르·베르사유 도보량 많음 → 핵심만. 지하철·관광지 소매치기 주의(시니어 가방 앞으로).</div></div></div>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f4f4f2;font-size:12px;color:#4a4a46;">
+      <b>종합 판단:</b> 시니어 동반 기준 <b>무리 없는 일정</b>. 힘든 날(D4·D6) 전후로 이동·휴식이 배치돼 회복 가능. 단 ① Day5 장거리 이동 1등석 ② 융프라우 날씨 예비 ③ 도보 구간 핵심만 — 이 3가지만 관리하면 쾌적. 더 여유 원하면 <b>인터라켄 1박 추가(스위스 5박)</b>로 융프라우 날씨 버퍼 확보 가능(+1인 약 30~40만).
+    </div>
+  </div>
+
+  <!-- ============ 최종 비용 ============ -->
+  <div class="sec-title">최종 비용 — 항목별 (1인, 9월 하순 평일 기준)</div>
+  <div class="card pad">
+    <table class="cost-table">
+      <thead><tr><th style="width:22%">항목</th><th style="width:48%">산출 근거</th><th class="ct-num" style="width:15%">절약형(하단)</th><th class="ct-num" style="width:15%">여유형(상단)</th></tr></thead>
+      <tbody>
+        <tr><td><b>✈️ 항공</b></td><td class="ct-src">ICN-ZRH in / CDG-ICN out 오픈조 경유, 어깨철 평일</td><td class="ct-num">140만</td><td class="ct-num">190만</td></tr>
+        <tr><td><b>🏨 스위스 숙박 4박</b></td><td class="ct-src">3방×4박, 호텔 30~45만/방 ÷5인 (샬레/아파트면 ↓)</td><td class="ct-num">72만</td><td class="ct-num">108만</td></tr>
+        <tr><td><b>🏨 파리 숙박 3박</b></td><td class="ct-src">3방×3박, 20~30만/방 ÷5인</td><td class="ct-num">36만</td><td class="ct-num">54만</td></tr>
+        <tr><td><b>🍽️ 식비 7일</b></td><td class="ct-src">스위스 4일×10~15만 + 파리 3일×8~12만 (마트 활용 시 ↓)</td><td class="ct-num">64만</td><td class="ct-num">96만</td></tr>
+        <tr><td><b>🚆 스위스 교통 STP</b></td><td class="ct-src">트래블패스 6일권 (2등석 CHF419 / 1등석 CHF469)</td><td class="ct-num">65만</td><td class="ct-num">73만</td></tr>
+        <tr><td><b>🏔️ 융프라우요흐</b></td><td class="ct-src">동신항운 쿠폰+STP 145CHF (정가 224CHF)</td><td class="ct-num">22만</td><td class="ct-num">22만</td></tr>
+        <tr><td><b>🚠 필라투스·하더쿨름</b></td><td class="ct-src">STP 50% 할인 후</td><td class="ct-num">5만</td><td class="ct-num">10만</td></tr>
+        <tr><td><b>🚄 취리히→파리 TGV</b></td><td class="ct-src">TGV Lyria 조기예약 €49~90 (1등석 ↑)</td><td class="ct-num">9만</td><td class="ct-num">14만</td></tr>
+        <tr><td><b>🎫 파리 교통·입장</b></td><td class="ct-src">나비고/뮤지엄패스 + 루브르€22·에펠€30·베르사유€32</td><td class="ct-num">18만</td><td class="ct-num">26만</td></tr>
+        <tr><td><b>🩺 여행자보험</b></td><td class="ct-src">60대 포함, 8일</td><td class="ct-num">8만</td><td class="ct-num">15만</td></tr>
+        <tr><td><b>🧾 기타·예비비</b></td><td class="ct-src">유심·팁·잡비·환차손</td><td class="ct-num">11만</td><td class="ct-num">22만</td></tr>
+        <tr style="border-top:2px solid #ececeb;"><td><b style="color:#6b4cff;">1인 합계</b></td><td class="ct-src">스위스 4박 + 파리 3박, 7박 8일 (표준형 중간값 ≈ 540만)</td><td class="ct-num" style="color:#6b4cff;font-size:14px;">약 450만</td><td class="ct-num" style="color:#6b4cff;font-size:14px;">약 630만</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec-title">최종 비용 — 5인 총액 (3단계)</div>
+  <div class="tier">
+    <div class="tier-card" style="background:#f0edff;border:1px solid #d9d2ff;">
+      <div class="tt" style="color:#6b4cff;">절약형</div>
+      <div class="tv" style="color:#6b4cff;">2,250<small>만원</small></div>
+      <div class="td" style="color:#4a35b0;">1인 ~450만 · 2등석 STP, 3성/아파트 숙소, 마트 식사 적극, 도시락 활용</div>
+    </div>
+    <div class="tier-card" style="background:#f0edff;border:1px solid #d9d2ff;">
+      <div class="tt" style="color:#6b4cff;">표준형 (권장)</div>
+      <div class="tv" style="color:#6b4cff;">2,700<small>만원</small></div>
+      <div class="td" style="color:#5b3fe0;">1인 ~540만 · 1등석 STP, 4성 호텔, 식당 위주 + 디너크루즈 1회. 시니어 쾌적</div>
+    </div>
+    <div class="tier-card" style="background:#f6f6f5;border:1px solid #ececeb;">
+      <div class="tt" style="color:#6b6b66;">여유형</div>
+      <div class="tv" style="color:#1a1a18;">3,150<small>만원</small></div>
+      <div class="td" style="color:#6b6b66;">1인 ~630만 · 프리미엄 숙소, 외식 풍성, 인터라켄 1박 추가/가이드 등 여유</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:#9a9a94;margin-top:10px;">
+    ※ 항공·환율(1CHF≈1,550원, 1EUR≈1,450원)·숙박 시세는 2027 예약 시점에 변동. 3~4월 항공권 오픈 즉시 확정 권장. 출처: 트립스토어·조촌부부·brunch·KKday·TGV Lyria·동신항운·SBB.
+  </div>
+
+</div>
+</body>
+</html>

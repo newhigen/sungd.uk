@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 가족여행 — 스위스 6박 일정 + 동선 지도</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+
+    :root{
+      --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+      --border:#ececeb; --line-strong:#e0e0de;
+      --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+      --pick:#6b4cff; --pick-bg:#f0edff;
+      --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+      --mono:'Google Sans Code',ui-monospace,'SF Mono',Menlo,monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--sans); letter-spacing:-.01em; -webkit-font-smoothing:antialiased; background: #f4f4f2; color: #1a1a18; font-size: 13px; line-height: 1.5; }
+    .wrap { max-width: 1500px; margin: 0 auto; padding: 16px 20px 40px; }
+
+    .hdr { margin-bottom: 12px; }
+    .hdr h1 { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; }
+    .hdr h1 em { color: #6b4cff; font-style: normal; }
+    .hdr .sub { font-size: 12px; color: #9a9a94; margin-top: 2px; }
+
+    /* 날짜 필터 */
+    .dayfilter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .df-btn { padding: 6px 12px; border-radius: 8px; background: #fff; border: 1.5px solid #ececeb; font-size: 12px; font-weight: 700; color: #6b6b66; cursor: pointer; }
+    .df-btn:hover { border-color: #cfcfca; }
+    .df-btn.active { background: #6b4cff; color: #fff; border-color: #6b4cff; }
+    .df-btn.all.active { background: #1a1a18; border-color: #1a1a18; }
+
+    /* 레이아웃 */
+    .layout { display: grid; grid-template-columns: 1fr 0.85fr; gap: 14px; align-items: start; }
+    .mapcol { position: sticky; top: 16px; }
+    #map { height: calc(100vh - 110px); min-height: 460px; border-radius: 14px; box-shadow: 0 1px 6px rgba(0,0,0,0.1); }
+    .legend { background: #fff; border-radius: 12px; padding: 10px 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px 16px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #4a4a46; }
+    .lg-ic { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #fff; }
+
+    /* Day 카드 */
+    .day { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 10px; overflow: hidden; }
+    .day-head { display: flex; align-items: center; gap: 10px; padding: 11px 16px; cursor: pointer; border-left: 4px solid transparent; }
+    .day.sel .day-head { background: #f5f3ff; border-left-color: #6b4cff; }
+    .day-badge { background: #6b4cff; color: #fff; font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 8px; flex-shrink: 0; }
+    .day-badge.peak { background: #b8860b; }
+    .day-badge.move { background: #9a9a94; }
+    .day-date { font-size: 11px; color: #9a9a94; font-weight: 600; flex-shrink: 0; }
+    .day-title { font-size: 13.5px; font-weight: 800; }
+    .day-pin { margin-left: auto; font-size: 11px; color: #6b4cff; font-weight: 700; flex-shrink: 0; }
+    .day-stay { font-size: 11px; color: #6b6b66; flex-shrink: 0; }
+    .day-body { padding: 4px 16px 14px; }
+    .tl-row { display: flex; gap: 10px; padding: 5px 0; align-items: flex-start; }
+    .tl-time { flex: 0 0 56px; font-size: 11px; font-weight: 700; color: #9a9a94; padding-top: 1px; }
+    .tl-act { font-size: 12.5px; }
+    .tl-act .mv { color: #6b4cff; font-weight: 600; }
+    .tl-act .ic { font-size: 11px; }
+    .tl-act .sub { font-size: 11px; color: #9a9a94; display: block; }
+    .day-foot { display: flex; gap: 14px; flex-wrap: wrap; font-size: 11.5px; color: #4a4a46; margin-top: 8px; padding-top: 8px; border-top: 1px solid #f4f4f2; }
+    .day-foot b { color: #1a1a18; }
+    .stamina-dot { font-size: 11px; }
+
+    .sec-title { font-size: 11px; font-weight: 700; color: #9a9a94; letter-spacing: 0.5px; text-transform: uppercase; margin: 22px 0 10px; }
+    .card { background: #fff; border-radius: 14px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .check-item { display: flex; gap: 9px; padding: 7px 0; border-bottom: 1px solid #f4f4f2; align-items: flex-start; }
+    .check-item:last-child { border-bottom: none; }
+    .ci-t { font-size: 12.5px; font-weight: 700; }
+    .ci-d { font-size: 11.5px; color: #6b6b66; }
+    .tier { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .tier-card { border-radius: 10px; padding: 12px 14px; }
+    .tier-card .tt { font-size: 11px; font-weight: 800; margin-bottom: 4px; }
+    .tier-card .tv { font-size: 19px; font-weight: 800; }
+    .tier-card .tv small { font-size: 11px; font-weight: 600; color: #9a9a94; }
+    .tier-card .td2 { font-size: 10.5px; margin-top: 4px; }
+    .note { background: #f0edff; border-radius: 8px; padding: 9px 12px; font-size: 11.5px; color: #5b3fe0; margin-top: 10px; line-height: 1.6; }
+
+    /* 마커 */
+    .pin { display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.35); border-radius: 50%; }
+    .pin.peak { border-radius: 5px; }
+
+    @media (max-width: 880px) {
+      .layout { grid-template-columns: 1fr; }
+      .mapcol { position: static; order: -1; }
+      #map { height: 44vh; min-height: 300px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <h1>스위스 6박 7일 — <em>일정 + 동선 지도</em></h1>
+    <div class="sub">왼쪽 일정의 날짜를 누르면 그 날의 동선·명소·식당·숙박이 지도에 표시돼요 · 마커 클릭 시 상세</div>
+  </div>
+
+  <div class="dayfilter" id="dayfilter">
+    <button class="df-btn all active" onclick="showDay(0)">전체 동선</button>
+    <button class="df-btn" onclick="showDay(1)">Day1</button>
+    <button class="df-btn" onclick="showDay(2)">Day2</button>
+    <button class="df-btn" onclick="showDay(3)">Day3</button>
+    <button class="df-btn" onclick="showDay(4)">Day4</button>
+    <button class="df-btn" onclick="showDay(5)">Day5</button>
+    <button class="df-btn" onclick="showDay(6)">Day6</button>
+    <button class="df-btn" onclick="showDay(7)">Day7</button>
+  </div>
+
+  <div class="layout">
+    <!-- 왼쪽: 일정 -->
+    <div class="days">
+      <div class="day" id="day-1">
+        <div class="day-head" onclick="showDay(1)"><span class="day-badge move">Day1</span><span class="day-date">9/18 토</span><span class="day-title">인천 → 취리히 → 루체른</span><span class="day-stay">🏨 루체른</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">오전</div><div class="tl-act">인천공항 출발 <span class="sub">경유 1회 13~15h, 시차 -7h</span></div></div>
+          <div class="tl-row"><div class="tl-time">저녁</div><div class="tl-act"><span class="ic">✈</span> 취리히공항 도착 → <span class="mv">🚆 루체른 IR 1시간</span></div></div>
+          <div class="tl-row"><div class="tl-time">밤</div><div class="tl-act"><span class="ic">🏨</span> 루체른 체크인(역·구시가 구역) · 가벼운 저녁</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🪫</span> <b>회복일</b> 무리 금지</span><span>🍽 도착 후 간단히</span></div>
+        </div>
+      </div>
+
+      <div class="day" id="day-2">
+        <div class="day-head" onclick="showDay(2)"><span class="day-badge">Day2</span><span class="day-date">9/19 일</span><span class="day-title">루체른 구시가 + 필라투스</span><span class="day-stay">🏨 루체른</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">09:30</div><div class="tl-act"><span class="ic">📷</span> 구시가 — 카펠교 · 빈사의 사자상 · 무제크 성벽 <span class="sub">평지 위주</span></div></div>
+          <div class="tl-row"><div class="tl-time">12:00</div><div class="tl-act"><span class="ic">🍽</span> 점심 — 카펠교변 스위스 전통식(송아지·뢰스티) 또는 한식</div></div>
+          <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act"><span class="mv">🚢🚠 필라투스 골든 라운드</span> (2,132m) <span class="sub">유람선+코그휠, STP 50%. 걷기 적음</span></div></div>
+          <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act"><span class="ic">🍽</span> 저녁 — 한식당(역 근처) 또는 스위스 음식</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🔋</span> <b>보통</b></span><span>탈것 위주라 무난</span></div>
+        </div>
+      </div>
+
+      <div class="day" id="day-3">
+        <div class="day-head" onclick="showDay(3)"><span class="day-badge move">Day3</span><span class="day-date">9/20 월</span><span class="day-title">루체른 → 체르마트 (~3h)</span><span class="day-stay">🏨 체르마트</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">10:00</div><div class="tl-act"><span class="mv">🚆 루체른→체르마트 약 3시간</span> <span class="sub">베른 경유, 경치. STP 포함</span></div></div>
+          <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act"><span class="ic">🏨</span> 체르마트 체크인(역·반호프거리) <span class="sub">차 없는 마을, 호텔 전기카트 픽업</span></div></div>
+          <div class="tl-row"><div class="tl-time">15:00</div><div class="tl-act"><span class="ic">📷</span> 마을 산책 · 키르히브뤼케(마터호른 포토존)</div></div>
+          <div class="tl-row"><div class="tl-time">19:30</div><div class="tl-act"><span class="ic">🍽</span> 라클렛/퐁뒤 (힌더도르프 일대, 체르마트 본고장)</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🟢</span> <b>여유</b> 이동일</span></div>
+        </div>
+      </div>
+
+      <div class="day" id="day-4">
+        <div class="day-head" onclick="showDay(4)"><span class="day-badge peak">Day4</span><span class="day-date">9/21 화</span><span class="day-title">고르너그라트 — 마터호른 ⛰️</span><span class="day-stay">🏨 체르마트</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">08:30</div><div class="tl-act"><span class="mv">🚈 고르너그라트 등산열차 30분</span> → 3,089m <span class="sub">STP 50%. 오전 시야 맑음</span></div></div>
+          <div class="tl-row"><div class="tl-time">09:30</div><div class="tl-act"><span class="ic">📷</span> 마터호른·빙하 파노라마 · 리펠제 반영 포토존(하산 중)</div></div>
+          <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act"><span class="ic">🍽</span> 체르마트 점심 · 오후 마을 여유(쇼핑·카페)</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🟡</span> <b>중간</b></span><span>3,089m, 융프라우보다 고산증 약함</span></div>
+        </div>
+      </div>
+
+      <div class="day" id="day-5">
+        <div class="day-head" onclick="showDay(5)"><span class="day-badge move">Day5</span><span class="day-date">9/22 수</span><span class="day-title">체르마트 → 인터라켄 (2h10)</span><span class="day-stay">🏨 인터라켄</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">10:30</div><div class="tl-act"><span class="mv">🚆 체르마트→인터라켄 2시간 10분</span> <span class="sub">슈피츠 경유. STP 포함</span></div></div>
+          <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act"><span class="ic">🏨</span> 인터라켄 체크인(동역 Ost 근처) <span class="sub">산악열차 기점</span></div></div>
+          <div class="tl-row"><div class="tl-time">15:00</div><div class="tl-act"><span class="mv">🚠 하더쿨름</span> 전망대 또는 <span class="ic">📷</span> 회에마테 공원 산책</div></div>
+          <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act"><span class="ic">🍽</span> 한식당 "인터라켄 아레" 또는 동역 Coop · 융프라우 도시락 준비</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🟢</span> <b>여유</b> 이동일</span></div>
+        </div>
+      </div>
+
+      <div class="day" id="day-6">
+        <div class="day-head" onclick="showDay(6)"><span class="day-badge peak">Day6</span><span class="day-date">9/23 목</span><span class="day-title">융프라우요흐 — Top of Europe 🏔️</span><span class="day-stay">🏨 인터라켄</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">08:00</div><div class="tl-act"><span class="mv">🚆 동역→그린델발트 터미널</span> (35분)</div></div>
+          <div class="tl-row"><div class="tl-time">08:45</div><div class="tl-act"><span class="mv">🚠 아이거 익스프레스 → 융프라우요흐</span> 3,454m <span class="sub">편도 ~1.5h</span></div></div>
+          <div class="tl-row"><div class="tl-time">10:30</div><div class="tl-act"><span class="ic">📷</span> 스핑크스 전망대·얼음궁전·알레치 빙하 <span class="sub">체류 1.5~2h, 무리 금지</span></div></div>
+          <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act"><span class="mv">하산</span> · 인터라켄 복귀 · 저녁(스위스 마지막 밤)</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🔴</span> <b>최대 부담</b></span><span>고산 3,454m 주의</span></div>
+        </div>
+      </div>
+
+      <div class="day" id="day-7">
+        <div class="day-head" onclick="showDay(7)"><span class="day-badge move">Day7</span><span class="day-date">9/24 금</span><span class="day-title">인터라켄 → 취리히공항 → 인천</span><span class="day-stay">✈ 귀국</span><span class="day-pin">📍</span></div>
+        <div class="day-body">
+          <div class="tl-row"><div class="tl-time">오전</div><div class="tl-act"><span class="mv">🚆 인터라켄→취리히공항 2시간 10분</span> <span class="sub">짧은 마지막 leg</span></div></div>
+          <div class="tl-row"><div class="tl-time">오후</div><div class="tl-act"><span class="ic">✈</span> 취리히→인천 경유편 13~15h (취리히 직항 없음)</div></div>
+          <div class="day-foot"><span><span class="stamina-dot">🟡</span> <b>귀국 이동</b></span><span>공항 3시간 전 여유</span></div>
+        </div>
+      </div>
+
+      <!-- 점검 -->
+      <div class="sec-title">전체 점검 — 체력·리스크</div>
+      <div class="card">
+        <div class="check-item"><div>🟢</div><div><div class="ci-t">완급 리듬 양호</div><div class="ci-d">명산일(D4·D6) 사이에 이동·완충 배치. 고산은 낮은 곳(고르너그라트)→높은 곳(융프라우) 순이라 적응 유리.</div></div></div>
+        <div class="check-item"><div>🟡</div><div><div class="ci-t">짐 이동 2회 · D3 3시간</div><div class="ci-d">루체른→체르마트(3h)·체르마트→인터라켄(2h10). 체르마트 차량 불가 → 테쉬 셔틀·호텔 전기카트.</div></div></div>
+        <div class="check-item"><div>🔴</div><div><div class="ci-t">고산증 (D6 융프라우 3,454m)</div><div class="ci-d">연령·체력 무관 발생 가능. 정상 체류 짧게, 수분, 천천히. 두통약 지참.</div></div></div>
+        <div class="check-item"><div>🟢</div><div><div class="ci-t">날씨 버퍼</div><div class="ci-d">체르마트·인터라켄 각 2박이라 두 명산 모두 맑은 날 선택 가능.</div></div></div>
+      </div>
+
+      <!-- 비용 -->
+      <div class="sec-title">최종 비용 — 5인 총액 (9월 하순 평일)</div>
+      <div class="tier">
+        <div class="tier-card" style="background:#f0edff;border:1px solid #d9d2ff;"><div class="tt" style="color:#6b4cff;">절약형</div><div class="tv" style="color:#6b4cff;">2,000<small>만</small></div><div class="td2" style="color:#4a35b0;">1인 ~400만 · 2등 STP/반액카드, 3성·마트, 보험 제외</div></div>
+        <div class="tier-card" style="background:#f0edff;border:1px solid #d9d2ff;"><div class="tt" style="color:#6b4cff;">표준형 (권장)</div><div class="tv" style="color:#6b4cff;">2,600<small>만</small></div><div class="td2" style="color:#5b3fe0;">1인 ~520만 · 1등 STP, 4성, 식당</div></div>
+        <div class="tier-card" style="background:#f6f6f5;border:1px solid #ececeb;"><div class="tt" style="color:#6b6b66;">여유형</div><div class="tv" style="color:#1a1a18;">3,000<small>만</small></div><div class="td2" style="color:#6b6b66;">1인 ~600만 · 프리미엄·마터호른뷰</div></div>
+      </div>
+      <div class="note">💡 숙박 <b>2방</b> — 트리플 1 + 더블 1 (성인 5인). STP 8일권(2등 ~70만/1등 ~100만) 또는 <b>반액카드(CHF120)+반값 티켓</b>으로 1인 25~30만 절약 가능. 여행자보험은 옵션(절약형 제외). 자세한 패스·항목별 비용은 「📊 시기·비용 분석」 탭 참고.</div>
+      <div style="font-size:11px;color:#9a9a94;margin-top:10px;">※ 식당·호텔은 대표/구역 표시(정확 위치·영업은 예약 시 확인). 출처: 트립스토어·조촌부부·myswitzerland·KKday·SBB.</div>
+    </div>
+
+    <!-- 오른쪽: 지도 -->
+    <div class="mapcol">
+      <div id="map"></div>
+      <div class="legend">
+        <div class="legend-item"><span class="lg-ic" style="background:#6b4cff;">🏨</span> 숙박 구역</div>
+        <div class="legend-item"><span class="lg-ic" style="background:#2563c9;">📷</span> 명소</div>
+        <div class="legend-item"><span class="lg-ic" style="background:#b4690e;">🍽</span> 식당</div>
+        <div class="legend-item"><span class="lg-ic" style="background:#b8860b;border-radius:3px;">⛰</span> 산악</div>
+        <div class="legend-item"><span class="lg-ic" style="background:#9a9a94;">✈</span> 공항</div>
+        <div class="legend-item"><span style="width:20px;border-top:3px solid #6b4cff;"></span> 기차</div>
+        <div class="legend-item"><span style="width:20px;border-top:3px dashed #b8860b;"></span> 산악왕복</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var map = L.map('map', { scrollWheelZoom: true }).setView([46.75, 8.05], 8);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '© OpenStreetMap' }).addTo(map);
+
+  var TYPE = {
+    hotel: {c:'#6b4cff', i:'🏨', r:'50%', s:26},
+    sight: {c:'#2563c9', i:'📷', r:'50%', s:22},
+    food:  {c:'#b4690e', i:'🍽', r:'50%', s:22},
+    peak:  {c:'#b8860b', i:'⛰', r:'5px', s:24},
+    air:   {c:'#9a9a94', i:'✈', r:'50%', s:24}
+  };
+
+  // 장소 데이터: d=day, t=type, n=이름, ll=좌표, desc
+  var PLACES = [
+    {d:1,t:'air',  n:'취리히 공항', ll:[47.4582,8.5556], desc:'Day1 도착 · Day7 귀국 (IN·OUT)'},
+    {d:1,t:'hotel',n:'루체른 숙박구역', ll:[47.0502,8.3103], desc:'역·카펠교 도보권. 2방: 트리플 1+더블 1'},
+    {d:2,t:'sight',n:'카펠교', ll:[47.0516,8.3076], desc:'루체른 상징 목조다리'},
+    {d:2,t:'sight',n:'빈사의 사자상', ll:[47.0584,8.3112], desc:'마크 트웨인 극찬 조각'},
+    {d:2,t:'sight',n:'무제크 성벽', ll:[47.0556,8.3050], desc:'중세 성벽·전망'},
+    {d:2,t:'peak', n:'필라투스 2,132m', ll:[46.9790,8.2552], desc:'유람선+코그휠 골든라운드. STP 50%'},
+    {d:2,t:'food', n:'한식당(역 인근)', ll:[47.0512,8.3066], desc:'김치찌개 등, 구글 4.6. 위치 예약 시 확인'},
+    {d:2,t:'food', n:'스위스 전통식(카펠교변)', ll:[47.0519,8.3084], desc:'송아지·뢰스티, 테라스'},
+    {d:3,t:'hotel',n:'체르마트 숙박구역', ll:[46.0231,7.7470], desc:'역·반호프거리. 차 없는 마을, 전기카트 픽업. 2방(트리플+더블)'},
+    {d:3,t:'sight',n:'키르히브뤼케(교회 다리)', ll:[46.0188,7.7472], desc:'마터호른 포토존'},
+    {d:3,t:'food', n:'라클렛/퐁뒤(힌더도르프)', ll:[46.0205,7.7479], desc:'체르마트 전통식 본고장'},
+    {d:4,t:'peak', n:'고르너그라트 3,089m', ll:[45.9836,7.7847], desc:'등산열차 30분, 마터호른 파노라마. STP 50%'},
+    {d:4,t:'sight',n:'리펠제 반영 포토존', ll:[46.0006,7.7710], desc:'마터호른 호수 반영(중간역)'},
+    {d:5,t:'hotel',n:'인터라켄 숙박구역', ll:[46.6905,7.8693], desc:'동역(Ost) 근처. 산악열차 기점. 2방(트리플+더블)'},
+    {d:5,t:'peak', n:'하더쿨름 전망대', ll:[46.6993,7.8730], desc:'푸니쿨라 8분, 호수 2개 조망'},
+    {d:5,t:'sight',n:'회에마테 공원', ll:[46.6850,7.8585], desc:'시내 잔디광장 산책'},
+    {d:5,t:'food', n:'한식당 "인터라켄 아레"', ll:[46.6868,7.8602], desc:'불고기·바비큐, 융프라우 책자 추천. 위치 확인'},
+    {d:6,t:'sight',n:'그린델발트 터미널', ll:[46.6242,8.0414], desc:'아이거 익스프레스 곤돌라 탑승'},
+    {d:6,t:'peak', n:'융프라우요흐 3,454m', ll:[46.5474,7.9856], desc:'Top of Europe. 고산증 주의'},
+    {d:7,t:'air',  n:'취리히 공항', ll:[47.4582,8.5556], desc:'Day7 귀국'}
+  ];
+
+  // 이동 구간: kind train(실선)/exc(점선)
+  var LEGS = [
+    {d:1,k:'train',a:[47.4582,8.5556],b:[47.0502,8.3103],l:'Day1 취리히공항→루체른 1h'},
+    {d:2,k:'exc',  a:[47.0502,8.3103],b:[46.9790,8.2552],l:'Day2 루체른↔필라투스'},
+    {d:3,k:'train',a:[47.0502,8.3103],b:[46.0231,7.7470],l:'Day3 루체른→체르마트 ~3h'},
+    {d:4,k:'exc',  a:[46.0231,7.7470],b:[45.9836,7.7847],l:'Day4 체르마트↔고르너그라트'},
+    {d:5,k:'train',a:[46.0231,7.7470],b:[46.6905,7.8693],l:'Day5 체르마트→인터라켄 2h10'},
+    {d:6,k:'exc',  a:[46.6905,7.8693],b:[46.5474,7.9856],l:'Day6 인터라켄↔융프라우요흐'},
+    {d:7,k:'train',a:[46.6905,7.8693],b:[47.4582,8.5556],l:'Day7 인터라켄→취리히공항 2h10'}
+  ];
+
+  function mkIcon(t) {
+    var s = TYPE[t];
+    return L.divIcon({ className:'', html:'<div class="pin '+(t==='peak'?'peak':'')+'" style="width:'+s.s+'px;height:'+s.s+'px;background:'+s.c+';border-radius:'+s.r+';font-size:'+(s.s*0.5)+'px;">'+s.i+'</div>', iconSize:[s.s,s.s], iconAnchor:[s.s/2,s.s/2] });
+  }
+
+  var markers = [], lines = [];
+  PLACES.forEach(function(p){
+    var m = L.marker(p.ll, {icon: mkIcon(p.t)}).bindPopup('<b>'+p.n+'</b><br><span style="color:#888">Day '+p.d+'</span><br>'+p.desc);
+    m._day = p.d; markers.push(m);
+  });
+  // 모든 경로선은 항상 지도에 깔아두고, 선택 시 스타일만 바꿔 하이라이트
+  LEGS.forEach(function(g){
+    var base = g.k==='train' ? {color:'#6b4cff',weight:5,opacity:0.95} : {color:'#b8860b',weight:4,opacity:0.9,dashArray:'6 7'};
+    var pl = L.polyline([g.a,g.b], base).bindTooltip(g.l,{sticky:true}).addTo(map);
+    pl._day = g.d; pl._base = base; pl._dash = base.dashArray || null; lines.push(pl);
+  });
+
+  var DIM = {color:'#cfcfca', weight:2, opacity:0.4};
+  var ALL_BOUNDS = [[47.4582,8.5556],[47.0502,8.3093],[46.0207,7.7491],[46.6905,7.8693],[46.5474,7.9856],[45.9836,7.7847]];
+
+  function showDay(d) {
+    // 마커: 해당 날만 (전체면 모두)
+    markers.forEach(function(m){ (d===0 || m._day===d) ? m.addTo(map) : map.removeLayer(m); });
+    // 경로선: 전체면 모두 진하게 / 특정 날이면 그 날만 진하게 + 나머지는 흐리게(맥락 유지)
+    lines.forEach(function(l){
+      if (d===0 || l._day===d) { l.setStyle(l._base); l.bringToFront(); }
+      else { l.setStyle({color:DIM.color, weight:DIM.weight, opacity:DIM.opacity, dashArray:l._dash}); }
+    });
+    // 버튼/카드 활성화
+    document.querySelectorAll('.df-btn').forEach(function(b,i){ b.classList.toggle('active', i===d); });
+    document.querySelectorAll('.day').forEach(function(el){ el.classList.remove('sel'); });
+    if (d>0) { var c=document.getElementById('day-'+d); if(c) c.classList.add('sel'); }
+    // 지도 범위 (선택 날로 줌인)
+    setTimeout(function(){
+      map.invalidateSize();
+      if (d===0) { map.fitBounds(ALL_BOUNDS,{padding:[35,35]}); }
+      else {
+        var pts = PLACES.filter(function(p){return p.d===d;}).map(function(p){return p.ll;});
+        LEGS.filter(function(g){return g.d===d;}).forEach(function(g){ pts.push(g.a); pts.push(g.b); });
+        if (pts.length===1) map.setView(pts[0], 12);
+        else if (pts.length>1) map.fitBounds(pts,{padding:[60,60]});
+      }
+    }, 60);
+  }
+
+  showDay(0);
+  window.addEventListener('message', function(e){ if(e.data==='refresh-map'){ setTimeout(function(){ map.invalidateSize(); }, 120); } });
+</script>
+</body>
+</html>

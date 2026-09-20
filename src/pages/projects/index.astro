@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import ProjectCard from '../../components/project/ProjectCard.astro';
+
+const allProjects = await getCollection('projects');
+
+function periodToNum(p?: string) {
+  if (!p) return 0;
+  const m = p.match(/(\d{4})\.(\d{2})(?:\.(\d{2}))?/);
+  return m ? parseInt(m[1]) * 10000 + parseInt(m[2]) * 100 + (m[3] ? parseInt(m[3]) : 0) : 0;
+}
+
+const sortedProjects = [...allProjects].sort(
+  (a, b) => periodToNum(b.data.period) - periodToNum(a.data.period)
+);
+
+// 토픽 순서(확장 시 여기만 추가) — 미정의 카테고리는 뒤에 자동 추가
+const TOPIC_ORDER = ['Claude·Agent', '데이터·대시보드', '의사결정·리서치', '개발·엔지니어링'];
+
+const byCategory = new Map<string, typeof sortedProjects>();
+for (const p of sortedProjects) {
+  const c = p.data.category;
+  if (!byCategory.has(c)) byCategory.set(c, []);
+  byCategory.get(c)!.push(p);
+}
+const categories = [
+  ...TOPIC_ORDER.filter(c => byCategory.has(c)),
+  ...[...byCategory.keys()].filter(c => !TOPIC_ORDER.includes(c)),
+];
+---
+
+<PageLayout title="Projects">
+  <div class="topics">
+    {categories.map(cat => (
+      <section class="topic">
+        <h2 class="topic-label">{cat} <span class="topic-count">{byCategory.get(cat)!.length}</span></h2>
+        <div class="card-grid">
+          {byCategory.get(cat)!.map(project => (
+            <ProjectCard
+              title={project.data.title}
+              slug={project.id}
+              description={project.data.description}
+              period={project.data.period}
+              icon={project.data.icon}
+              category={project.data.category}
+              variant="card"
+            />
+          ))}
+        </div>
+      </section>
+    ))}
+    {sortedProjects.length === 0 && (
+      <p style="color: var(--text-secondary);">No projects yet.</p>
+    )}
+  </div>
+</PageLayout>

@@ -1,0 +1,243 @@
+/* resume.sungd.uk — 한국어·영어 페이지 공용 스타일.
+   레이아웃: 넓은 화면은 좌우 2단(왼쪽 고정 / 오른쪽 스크롤),
+   좁은 화면은 한 단으로 접고 섹션 이동줄만 상단에 고정한다. */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Inter.woff2') format('woff2');
+}
+
+:root {
+  --bg: #f7f8fa;
+  --text-primary: rgba(10, 14, 20, 0.76);   /* 검정에 가깝던 것을 진한 회색으로 */
+  --text-body: rgba(10, 14, 20, 0.68);
+  --text-secondary: rgba(10, 14, 20, 0.62);
+  --text-tertiary: rgba(10, 14, 20, 0.56);  /* 연도·부가표기. 너무 흐려 읽기 어렵던 것을 끌어올림 */
+  --border: rgba(10, 14, 20, 0.1);
+  --accent: #2f5fd0;              /* 섹션 제목에만. 본문·강조는 뉴트럴로 둔다 */
+  --bg-blur: rgba(247, 248, 250, 0.86);
+  --bg-fade: rgba(247, 248, 250, 0);
+  --gutter: 1.5rem;          /* 페이지 좌우 여백. 상단 고정 이동줄의 bleed 폭과 같아야 한다 */
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111318;
+    --text-primary: rgba(233, 238, 245, 0.86);
+    --text-body: rgba(233, 238, 245, 0.74);
+    --text-secondary: rgba(233, 238, 245, 0.68);
+    --text-tertiary: rgba(233, 238, 245, 0.6);
+    --border: rgba(233, 238, 245, 0.11);
+    --accent: #7fa5f5;            /* 어두운 바탕에서 같은 파랑은 가라앉아 한 단계 밝게 */
+    --bg-blur: rgba(17, 19, 24, 0.86);
+    --bg-fade: rgba(17, 19, 24, 0);
+  }
+}
+
+* { box-sizing: border-box; }
+
+
+html { font-size: 15px; }
+
+body {
+  margin: 0;
+  padding: 3.5rem var(--gutter) 7rem;
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+a { color: inherit; text-decoration: none; }
+
+sup {
+  font-size: 0.78em;
+  font-weight: 400;
+  color: var(--text-tertiary);
+  white-space: nowrap;   /* "2저자"가 글자 단위로 쪼개지지 않게 */
+}
+/* 수여기관 나열은 길어서 줄바꿈이 필요하다 */
+.award-title sup { white-space: normal; }
+
+/* ── 레이아웃 ── */
+.resume {
+  max-width: 56rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 13.5rem 1fr;
+  gap: 0 3.5rem;
+  align-items: start;
+}
+
+/* 왼쪽: 스크롤해도 따라오는 신원 블록 */
+.col-left { position: sticky; top: 3.5rem; }
+.name { margin: 0; font-size: 1.75rem; font-weight: 700; letter-spacing: -0.015em; }
+.tagline { margin: 0.3rem 0 0; font-size: 0.875rem; color: var(--text-secondary); }
+.contact { margin: 1.15rem 0 0; font-size: 0.8125rem; color: var(--text-tertiary); }
+.lang {
+  display: inline-block;
+  margin-top: 1.15rem;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.lang:hover { color: var(--text-primary); border-color: var(--text-tertiary); }
+.lang:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+
+/* 섹션 이동줄 */
+.nav { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 1.5rem; }
+.nav a {
+  font-size: 0.75rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  transition: color 0.15s ease;
+}
+.nav a:hover { color: var(--text-secondary); }
+.nav a.on { color: var(--text-primary); font-weight: 600; }
+/* 같은 도메인의 다른 쪽(프로젝트)으로 나가는 링크 — 문서 안 앵커와 구분 */
+.nav a.out { margin-top: 0.85rem; padding-top: 0.7rem; border-top: 1px solid var(--border); }
+.nav a:focus-visible { outline: 2px solid var(--text-secondary); outline-offset: 3px; border-radius: 2px; }
+
+/* ── 섹션 ── */
+.section { margin-bottom: 1.75rem; scroll-margin-top: 4rem; }
+.section:last-child { margin-bottom: 0; }
+.section-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.section-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.rule { flex: 1; height: 1px; background: var(--border); }
+/* 한글 제목은 대문자 효과를 못 받아 상대적으로 작아 보인다.
+   자간을 줄이고 크기를 한 단계 올려 균형을 맞춘다. */
+html[lang="ko"] .section-title { font-size: 0.9375rem; letter-spacing: 0.01em; }
+
+.scholar {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.01em;
+  color: var(--text-tertiary);
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
+}
+.scholar:hover { opacity: 1; }
+
+/* ── 경력 ──
+   넓은 화면: 직무 · 소속 · 기간을 한 줄에 두고, 재직 햇수는 기간 아래 작게.
+   좁은 화면: 직무|기간 / 소속|햇수 두 줄로 접는다. */
+.jobs { display: flex; flex-direction: column; gap: 0.875rem; }
+.job-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0 1rem;
+  align-items: baseline;
+}
+.job-role { grid-column: 1; grid-row: 1; font-size: 0.9375rem; font-weight: 600; }
+.job-org { grid-column: 2; grid-row: 1; font-size: 0.875rem; color: var(--text-secondary); }
+.job-dates {
+  grid-column: 3; grid-row: 1;
+  font-size: 0.8125rem; color: var(--text-tertiary);
+  white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums;
+}
+.job-dur {
+  grid-column: 3; grid-row: 2;
+  font-size: 0.75rem; color: var(--text-tertiary);
+  white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums;
+}
+.job-desc { margin: 0.25rem 0 0; font-size: 0.875rem; color: var(--text-secondary); }
+
+/* ── 학력·언어 ── */
+.rows { display: flex; flex-direction: column; gap: 0.5rem; }
+.row { display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: baseline; font-size: 0.875rem; }
+.row-period { font-size: 0.8125rem; color: var(--text-tertiary); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.row-org { font-size: 0.8125rem; color: var(--text-body); }
+.lang-row { display: flex; gap: 1rem; align-items: baseline; font-size: 0.875rem; }
+.lang-level { font-size: 0.8125rem; color: var(--text-tertiary); }
+
+/* ── 연도 + 내용 목록 ── */
+.entries { display: flex; flex-direction: column; }
+.entries.gap-sm { gap: 0.25rem; }
+.entries.gap-md { gap: 0.5rem; }
+.entries.gap-lg { gap: 0.75rem; }
+.entry { display: grid; grid-template-columns: 2.5rem 1fr; gap: 0 1rem; align-items: baseline; }
+.entry-year { font-size: 0.8125rem; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+.sub { font-size: 0.6875rem; color: var(--text-tertiary); }
+
+.course-title { font-size: 0.7rem; }
+.award-title { font-size: 0.8rem; }
+.pub-title { font-size: 0.7rem; }
+
+/* ── 좁은 화면: 한 단으로 접고, 이동줄만 상단 고정 ── */
+@media (max-width: 700px) {
+  html { font-size: 14.5px; }
+  :root { --gutter: 1.25rem; }
+  body { padding: 2rem var(--gutter) 4rem; }
+
+  .resume { grid-template-columns: 1fr; gap: 0; }
+  /* 감싼 열을 풀어 .side 와 .nav 가 페이지 전체 높이를 기준으로 놓이게 한다.
+     이래야 .nav 의 sticky 가 좁은 부모 박스에 갇히지 않는다. */
+  .col-left { display: contents; }
+  .side { margin-bottom: 0; }
+  .name { font-size: 1.35rem; }
+
+  /* 이름·직함 옆에 언어 버튼 */
+  .side-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .lang { margin-top: 0; flex-shrink: 0; }
+  .contact { margin-top: 0.5rem; }
+
+  /* 세로 목록이던 이동줄 → 가로로 눕히고 상단에 고정 */
+  .nav {
+    flex-direction: row;
+    gap: 0.9rem;
+    margin: 1rem calc(var(--gutter) * -1) 0.6rem;
+    padding: 0.6rem var(--gutter) 1.4rem;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    /* 아래로 갈수록 투명해져 본문이 지나가는 게 비친다.
+       nav 이 가로 스크롤 컨테이너라 아래에 붙인 가상요소는 잘린다 — 배경으로 처리한다. */
+    background: linear-gradient(to bottom, var(--bg) 0%, var(--bg) 62%, var(--bg-fade) 100%);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; }
+
+  .section { scroll-margin-top: 3.6rem; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 14px; }
+  :root { --gutter: 1.125rem; }
+  body { padding: 1.75rem var(--gutter) 4rem; }
+  .name { font-size: 1.3rem; }
+
+  /* 직무|기간 한 줄, 소속|햇수 한 줄 */
+  .job-row { grid-template-columns: 1fr auto; gap: 0.15rem 0.75rem; }
+  .job-role { grid-column: 1; grid-row: 1; }
+  .job-dates { grid-column: 2; grid-row: 1; }
+  .job-org { grid-column: 1; grid-row: 2; }
+  .job-dur { grid-column: 2; grid-row: 2; }
+
+  .row { font-size: 0.8125rem; gap: 0.6rem; }
+  .row-org, .row-period { font-size: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}

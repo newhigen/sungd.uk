@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>새벌시 지방선거 공약 분석 (예시)</title>
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+:root{
+  --bg:#fbfbfa;--surface:#fff;--surface2:#f6f6f5;
+  --border:#ececeb;--line-strong:#e0e0de;
+  --text:#1a1a18;--muted:#6b6b66;--ink-3:#9a9a94;
+  --pick:#6b4cff;--pick-bg:#f0edff;
+  --feature:#1a7f4b;--improve:#2563c9;--fix:#b4690e;--security:#c8453a;
+  --p1:#3b6fd4;--p2:#d94452;
+  --radius:14px;--radius-sm:9px;
+  --shadow-sm:0 1px 2px rgba(20,20,18,.04),0 1px 3px rgba(20,20,18,.05);
+  --shadow-md:0 2px 8px rgba(20,20,18,.05),0 8px 24px rgba(20,20,18,.06);
+  --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+}
+[data-theme=dark]{
+  --bg:#0f0f0e;--surface:#191917;--surface2:#222220;
+  --border:#2a2a27;--line-strong:#373734;
+  --text:#ededeb;--muted:#a0a09b;--ink-3:#6e6e69;
+  --pick:#9d86ff;--pick-bg:#241f3d;
+  --feature:#3fb87a;--improve:#5b9bf0;--fix:#d99a4e;--security:#e07a6f;
+  --p1:#5b9bf0;--p2:#e07a6f;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.2);
+  --shadow-md:0 2px 8px rgba(0,0,0,.24),0 8px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);
+  letter-spacing:-.01em;-webkit-font-smoothing:antialiased;line-height:1.6}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+@media(max-width:600px){.wrap{padding:0 18px}}
+
+.anon-banner{position:sticky;top:0;z-index:200;background:var(--land-soft,#fdf6e3);color:var(--fix);
+  font-size:12.5px;font-weight:650;text-align:center;padding:8px 16px;border-bottom:1px solid var(--border)}
+[data-theme=dark] .anon-banner{background:#241f0e;color:#d4af5a}
+
+.topbar{position:sticky;top:0;z-index:100;background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:13px;padding-bottom:13px}
+.brand{font-weight:800;font-size:1rem;letter-spacing:-.02em}
+.brand span{color:var(--pick)}
+.theme-toggle{background:var(--surface2);border:1px solid var(--border);color:var(--muted);
+  border-radius:9px;padding:6px 12px;font-size:12.5px;font-weight:650;cursor:pointer;font-family:inherit}
+.theme-toggle:hover{border-color:var(--line-strong)}
+
+.hero{padding:50px 0 28px}
+.hero h1{font-size:2.05rem;font-weight:800;letter-spacing:-.03em;margin:0 0 12px;line-height:1.2}
+.hero h1 em{color:var(--pick);font-style:normal}
+.hero .meta{color:var(--ink-3);font-size:.9rem;font-weight:500}
+.hero .meta b{color:var(--muted);font-weight:650}
+
+.seg{display:inline-flex;gap:3px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:11px;padding:3px;margin-bottom:8px}
+.seg-btn{border:none;background:transparent;color:var(--muted);font-family:inherit;
+  font-size:.88rem;font-weight:650;padding:8px 16px;border-radius:8px;cursor:pointer;transition:.15s}
+.seg-btn.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm)}
+
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+.section-sep{font-size:1.16rem;font-weight:750;letter-spacing:-.02em;margin:34px 0 14px;
+  display:flex;align-items:baseline;gap:9px}
+.section-sep .sub{font-size:.82rem;font-weight:500;color:var(--ink-3);letter-spacing:0}
+
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+
+.card,.triple-card,.record-card{background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;box-shadow:var(--shadow-sm);transition:.18s ease}
+.card:hover,.triple-card:hover,.record-card:hover{border-color:var(--line-strong);
+  box-shadow:var(--shadow-md);transform:translateY(-2px)}
+
+.logo-badge{display:inline-flex;align-items:center;gap:6px;vertical-align:middle;margin-right:7px}
+.tc-name,.rc-name{display:flex;align-items:center;gap:8px;font-weight:750;font-size:1.05rem;letter-spacing:-.02em}
+.tc-meta,.rc-header+.rc-body .rc-label:first-child{}
+.tc-meta{color:var(--muted);font-size:.82rem;margin:6px 0 0;line-height:1.5}
+.tc-label,.rc-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--ink-3);margin:14px 0 6px}
+.tc-label:first-of-type{margin-top:14px}
+.triple-card ul,.promise-list{margin:0;padding:0;list-style:none}
+.triple-card li,.promise-list li{font-size:.85rem;color:var(--text);padding:3px 0 3px 14px;position:relative}
+.triple-card li::before,.promise-list li::before{content:'·';position:absolute;left:2px;color:var(--ink-3)}
+.rc-header{display:flex;flex-direction:column;gap:7px;margin-bottom:4px}
+.party-line{display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:650;color:var(--muted)}
+.incumbent{font-size:.66rem;font-weight:700;color:var(--pick);background:var(--pick-bg);
+  padding:2px 7px;border-radius:20px;letter-spacing:0}
+
+.report{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px;box-shadow:var(--shadow-sm)}
+
+.compare-row{display:grid;grid-template-columns:1fr 84px 1fr;gap:10px;align-items:start;
+  padding:14px 0;border-top:1px solid var(--border)}
+.compare-row:first-of-type{border-top:none}
+.cmp-cell.left{text-align:right}
+.cmp-cat{text-align:center;font-size:.78rem;font-weight:700;color:var(--muted);padding-top:2px}
+.cmp-items{margin:0;padding:0;list-style:none}
+.cmp-items li{font-size:.84rem;color:var(--text);padding:3px 0;line-height:1.5}
+
+.tip{border-bottom:1px dashed var(--ink-3);cursor:help;position:relative}
+.tip-pop{display:none;position:absolute;bottom:130%;left:50%;transform:translateX(-50%);z-index:80;
+  width:250px;background:#1a1a18;color:#ededeb;padding:11px 13px;border-radius:11px;
+  font-size:.76rem;font-weight:400;line-height:1.55;box-shadow:var(--shadow-md);letter-spacing:0;text-align:left}
+[data-theme=dark] .tip-pop{background:#000;border:1px solid var(--border)}
+.tip:hover .tip-pop{display:block}
+.tip-tag{display:inline-block;font-size:.6rem;font-weight:700;padding:1px 7px;border-radius:6px;
+  margin:0 4px 4px 0;color:#fff;letter-spacing:0}
+.tip-tag.verified{background:#1a7f4b}.tip-tag.report{background:#2563c9}
+.tip-tag.pledge{background:#6b4cff}.tip-tag.bulletin{background:#7c5cff}.tip-tag.partial{background:#b4690e}
+.tip-src{display:block;margin-top:7px;color:#9d86ff;font-size:.72rem;text-decoration:none}
+.tip-src:hover{text-decoration:underline}
+
+.uniq{display:inline-block;font-size:.62rem;font-weight:700;color:var(--pick);background:var(--pick-bg);
+  padding:1px 7px;border-radius:20px;margin-left:5px;letter-spacing:0}
+.pl-done{color:var(--feature);font-weight:700;font-size:.78rem}
+.pl-wip{color:var(--fix);font-weight:700;font-size:.78rem}
+.pl-plan{color:var(--ink-3);font-weight:650;font-size:.78rem}
+.rate-note{font-size:.8rem;color:var(--muted);margin-top:10px}
+footer{color:var(--ink-3);font-size:.78rem;padding:40px 0 60px;border-top:1px solid var(--border);margin-top:40px}
+</style>
+</head>
+<body>
+<div class="anon-banner">ⓘ 가공된 예시 데이터 · 실제 인물·정당·지역 아님 · 출처 링크 비활성</div>
+<svg width="0" height="0" style="position:absolute;overflow:hidden"><defs><symbol id="logo-1" viewBox="0 0 28 28"><circle cx="14" cy="14" r="13" fill="none" stroke="currentColor" stroke-width="2" class="p1"/><text x="14" y="19" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">1</text></symbol><symbol id="logo-2" viewBox="0 0 28 28"><circle cx="14" cy="14" r="13" fill="none" stroke="currentColor" stroke-width="2"/><text x="14" y="19" text-anchor="middle" font-size="14" font-weight="800" fill="currentColor">2</text></symbol></defs></svg>
+<div class="topbar"><div class="wrap">
+  <div class="brand">공약 이행 분석<span>.</span></div>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">◐ 라이트</button>
+</div></div>
+<div class="wrap">
+  <div class="hero">
+    <h1>지방선거 <em>공약 이행</em> 분석</h1>
+    <p class="meta">가상 도시 <b>새벌시</b> · 공약 이행률 분석 도구 예시 · 과거 이행률 기반 전망</p>
+  </div>
+  <div class="seg">
+    <button class="seg-btn active" onclick="showTab('mayor')">시장 · 2명</button>
+    <button class="seg-btn" onclick="showTab('council')">시의원 · 4명</button>
+  </div>
+  <div id="tab-mayor" class="tab-pane active"><div class="section-sep">메인 후보 <span class="sub">슬로건 · 핵심 기조</span></div><div class="cards-grid"><div class="triple-card"><div class="tc-name"><span class="logo-badge" style="color:var(--p1)"><svg width="22" height="22"><use href="#logo-1"/></svg></span>Daniel Park</div><div class="tc-meta">기호 1 · 새정치연합 · 52세 · 전 시의원 2선 → 시민단체 대표</div><div class="tc-label">슬로건</div><div style="font-size:.9rem;color:var(--text);font-weight:650">시민이 먼저인 새벌, 함께 바꾸겠습니다</div><div class="tc-label">핵심 기조</div><ul><li>현장 중심 생활 행정</li><li>생활 인프라 우선 투자</li><li>시민 참여 예산 확대</li></ul></div><div class="triple-card"><div class="tc-name"><span class="logo-badge" style="color:var(--p2)"><svg width="22" height="22"><use href="#logo-2"/></svg></span>Steven Han</div><div class="tc-meta">기호 2 · 국민미래당 · 58세 · 현직 · 현 시장 1기 → 전 도의원</div><div class="tc-label">슬로건</div><div style="font-size:.9rem;color:var(--text);font-weight:650">검증된 추진력, 멈추지 않는 새벌</div><div class="tc-label">핵심 기조</div><ul><li>산업 기반 성장</li><li>광역 교통망 완성</li><li>행정 효율화</li></ul></div></div><div class="section-sep">과거 공약 이행 실적 <span class="sub">현직 1기 평가</span></div><div class="report"><div style="font-weight:700;margin-bottom:10px;font-size:.92rem"><span class="logo-badge" style="color:var(--p2)"><svg width="22" height="22"><use href="#logo-2"/></svg></span>Steven Han · 현직 1기</div><ul class="promise-list"><li>✓ <span class="tip">공공도서관 3곳 신설<span class="tip-pop"><span class="tip-tag verified">검증</span>1기 임기 내 3개 권역 도서관 개관 완료. 생활 인프라 확충 성과.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="pl-done">완료</span></li><li>✓ <span class="tip">시민체육관 건립<span class="tip-pop"><span class="tip-tag verified">검증</span>북부권 실내체육관 준공. 생활체육 수요 대응.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="pl-done">완료</span></li><li>◑ <span class="tip">첨단산업단지 유치<span class="tip-pop"><span class="tip-tag partial">부분</span>산업단지 지구지정은 완료, 착공·분양은 다음 임기로 이월.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="pl-wip">부분 이행</span></li><li>○ <span class="tip">종합병원 유치<span class="tip-pop"><span class="tip-tag report">공약</span>1기 공약했으나 임기 내 미착수. 다음 임기 재공약.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="pl-plan">미착수</span></li></ul><p class="rate-note">이행률 추정 약 <b>65%</b> (완료 2 / 부분 1 / 미착수 1) — 과거 이행률은 차기 공약 신뢰도의 근거가 된다.</p></div><div class="section-sep">분야별 공약 비교 <span class="sub">선거공보 · 5대공약 발췌 예시</span></div><div class="report"><div class="compare-row" style="font-weight:700;border:none;padding-top:0"><div class="cmp-cell left">Daniel Park <span style="color:var(--p1)">●</span></div><div class="cmp-cat">분야</div><div class="cmp-cell right"><span style="color:var(--p2)">●</span> Steven Han</div></div><div class="compare-row"><div class="cmp-cell left"><ul class="cmp-items"><li><span class="tip">도시철도 연장 조기 착공<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>노선 연장 예타 통과 후 조기 착공 약속.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li><li><span class="tip">마을버스 노선 확대<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span>교통 사각지대 마을버스 증차.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li></ul></div><div class="cmp-cat"><span class="tip">교통<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span><span class="tip-tag pledge">5대공약</span>교통 분야 공약. 선거공보·5대공약 PDF에서 발췌한 원문 예시.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></div><div class="cmp-cell right"><ul class="cmp-items"><li>✓ <span class="tip">광역버스 증차<span class="tip-pop"><span class="tip-tag verified">검증</span>1기 출퇴근 급행버스 신설·증차 완료.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li><li><span class="tip">간선급행버스(BRT) 도입<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>주요 간선축 BRT 신설.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li><li><span class="tip">환승센터 건립<span class="tip-pop"><span class="tip-tag report">공약</span>철도-버스 환승센터.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="uniq">차별점</span></li></ul></div></div><div class="compare-row"><div class="cmp-cell left"><ul class="cmp-items"><li><span class="tip">청년 임대주택 공급<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>역세권 청년 임대주택 단지 조성.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="uniq">차별점</span></li><li><span class="tip">노후주택 정비 지원<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span>구도심 노후주택 리모델링 지원.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li></ul></div><div class="cmp-cat"><span class="tip">주거<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span><span class="tip-tag pledge">5대공약</span>주거 분야 공약. 선거공보·5대공약 PDF 발췌 예시.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></div><div class="cmp-cell right"><ul class="cmp-items"><li><span class="tip">역세권 재개발 활성화<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>역세권 정비사업 인허가 간소화.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li><li><span class="tip">신규 택지 조성<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span>공공주택 택지지구 추진.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li></ul></div></div><div class="compare-row"><div class="cmp-cell left"><ul class="cmp-items"><li><span class="tip">국공립 어린이집 확충<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>보육 수요 대응 국공립 확대.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li><li><span class="tip">어린이 도서관 신설<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span>권역별 어린이 전용 도서관.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="uniq">차별점</span></li></ul></div><div class="cmp-cat"><span class="tip">복지<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span><span class="tip-tag pledge">5대공약</span>복지 분야 공약. 선거공보·5대공약 PDF 발췌 예시.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></div><div class="cmp-cell right"><ul class="cmp-items"><li>✓ <span class="tip">경로당 시설 개선<span class="tip-pop"><span class="tip-tag verified">검증</span>1기 경로당 냉난방·리모델링 완료.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li><li><span class="tip">시니어 일자리 확대<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>노인 일자리 사업 확대.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li></ul></div></div><div class="compare-row"><div class="cmp-cell left"><ul class="cmp-items"><li><span class="tip">지역화폐 환급률 15% 확대<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>현 10%에서 15%로 상향.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li></ul></div><div class="cmp-cat"><span class="tip">경제<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span><span class="tip-tag pledge">5대공약</span>경제 분야 공약. 선거공보·5대공약 PDF 발췌 예시.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></div><div class="cmp-cell right"><ul class="cmp-items"><li><span class="tip">첨단산업단지 유치<span class="tip-pop"><span class="tip-tag pledge">5대공약</span>RE100 산단에 AI·바이오 기업 유치.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span> <span class="uniq">차별점</span></li><li><span class="tip">전통시장 주차장 조성<span class="tip-pop"><span class="tip-tag bulletin">선거공보</span>전통시장 공영주차장 확충.<a class="tip-src" href="#" onclick="return false">출처: 공개 선거공보·공약 예시</a></span></span></li></ul></div></div></div></div>
+  <div id="tab-council" class="tab-pane"><div class="section-sep">시의원 후보 <span class="sub">가선거구 · 3인 선출</span></div><div class="cards-grid"><div class="record-card"><div class="rc-header"><div class="rc-name"><span class="logo-badge" style="color:var(--p1)"><svg width="22" height="22"><use href="#logo-1"/></svg></span>Hannah Yoo</div><div class="party-line">새정치연합 · 도전</div></div><div class="rc-body"><div class="rc-label">이력</div><ul class="promise-list"><li>전 주민자치위원장</li><li>협동조합 이사</li><li>사회복지 분야 활동</li></ul><div class="rc-label">슬로건</div><p style="font-size:.88rem;font-weight:650;color:var(--text);margin:0">"골목까지 닿는 행정"</p><div class="rc-label">주요 공약 · 이행 전망</div><ul class="promise-list"><li>어린이 도서관 신설 — <span class="pl-plan">○ 공약</span></li><li>경로당 냉난방 개선 — <span class="pl-wip">◑ 추진중</span></li><li>보육시설 확충 — <span class="pl-plan">○ 공약</span></li></ul></div></div><div class="record-card"><div class="rc-header"><div class="rc-name"><span class="logo-badge" style="color:var(--p1)"><svg width="22" height="22"><use href="#logo-1"/></svg></span>Brian Baek</div><div class="party-line">새정치연합 · 도전 · 청년</div></div><div class="rc-body"><div class="rc-label">이력</div><ul class="promise-list"><li>청년정책연구소 연구원</li><li>스타트업 대표</li><li>경영 분야 활동</li></ul><div class="rc-label">슬로건</div><p style="font-size:.88rem;font-weight:650;color:var(--text);margin:0">"청년이 머무는 도시"</p><div class="rc-label">주요 공약 · 이행 전망</div><ul class="promise-list"><li>청년 임대주택 확대 — <span class="pl-plan">○ 공약</span></li><li>생활체육시설 조성 — <span class="pl-plan">○ 공약</span></li><li>야간 버스 노선 신설 — <span class="pl-plan">○ 공약</span></li></ul></div></div><div class="record-card"><div class="rc-header"><div class="rc-name"><span class="logo-badge" style="color:var(--p2)"><svg width="22" height="22"><use href="#logo-2"/></svg></span>Kevin Chun <span class="incumbent">현직</span></div><div class="party-line">국민미래당 · 운영위원장</div></div><div class="rc-body"><div class="rc-label">이력</div><ul class="promise-list"><li>현 시의회 의원 (운영위원장)</li><li>전 상공회의소 부회장</li><li>경제 분야 활동</li></ul><div class="rc-label">슬로건</div><p style="font-size:.88rem;font-weight:650;color:var(--text);margin:0">"안정과 신뢰의 의정"</p><div class="rc-label">주요 공약 · 이행 전망</div><ul class="promise-list"><li>골목상권 지원 확대 — <span class="pl-done">✓ 완료</span></li><li>CCTV·보안등 확충 — <span class="pl-done">✓ 완료</span></li><li>전통시장 주차장 조성 — <span class="pl-wip">◑ 추진중</span></li></ul></div></div><div class="record-card"><div class="rc-header"><div class="rc-name"><span class="logo-badge" style="color:var(--p2)"><svg width="22" height="22"><use href="#logo-2"/></svg></span>Marcus Bong</div><div class="party-line">국민미래당 · 도전</div></div><div class="rc-body"><div class="rc-label">이력</div><ul class="promise-list"><li>기업인 (제조업)</li><li>체육회 이사</li><li>기계공학 분야 활동</li></ul><div class="rc-label">슬로건</div><p style="font-size:.88rem;font-weight:650;color:var(--text);margin:0">"현장에서 답을 찾겠습니다"</p><div class="rc-label">주요 공약 · 이행 전망</div><ul class="promise-list"><li>산업단지 진입로 개선 — <span class="pl-plan">○ 공약</span></li><li>직업교육센터 설립 — <span class="pl-plan">○ 공약</span></li><li>하천 산책로 정비 — <span class="pl-wip">◑ 추진중</span></li></ul></div></div></div></div>
+  <footer>공약·이행 데이터는 모두 가상 예시입니다. 출처 표기는 분석 형식을 보여주기 위한 것으로 실제 링크가 아닙니다.</footer>
+</div>
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelectorAll('.seg-btn').forEach(b=>b.classList.remove('active'));
+  if(window.event&&window.event.currentTarget)window.event.currentTarget.classList.add('active');
+}
+function toggleTheme(){
+  var h=document.documentElement,d=h.getAttribute('data-theme')==='dark',n=d?'light':'dark';
+  h.setAttribute('data-theme',n);
+  document.getElementById('themeBtn').textContent=n==='dark'?'◑ 다크':'◐ 라이트';
+  try{localStorage.setItem('election-theme',n)}catch(e){}
+}
+(function(){var s='light';try{s=localStorage.getItem('election-theme')||'light'}catch(e){}
+  document.documentElement.setAttribute('data-theme',s);
+  document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('themeBtn');if(b)b.textContent=s==='dark'?'◑ 다크':'◐ 라이트'});})();
+</script>
+</body>
+</html>

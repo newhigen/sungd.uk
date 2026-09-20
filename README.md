@@ -1,37 +1,33 @@
-# sungd.uk
+# resume.sungd.uk
 
-네 사이트로 가는 랜딩 한 장. 빌드 없이 GitHub Pages 가 `main` 루트를 그대로 서빙한다.
-
-```
-index.html    전부 (스타일 인라인)
-404.html      옛 글 주소로 온 사람 안내
-CNAME · favicon.svg · robots.txt
-```
-
-## 로컬 확인
+이력서와 만든 것들(Projects). Astro 정적 사이트, GitHub Actions 가 빌드해 Pages 로 배포한다.
 
 ```sh
-python3 -m http.server 8899
+npm install
+npm run dev
 ```
 
-## 사이트 구성
+## 어디를 고치나
 
-이 표는 여기에만 둔다. 다른 repo 의 README 는 자기 사이트만 설명한다.
-**repo 이름이 곧 주소다** — `newhigen/resume.sungd.uk` 처럼.
+```
+public/index.html      이력서 (한국어) — 손으로 관리, 빌드에 안 태운다
+public/en/index.html   이력서 (영문)
+public/style.css       이력서 전용 스타일
+public/script.js       재직 기간 자동 계산 + 사이드바 현재 섹션 표시
+src/content/projects/  프로젝트 14개 (마크다운)
+src/pages/projects/    프로젝트 목록·상세
+```
 
-| 주소                                         | 내용                              |
-| -------------------------------------------- | --------------------------------- |
-| [sungd.uk](https://sungd.uk)                 | 랜딩 (이 repo)                    |
-| [resume.sungd.uk](https://resume.sungd.uk)   | 이력서 + 프로젝트                 |
-| [writing.sungd.uk](https://writing.sungd.uk) | 글 — 책·생각·기술                 |
-| [ai.sungd.uk](https://ai.sungd.uk)           | Claude Code·Codex 릴리스 큐레이션 |
+## 이력서를 고칠 때
 
-## 404 가 하는 일
+- **두 쪽을 같이 고친다.** 한국어·영문이 같은 구조·같은 클래스를 쓴다.
+- 경력 기간은 `data-from` / `data-to` 만 넣으면 오늘 날짜 기준으로 자동 계산된다.
+- 내용은 **본인 확인 없이 바꾸지 않는다.** `resume-studio` 의 master 데이터에 더 최신·상세한 이력이
+  있지만, 무엇을 반영할지는 항목별로 정한다.
 
-이 주소는 원래 글 블로그였다. 예전 링크·북마크가 전부 여기로 온다.
+## 옛 주소
 
-`404.html` 은 갈 곳을 안내하고, **들어온 주소를 그대로 writing 에서 여는 링크**를 만들어준다.
-`sungd.uk/the-go-giver-1/` → `writing.sungd.uk/the-go-giver-1/`.
+이 사이트는 `tech.sungd.uk` 였다. 2026-08-09 재편 때 기술 글은 `writing.sungd.uk` 로 보내고
+프로젝트만 남긴 뒤, 이력서를 첫 쪽으로 들여왔다. 넘김(리다이렉트)은 안 걸었다.
 
-넘김(리다이렉트)은 안 건다. 필요해지면 조건식이 `resume.sungd.uk` repo 의
-`docs/reorg/cloudflare.md` 에 있다.
+배경과 결정 과정은 `docs/reorg/` 참고. 다른 사이트는 [sungd.uk](https://sungd.uk) 에서.

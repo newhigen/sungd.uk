@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteLinks from '../components/layout/SiteLinks.astro';
+---
+
+<style>
+  .nf-wrap {
+    max-width: 44rem;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  .nf-code {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem;
+  }
+  .nf-wrap h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+    letter-spacing: -0.01em;
+  }
+  .nf-wrap p {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin: 0 0 2.5rem;
+  }
+  .nf-wrap p a {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border);
+  }
+  .nf-wrap p a:hover {
+    border-bottom-color: var(--text-tertiary);
+  }
+  .nf-section {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .nf-wrap { padding: 2.5rem 1.25rem; }
+  }
+</style>
+
+<BaseLayout title="찾는 쪽이 없습니다 — 조성덕">
+  <div class="nf-wrap">
+    <p class="nf-code">404</p>
+    <h1>찾는 쪽이 없습니다</h1>
+    <p>
+      주소를 다시 확인해 주세요. <a href="/">이력서</a> 나 <a href="/projects">프로젝트</a> 에서
+      찾으시는 게 있을 수 있습니다.
+    </p>
+
+    <h2 class="nf-section">다른 곳</h2>
+    <SiteLinks current="resume" />
+  </div>
+</BaseLayout>
