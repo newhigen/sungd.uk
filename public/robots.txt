@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://resume.sungd.uk/sitemap-index.xml
+Sitemap: https://sungd.uk/sitemap-index.xml
