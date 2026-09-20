@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8" />
   <meta name="description" content="조성덕 — ML Engineer @ VUNO. 직접 쓸 도구를 만들면서 일합니다." />
-  <title>조성덕 | Sungduk Cho</title>
+  <title>sungd.uk</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
   <!-- Fonts -->
@@ -96,8 +96,13 @@
       border-radius: 15px;
       object-fit: cover;
       border: 1px solid var(--line);
-      background: var(--hover-bg);
+      background: var(--card-bg, #ffffff);
       flex-shrink: 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .avatar {
+        filter: invert(1) brightness(0.9);
+      }
     }
     .meta {
       display: flex;
@@ -315,7 +320,7 @@
     
     <!-- Profile Header -->
     <header class="profile-header">
-      <img class="avatar" src="https://github.com/newhigen.png" alt="조성덕" onerror="this.onerror=null; this.src='https://github.com/sungdukcho.png';" />
+      <img class="avatar" src="/avatar.jpg" alt="조성덕" />
       <div class="meta">
         <div class="name-row">
           <h1 class="name-ko">조성덕</h1>
