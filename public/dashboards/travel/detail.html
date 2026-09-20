@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 가족여행 — 스위스 6박 7일 상세 일정</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+
+    :root{
+      --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+      --border:#ececeb; --line-strong:#e0e0de;
+      --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+      --pick:#6b4cff; --pick-bg:#f0edff;
+      --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+      --mono:'Google Sans Code',ui-monospace,'SF Mono',Menlo,monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--sans); letter-spacing:-.01em; -webkit-font-smoothing:antialiased; background: #f4f4f2; color: #1a1a18; font-size: 13px; line-height: 1.5; }
+    .wrap { max-width: 1400px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .hdr { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; flex-wrap: wrap; }
+    .hdr h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; }
+    .hdr h1 em { color: #6b4cff; font-style: normal; }
+    .hdr-meta { font-size: 12px; color: #9a9a94; }
+    .tag { display: inline-block; background: #f0edff; color: #6b4cff; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+    .tag.green { background: #f0edff; color: #6b4cff; }
+    .intro { font-size: 12px; color: #6b6b66; margin-bottom: 18px; max-width: 940px; }
+
+    .card { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .sec-title { font-size: 11px; font-weight: 700; color: #9a9a94; letter-spacing: 0.5px; text-transform: uppercase; margin: 24px 0 10px; }
+
+    .route { display: flex; align-items: stretch; background: #fff; border-radius: 14px; padding: 14px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 8px; flex-wrap: wrap; }
+    .route-node { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 0 4px; }
+    .route-city { font-size: 13px; font-weight: 800; }
+    .route-nights { font-size: 10px; color: #9a9a94; }
+    .route-arrow { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; color: #b3b3ad; }
+    .route-arrow .mode { font-size: 9px; color: #9a9a94; white-space: nowrap; }
+
+    .day { background: #fff; border-radius: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); margin-bottom: 12px; overflow: hidden; }
+    .day-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #f4f4f2; flex-wrap: wrap; }
+    .day-badge { background: #6b4cff; color: #fff; font-size: 13px; font-weight: 800; padding: 4px 12px; border-radius: 10px; }
+    .day-badge.peak { background: #6b4cff; }
+    .day-badge.move { background: #9a9a94; }
+    .day-date { font-size: 12px; color: #9a9a94; font-weight: 600; }
+    .day-title { font-size: 15px; font-weight: 800; }
+    .day-meta { margin-left: auto; display: flex; gap: 14px; align-items: center; }
+    .day-stay { font-size: 11px; color: #6b6b66; }
+    .day-cost { font-size: 12px; font-weight: 700; color: #6b4cff; }
+
+    .day-body { display: grid; grid-template-columns: 1.7fr 1fr; gap: 0; }
+    .timeline { padding: 14px 18px; border-right: 1px solid #f4f4f2; }
+    .tl-row { display: flex; gap: 12px; padding: 7px 0; align-items: flex-start; }
+    .tl-time { flex: 0 0 64px; font-size: 11px; font-weight: 700; color: #9a9a94; padding-top: 1px; }
+    .tl-act { font-size: 12.5px; color: #1a1a18; }
+    .tl-act .sub { font-size: 11px; color: #9a9a94; display: block; margin-top: 1px; }
+    .tl-act .mv { color: #6b4cff; font-weight: 600; }
+
+    .day-side { padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+    .sb-label { font-size: 10px; font-weight: 700; color: #9a9a94; text-transform: uppercase; margin-bottom: 5px; }
+    .meal { font-size: 12px; color: #4a4a46; margin-bottom: 3px; }
+    .meal b { color: #1a1a18; }
+    .stamina { border-radius: 8px; padding: 8px 10px; font-size: 11.5px; background: #FFF7ED; color: #9A3412; }
+    .stamina.easy { background: #f0edff; color: #4a35b0; }
+    .stamina.hard { background: #FEF2F2; color: #991B1B; }
+    .tip { background: #f0edff; border-radius: 8px; padding: 8px 10px; font-size: 11.5px; color: #5b3fe0; }
+
+    .check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .check-item { display: flex; gap: 10px; padding: 9px 0; border-bottom: 1px solid #f4f4f2; align-items: flex-start; }
+    .check-item:last-child { border-bottom: none; }
+    .ci-ic { font-size: 15px; flex-shrink: 0; }
+    .ci-t { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+    .ci-d { font-size: 12px; color: #6b6b66; }
+    .pad { padding: 14px 18px; }
+
+    .cost-table { width: 100%; border-collapse: collapse; }
+    .cost-table th { font-size: 11px; font-weight: 600; color: #9a9a94; text-align: left; padding: 0 8px 8px 0; border-bottom: 1px solid #ececeb; }
+    .cost-table td { padding: 8px 8px 8px 0; border-bottom: 1px solid #f4f4f2; font-size: 12px; vertical-align: top; }
+    .cost-table tr:last-child td { border-bottom: none; }
+    .ct-num { text-align: right; font-weight: 700; white-space: nowrap; }
+    .ct-src { font-size: 11px; color: #9a9a94; }
+
+    .tier { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .tier-card { border-radius: 12px; padding: 14px 16px; }
+    .tier-card .tt { font-size: 12px; font-weight: 800; margin-bottom: 6px; }
+    .tier-card .tv { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
+    .tier-card .tv small { font-size: 12px; font-weight: 600; color: #9a9a94; }
+    .tier-card .td { font-size: 11px; margin-top: 6px; line-height: 1.6; }
+
+    @media (max-width: 900px) {
+      .day-body { grid-template-columns: 1fr; }
+      .timeline { border-right: none; border-bottom: 1px solid #f4f4f2; }
+      .check-grid, .tier { grid-template-columns: 1fr; }
+      .route { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hdr">
+    <h1>2027 가족여행 상세 일정 — <em>스위스 6박 7일</em></h1>
+    <span class="tag green">3대 명산 완전판</span>
+    <span class="tag">5인 · 취리히 IN·OUT</span>
+    <span class="hdr-meta">예시 9/18(토)~9/24(금) · 9월 하순 내 자유 조정</span>
+  </div>
+  <div class="intro">
+    필라투스 · <b>마터호른</b> · <b>융프라우</b> 스위스 3대 명산 완전판. 동선은 <b>루체른 → 체르마트 → 인터라켄</b> 순으로,
+    먼 체르마트를 중간에 두고 인터라켄(취리히 2시간)을 마지막에 배치해 귀국일 이동을 줄임. 교통은 <b>스위스 트래블 패스(STP) 8일권</b>.
+    숙박 <b>2방</b> — 트리플 1 + 더블 1 (성인 5인). 환율 가정 <b>1 CHF≈1,550원</b>(2027 추정). 금액은 1인 기준, 항공·STP는 비용표에 별도 집계.
+  </div>
+
+  <!-- 여정 요약 -->
+  <div class="route">
+    <div class="route-node"><span class="route-city">인천</span><span class="route-nights">D1 출발</span></div>
+    <div class="route-arrow"><span>✈</span><span class="mode">경유 13~15h</span></div>
+    <div class="route-node"><span class="route-city">취리히</span><span class="route-nights">도착</span></div>
+    <div class="route-arrow"><span>🚆</span><span class="mode">IR 1h</span></div>
+    <div class="route-node"><span class="route-city">루체른</span><span class="route-nights">2박</span></div>
+    <div class="route-arrow"><span>🚆</span><span class="mode">~3h</span></div>
+    <div class="route-node"><span class="route-city">체르마트</span><span class="route-nights">2박</span></div>
+    <div class="route-arrow"><span>🚆</span><span class="mode">2h10</span></div>
+    <div class="route-node"><span class="route-city">인터라켄</span><span class="route-nights">2박</span></div>
+    <div class="route-arrow"><span>🚆✈</span><span class="mode">취리히 2h+귀국</span></div>
+    <div class="route-node"><span class="route-city">인천</span><span class="route-nights">D8 도착</span></div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge move">Day 1</span><span class="day-date">9/18 토</span>
+      <span class="day-title">인천 → 취리히 → 루체른</span>
+      <div class="day-meta"><span class="day-stay">🏨 루체른</span><span class="day-cost">~3만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">오전</div><div class="tl-act">인천공항(ICN) 출발 <span class="sub">경유 1회, 총 13~15시간. 시차 -7h</span></div></div>
+        <div class="tl-row"><div class="tl-time">오후~저녁</div><div class="tl-act">취리히공항(ZRH) 도착 · 입국·수하물</div></div>
+        <div class="tl-row"><div class="tl-time">저녁</div><div class="tl-act"><span class="mv">🚆 공항역→루체른 IR 직행 1시간</span> (STP 1일차 개시)</div></div>
+        <div class="tl-row"><div class="tl-time">밤</div><div class="tl-act">루체른 호텔 체크인 · 가벼운 저녁 후 취침</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사</div><div class="meal"><b>점심·저녁</b> 기내식</div><div class="meal"><b>도착 후</b> 루체른 역 근처 간단히 (25~35 CHF)</div></div>
+        <div class="stamina">🪫 <b>체력: 회복일</b> — 장거리 비행 직후. 이동·취침만, 무리 금지.</div>
+        <div class="tip">💡 도착일은 일정 욕심 X. 기내에서 스위스 시간 기준 수면 조절.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge">Day 2</span><span class="day-date">9/19 일</span>
+      <span class="day-title">루체른 구시가 + 필라투스</span>
+      <div class="day-meta"><span class="day-stay">🏨 루체른</span><span class="day-cost">~13만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">08:30</div><div class="tl-act">호텔 조식</div></div>
+        <div class="tl-row"><div class="tl-time">09:30</div><div class="tl-act">루체른 구시가 도보 <span class="sub">카펠교 · 빈사의 사자상 · 무제크 성벽. 평지 위주</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:00</div><div class="tl-act">호반 점심</div></div>
+        <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act"><span class="mv">🚢🚠 필라투스 골든 라운드</span> <span class="sub">유람선+코그휠/곤돌라(2,132m). STP 50% 할인. 탈것 위주라 걷기 적음</span></div></div>
+        <div class="tl-row"><div class="tl-time">17:30</div><div class="tl-act">루체른 복귀 · 휴식</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁: 스위스 음식 또는 한식당</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사 (1인)</div><div class="meal"><b>아침</b> 호텔 조식(포함)</div><div class="meal"><b>점심</b> 호반 30~45 CHF</div><div class="meal"><b>저녁</b> 뢰스티/퐁뒤 또는 한식 30~45 CHF</div></div>
+        <div class="stamina">🔋 <b>체력: 보통</b> — 시차 적응 둘째날. 필라투스 탈것 위주라 무난. 오후 휴식 확보.</div>
+        <div class="tip">💡 시니어은 필라투스 곤돌라가 멀미 적고 편함. 흐리면 실내·구시가 위주로 조정.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge move">Day 3</span><span class="day-date">9/20 월</span>
+      <span class="day-title">루체른 → 체르마트 (약 3시간)</span>
+      <div class="day-meta"><span class="day-stay">🏨 체르마트</span><span class="day-cost">~12만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:00</div><div class="tl-act">조식 · 체크아웃</div></div>
+        <div class="tl-row"><div class="tl-time">10:00</div><div class="tl-act"><span class="mv">🚆 루체른→체르마트 약 3시간</span> <span class="sub">베른/피스프 경유, STP 포함. 앉아서 경치 감상</span></div></div>
+        <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act">체르마트 도착 · 호텔 체크인 · 점심 <span class="sub">차 없는 청정마을(전기차·마차만). 호텔 짐 픽업 가능</span></div></div>
+        <div class="tl-row"><div class="tl-time">15:00</div><div class="tl-act">마을 산책 · 마터호른 첫 조망 <span class="sub">반호프 거리, 마터호른 포토존, 교회 다리</span></div></div>
+        <div class="tl-row"><div class="tl-time">18:00</div><div class="tl-act">휴식</div></div>
+        <div class="tl-row"><div class="tl-time">19:30</div><div class="tl-act">저녁: 라클렛/퐁뒤 (체르마트 본고장)</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사 (1인)</div><div class="meal"><b>아침</b> 호텔 조식</div><div class="meal"><b>점심</b> 체르마트 25~40 CHF</div><div class="meal"><b>저녁</b> 라클렛/퐁뒤 35~50 CHF</div></div>
+        <div class="stamina easy">🟢 <b>체력: 여유</b> — 이동일(앉아서). 도착 후 가벼운 마을 산책만.</div>
+        <div class="tip">💡 체르마트는 무공해 마을이라 마터호른 조망이 깨끗. 짐은 호텔 픽업 서비스 활용(역→호텔 전기카트).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge peak">Day 4</span><span class="day-date">9/21 화</span>
+      <span class="day-title">고르너그라트 — 마터호른 ⛰️ 하이라이트①</span>
+      <div class="day-meta"><span class="day-stay">🏨 체르마트</span><span class="day-cost">~17만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">07:30</div><div class="tl-act">이른 조식 (오전 시야가 가장 맑음)</div></div>
+        <div class="tl-row"><div class="tl-time">08:30</div><div class="tl-act"><span class="mv">🚈 고르너그라트 등산열차 30분</span> <span class="sub">체르마트역 맞은편 → 3,089m 전망대. STP 50% 할인</span></div></div>
+        <div class="tl-row"><div class="tl-time">09:15</div><div class="tl-act">고르너그라트 전망대 <span class="sub">마터호른·몬테로사·빙하 파노라마. 3,089m라 융프라우보다 고산증 부담 적음</span></div></div>
+        <div class="tl-row"><div class="tl-time">11:30</div><div class="tl-act">하산 (중간역 로텐보덴~리펠베르크 호수 반영 포토존 잠깐)</div></div>
+        <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act">체르마트 점심 · 오후 마을 여유 <span class="sub">쇼핑·카페, 또는 마터호른 글레이셔 파라다이스(옵션) 추가</span></div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사 (1인)</div><div class="meal"><b>아침</b> 호텔 조식(이른 시간)</div><div class="meal"><b>점심</b> 마을 25~40 CHF</div><div class="meal"><b>저녁</b> 30~45 CHF</div></div>
+        <div class="stamina">🟡 <b>체력: 중간</b> — 등산열차라 부담 적음. 3,089m로 고산증 약함. 오후는 마을에서 여유.</div>
+        <div class="tip">💡 <b>날씨 유연</b>: 체르마트 2박이라 Day3 오후/Day4 중 맑은 때 선택. 흐리면 마을·글레이셔 파라다이스(실내 비중)로 대체.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge move">Day 5</span><span class="day-date">9/22 수</span>
+      <span class="day-title">체르마트 → 인터라켄 (2시간 10분)</span>
+      <div class="day-meta"><span class="day-stay">🏨 인터라켄</span><span class="day-cost">~12만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">09:30</div><div class="tl-act">조식 · 체크아웃</div></div>
+        <div class="tl-row"><div class="tl-time">10:30</div><div class="tl-act"><span class="mv">🚆 체르마트→인터라켄 직행 약 2시간 10분</span> <span class="sub">슈피츠/피스프 경유. STP 포함</span></div></div>
+        <div class="tl-row"><div class="tl-time">13:00</div><div class="tl-act">인터라켄 도착 · 체크인 · 점심</div></div>
+        <div class="tl-row"><div class="tl-time">15:00</div><div class="tl-act"><span class="mv">🚠 하더쿨름 전망대</span> <span class="sub">푸니쿨라 8분(STP 50%). 인터라켄·호수 2개 조망</span> 또는 회에마테 산책</div></div>
+        <div class="tl-row"><div class="tl-time">17:30</div><div class="tl-act">휴식 (다음날 융프라우 대비)</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁 · 융프라우 도시락(신라면/물) 준비</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사 (1인)</div><div class="meal"><b>아침</b> 호텔 조식</div><div class="meal"><b>점심</b> 인터라켄 25~40 CHF</div><div class="meal"><b>저녁</b> 30~45 CHF</div></div>
+        <div class="stamina easy">🟢 <b>체력: 여유</b> — 이동일. 오후 가볍게 + 휴식으로 융프라우 대비.</div>
+        <div class="tip">💡 Coop/Migros에서 다음날 융프라우 점심 도시락·물·간식 구매(정상 식당 매우 비쌈).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 6 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge peak">Day 6</span><span class="day-date">9/23 목</span>
+      <span class="day-title">융프라우요흐 — Top of Europe 🏔️ 하이라이트②</span>
+      <div class="day-meta"><span class="day-stay">🏨 인터라켄</span><span class="day-cost">~30만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">07:00</div><div class="tl-act">이른 조식</div></div>
+        <div class="tl-row"><div class="tl-time">08:00</div><div class="tl-act"><span class="mv">🚆 인터라켄동역→그린델발트 터미널</span> <span class="sub">약 35분</span></div></div>
+        <div class="tl-row"><div class="tl-time">08:45</div><div class="tl-act"><span class="mv">🚠 아이거 익스프레스 곤돌라 15분 → 융프라우요흐</span> <span class="sub">편도 총 ~1시간 30분. 3,454m</span></div></div>
+        <div class="tl-row"><div class="tl-time">10:30</div><div class="tl-act">정상: 스핑크스 전망대·얼음궁전·알레치 빙하 <span class="sub">체류 1.5~2시간. 천천히, 수분, 무리 금지</span></div></div>
+        <div class="tl-row"><div class="tl-time">12:30</div><div class="tl-act">점심 (도시락 또는 정상 식당)</div></div>
+        <div class="tl-row"><div class="tl-time">13:30</div><div class="tl-act"><span class="mv">하산</span> · 클라이네 샤이덱/그린델발트 잠깐</div></div>
+        <div class="tl-row"><div class="tl-time">16:30</div><div class="tl-act">인터라켄 복귀 · 휴식</div></div>
+        <div class="tl-row"><div class="tl-time">19:00</div><div class="tl-act">저녁 (스위스 마지막 밤)</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사 (1인)</div><div class="meal"><b>아침</b> 호텔 조식(이른 시간)</div><div class="meal"><b>점심</b> 도시락 권장(정상 30~40 CHF)</div><div class="meal"><b>저녁</b> 30~45 CHF</div></div>
+        <div class="stamina hard">🔴 <b>체력: 최대 부담</b> — 고산 3,454m. 고산증(두통·메스꺼움) 가능. 정상 체류 짧게, 수분, 천천히. 시니어 컨디션 최우선.</div>
+        <div class="tip">💡 인터라켄 2박이라 Day5 오후/Day6 중 맑은 날 선택. 티켓은 1~2일 전 날씨 보고 확정. 흐리면 쉴트호른·피르스트 대안.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAY 7 -->
+  <div class="day">
+    <div class="day-head">
+      <span class="day-badge move">Day 7</span><span class="day-date">9/24 금</span>
+      <span class="day-title">인터라켄 → 취리히공항 → 인천</span>
+      <div class="day-meta"><span class="day-stay">✈ 기내 1박</span><span class="day-cost">~6만/인</span></div>
+    </div>
+    <div class="day-body">
+      <div class="timeline">
+        <div class="tl-row"><div class="tl-time">오전</div><div class="tl-act">조식 · 체크아웃</div></div>
+        <div class="tl-row"><div class="tl-time">출발 4h 전</div><div class="tl-act"><span class="mv">🚆 인터라켄→취리히공항 약 2시간 10분</span> <span class="sub">짧고 깔끔한 마지막 leg. STP 마지막날</span></div></div>
+        <div class="tl-row"><div class="tl-time">공항</div><div class="tl-act">체크인·면세·텍스리펀</div></div>
+        <div class="tl-row"><div class="tl-time">오후</div><div class="tl-act"><span class="mv">✈ 취리히→인천 경유편 13~15시간</span> <span class="sub">취리히는 직항 없음(경유)</span></div></div>
+        <div class="tl-row"><div class="tl-time">D8</div><div class="tl-act">인천 도착 (현지 +7h)</div></div>
+      </div>
+      <div class="day-side">
+        <div><div class="sb-label">식사 (1인)</div><div class="meal"><b>아침</b> 호텔</div><div class="meal"><b>점심</b> 공항 20~30 CHF</div><div class="meal"><b>저녁</b> 기내식</div></div>
+        <div class="stamina">🟡 <b>체력: 귀국 이동</b> — 인터라켄→공항 2시간으로 짧음. 공항 3시간 전 여유.</div>
+        <div class="tip">💡 마지막 베이스를 인터라켄(취리히 2시간)으로 둬 귀국 이동이 짧음. 텍스리펀 시간 여유.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 점검 -->
+  <div class="sec-title">전체 점검 — 시간 · 체력 · 리스크</div>
+  <div class="card pad">
+    <div class="check-grid">
+      <div class="check-item"><div class="ci-ic">🟢</div><div><div class="ci-t">완급 리듬 양호</div><div class="ci-d">회복(D1)→관광(D2)→이동(D3)→명산中(D4 마터호른)→이동(D5)→명산高(D6 융프라우)→귀국(D7). 두 명산일 사이에 앉아 가는 이동일이 끼어 체력 분산.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟢</div><div><div class="ci-t">고산 순서가 유리</div><div class="ci-d">먼저 고르너그라트(3,089m)로 적응 후 융프라우(3,454m). 낮은 곳 먼저라 고산 적응에 도움.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟡</div><div><div class="ci-t">짐 이동 2회 (5인 대량)</div><div class="ci-d">루체른→체르마트, 체르마트→인터라켄. 체르마트는 차량 불가 → 테쉬역 셔틀/호텔 전기카트 픽업 활용.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟡</div><div><div class="ci-t">Day 3 이동 3시간</div><div class="ci-d">루체른→체르마트가 가장 긴 내부 이동. 앉아서·경치 좋지만 길다. 오전 출발로 오후 체르마트 여유 확보.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🔴</div><div><div class="ci-t">고산증 (D6 융프라우)</div><div class="ci-d">3,454m. 연령·체력 무관 발생 가능. 정상 체류 짧게, 수분, 천천히. 두통약 지참, 심하면 즉시 하산.</div></div></div>
+      <div class="check-item"><div class="ci-ic">🟢</div><div><div class="ci-t">날씨 버퍼 양호</div><div class="ci-d">체르마트 2박·인터라켄 2박이라 두 명산 모두 날씨 예비일 확보. 흐린 날은 마을/대체 전망대로.</div></div></div>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid #f4f4f2;font-size:12px;color:#4a4a46;">
+      <b>종합 판단:</b> 시니어 동반 기준 <b>무리 없는 일정</b>. 명산일(D4·D6) 사이에 이동·완충이 배치되고, 고산은 낮은 곳(고르너그라트)→높은 곳(융프라우) 순이라 적응에 유리. 관리포인트 ① 짐 이동 2회(체르마트 셔틀) ② D6 고산증 ③ D3 3시간 이동 — 이 3가지만 챙기면 쾌적. 더 줄이려면 <b>5박안(체르마트 생략, 인터라켄 3박)</b>으로 이동 1회·날씨버퍼↑.
+    </div>
+  </div>
+
+  <!-- 교통 패스 비교 -->
+  <div class="sec-title">교통 패스 — 스위스 트래블 패스(STP) vs 반액카드(Half Fare Card)</div>
+  <div class="card pad">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div style="background:#f0edff;border-radius:10px;padding:12px 14px;">
+        <div style="font-size:13px;font-weight:800;color:#6b4cff;margin-bottom:6px;">스위스 트래블 패스 (STP)</div>
+        <div style="font-size:12px;color:#5b3fe0;line-height:1.7;">
+          • 8일권 2등 ~CHF450 / 1등 ~CHF700<br>
+          • 기차·버스·유람선 <b>무제한 무료</b><br>
+          • 산악열차 <b>50% 할인</b> + 박물관 500곳 무료<br>
+          • <b>편함</b>: 표 안 사고 그냥 타면 됨
+        </div>
+      </div>
+      <div style="background:#f0edff;border-radius:10px;padding:12px 14px;">
+        <div style="font-size:13px;font-weight:800;color:#6b4cff;margin-bottom:6px;">반액카드 (Half Fare Card) ✅ 있음</div>
+        <div style="font-size:12px;color:#4a35b0;line-height:1.7;">
+          • <b>1개월 ~CHF120</b> (≈19만/인)<br>
+          • 기차·버스·유람선·<b>산악열차 모두 50%</b> 할인<br>
+          • 카드값 + 매 구간 반값 티켓 별도 구매<br>
+          • 이동이 적은 일정에서 STP보다 쌀 수 있음
+        </div>
+      </div>
+    </div>
+    <div class="note">
+      💡 <b>네, 반액카드 있습니다.</b> 1개월 ~CHF120에 <b>산악열차 포함 모든 교통 50% 할인</b>. 핵심 차이: STP는 도시 간 기차가 <b>공짜</b>, 반액카드는 <b>반값</b>.<br>
+      <b>이 6박 일정은 산악 비중이 크고(필라투스·고르너그라트·융프라우, 둘 다 50%로 동일) 도시 간 이동이 3~4회뿐</b>이라 두 패스가 접전. 대략:
+      <span style="white-space:nowrap;">STP 8일 2등 ≈ CHF450</span> vs <span style="white-space:nowrap;">반액카드 CHF120 + 도시간 반값(~CHF120~150) ≈ CHF240~270</span> →
+      <b>반액카드가 1인 약 25~30만원 더 저렴할 가능성</b>. 단 STP는 표 안 사는 편리함·박물관·유람선 무료가 강점.
+    </div>
+    <div class="note warn">
+      ⚠️ 정확한 우열은 <b>2027 패스 가격 + 실제 구간 요금</b>으로 예약 시 재계산 필요. 시니어 동반이라 <b>편의(STP)</b>를 살짝 우선하되, 비용 민감하면 반액카드로 25~30만/인 × 5인 = <b>~130만원 절약</b> 가능.
+    </div>
+  </div>
+
+  <!-- 최종 비용 -->
+  <div class="sec-title">최종 비용 — 항목별 (1인, 9월 하순 평일, 취리히 왕복)</div>
+  <div class="card pad">
+    <table class="cost-table">
+      <thead><tr><th style="width:22%">항목</th><th style="width:48%">산출 근거</th><th class="ct-num" style="width:15%">절약형(하단)</th><th class="ct-num" style="width:15%">여유형(상단)</th></tr></thead>
+      <tbody>
+        <tr><td><b>✈️ 항공</b></td><td class="ct-src">ICN-ZRH 왕복 경유, 어깨철 평일</td><td class="ct-num">130만</td><td class="ct-num">180만</td></tr>
+        <tr><td><b>🏨 숙박 6박</b></td><td class="ct-src">2방(더블+트리플)×6박 ÷5인. 더블 30~45만·트리플 40~60만/박</td><td class="ct-num">84만</td><td class="ct-num">126만</td></tr>
+        <tr><td><b>🍽️ 식비 7일</b></td><td class="ct-src">절약형 하루 10만(마트 적극)·여유형 15만(식당 위주)</td><td class="ct-num">70만</td><td class="ct-num">105만</td></tr>
+        <tr><td><b>🚆 교통 패스</b></td><td class="ct-src">STP 8일권 2등 ~CHF450(70만) / 1등 ~CHF700(100만). ※반액카드 대안은 아래 참고</td><td class="ct-num">70만</td><td class="ct-num">100만</td></tr>
+        <tr><td><b>🏔️ 융프라우요흐</b></td><td class="ct-src">동신항운 쿠폰+STP 145CHF</td><td class="ct-num">22만</td><td class="ct-num">22만</td></tr>
+        <tr><td><b>⛰️ 고르너그라트</b></td><td class="ct-src">STP 50% 할인 (정가 ~19만 → ~9.5만)</td><td class="ct-num">10만</td><td class="ct-num">13만</td></tr>
+        <tr><td><b>🚠 필라투스·하더쿨름</b></td><td class="ct-src">STP 50% 할인 후</td><td class="ct-num">8만</td><td class="ct-num">12만</td></tr>
+        <tr><td><b>🩺 여행자보험</b> <span style="font-size:10px;color:#9a9a94;">(옵션)</span></td><td class="ct-src">60대 포함 7~8일 · 절약형은 제외</td><td class="ct-num" style="color:#b3b3ad;">— 제외</td><td class="ct-num">15만</td></tr>
+        <tr><td><b>🧾 기타·예비비</b></td><td class="ct-src">유심·팁·잡비·환차손</td><td class="ct-num">12만</td><td class="ct-num">23만</td></tr>
+        <tr style="border-top:2px solid #ececeb;"><td><b style="color:#6b4cff;">1인 합계</b></td><td class="ct-src">스위스 6박 7일 · 2방 (표준형 1등석·4성 ≈ 520만)</td><td class="ct-num" style="color:#6b4cff;font-size:14px;">약 400만</td><td class="ct-num" style="color:#6b4cff;font-size:14px;">약 600만</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec-title">최종 비용 — 5인 총액 (3단계)</div>
+  <div class="tier">
+    <div class="tier-card" style="background:#f0edff;border:1px solid #d9d2ff;">
+      <div class="tt" style="color:#6b4cff;">절약형</div>
+      <div class="tv" style="color:#6b4cff;">2,000<small>만원</small></div>
+      <div class="td" style="color:#4a35b0;">1인 ~400만 · 2방, 2등 STP/반액카드, 3성·마트, 보험 옵션 제외</div>
+    </div>
+    <div class="tier-card" style="background:#f0edff;border:1px solid #d9d2ff;">
+      <div class="tt" style="color:#6b4cff;">표준형 (권장)</div>
+      <div class="tv" style="color:#6b4cff;">2,600<small>만원</small></div>
+      <div class="td" style="color:#5b3fe0;">1인 ~520만 · 2방, 1등 STP, 4성 호텔, 식당 위주. 시니어 쾌적</div>
+    </div>
+    <div class="tier-card" style="background:#f6f6f5;border:1px solid #ececeb;">
+      <div class="tt" style="color:#6b6b66;">여유형</div>
+      <div class="tv" style="color:#1a1a18;">3,000<small>만원</small></div>
+      <div class="td" style="color:#6b6b66;">1인 ~600만 · 2방, 프리미엄 숙소(체르마트 마터호른 뷰), 외식 풍성</div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:#9a9a94;margin-top:10px;">
+    ※ 환율(1CHF≈1,550원)·항공·숙박은 2027 예약 시점 변동. 3~4월 항공권 오픈 즉시 확정 권장. 체르마트는 차량 진입 불가(테쉬역 셔틀). 출처: 트립스토어·조촌부부·brunch·KKday·SBB·동신항운·Omio.
+  </div>
+
+</div>
+</body>
+</html>

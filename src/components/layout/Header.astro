@@ -1,0 +1,130 @@
+---
+import ThemeToggle from '../ui/ThemeToggle.astro';
+---
+
+<style>
+  .nav-link {
+    color: var(--text-secondary);
+  }
+  .nav-link:hover {
+    color: var(--text-primary);
+    opacity: 1;
+  }
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0.25rem;
+    line-height: 1;
+  }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 40;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .menu-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 10rem;
+    background-color: var(--bg);
+    border-left: 1px solid var(--border);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.25rem;
+    gap: 1.25rem;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+  }
+  .mobile-menu.open {
+    transform: translateX(0);
+  }
+  .mobile-menu a {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .mobile-menu a:hover {
+    color: var(--text-primary);
+  }
+
+  @media (min-width: 641px) {
+    .menu-overlay { display: none !important; }
+    .mobile-menu { display: none !important; }
+    .hamburger { display: none !important; }
+  }
+
+  @media (max-width: 640px) {
+    .desktop-nav { display: none !important; }
+    .hamburger { display: block; }
+  }
+</style>
+
+<header style="background-color: var(--bg);">
+  <nav style="max-width: 90rem; margin: 0 auto; padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between;">
+    <a href="/" style="font-size: 1rem; font-weight: 600; color: var(--text-primary);">
+      ▤ 조성덕
+    </a>
+    <ul class="desktop-nav" style="display: flex; gap: 1.5rem; list-style: none; margin: 0; padding: 0; font-size: 0.875rem;">
+      <li><a href="/" class="nav-link">Resume</a></li>
+      <li><a href="/projects" class="nav-link">Projects</a></li>
+      <li><a href="/about" class="nav-link">About</a></li>
+      <li><a href="https://writing.sungd.uk" class="nav-link">Writing</a></li>
+    </ul>
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <ThemeToggle />
+      <button class="hamburger" id="hamburger-btn" aria-label="메뉴">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M3 5h14a1 1 0 010 2H3a1 1 0 010-2zm0 4h14a1 1 0 010 2H3a1 1 0 010-2zm0 4h14a1 1 0 010 2H3a1 1 0 010-2z"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div class="menu-overlay" id="menu-overlay"></div>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/" class="nav-link">Resume</a>
+  <a href="/projects" class="nav-link">Projects</a>
+  <a href="/about" class="nav-link">About</a>
+  <a href="https://writing.sungd.uk" class="nav-link">Writing</a>
+</div>
+
+<script is:inline>
+  function initHamburger() {
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
+    if (!btn || !menu || !overlay) return;
+
+    function open() {
+      menu.classList.add('open');
+      overlay.classList.add('open');
+    }
+    function close() {
+      menu.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+
+    btn.addEventListener('click', () => {
+      menu.classList.contains('open') ? close() : open();
+    });
+    overlay.addEventListener('click', close);
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  }
+  document.addEventListener('astro:page-load', initHamburger);
+</script>

@@ -2,6 +2,22 @@
 
 sungd.uk 변천사. 최신이 맨 위.
 
+## 2026-09-20 — Astro 기반 에디토리얼 랜딩 개편 및 이력서/프로젝트 흡수 통합
+
+`resume.sungd.uk`에 있던 이력서·프로젝트 빌드 시스템(Astro)을 `sungd.uk`로 흡수 통합. 루트(`/`)에는 성덕 님의 3번 마커형 에디토리얼 랜딩을 배치하고, 한국어 이력서는 `/cv/`로 라우팅하며, `/resume`는 `/cv`로 리다이렉트한다.
+
+- **무엇**:
+  - 루트(`/`)에 3번 마커형(`01 / WORK`, `02 / TOOLING`, `03 / PHILOSOPHY`) 에디토리얼 랜딩(`src/pages/index.astro`) 구현.
+  - 이력서(`cv/`, `en/`) 및 프로젝트 14개(`projects/`)를 Astro 빌드 파이프라인으로 단일 배포.
+  - `/resume` 접속 시 `/cv`로 리다이렉트(`astro.config.mjs` redirects).
+  - GitHub Actions를 통한 GitHub Pages 자동 빌드/배포 워크플로우 도입.
+- **왜**:
+  - `resume.sungd.uk`와 `sungd.uk`로 분산되어 있던 개인 대표 사이트를 단일 도메인(`sungd.uk`)과 단일 빌드 시스템으로 일원화.
+  - "공개 사이트는 repo 이름이 곧 주소다" 규칙 준수.
+- **핵심 결정**:
+  - 타이포그래피: `Inter Tight` + `Pretendard` + `JetBrains Mono` 자간/행간 정밀 페어링.
+  - 칼같은 단일 수직 축(Single Vertical Axis) 레이아웃 적용.
+
 ## 2026-09-05 — 옛 글 주소를 안내 대신 바로 넘김
 
 2026-08-10 에 「집계를 보고 넘김을 걸지 정한다」로 남겨둔 것을 닫는다. 계측 결과가 나왔다.

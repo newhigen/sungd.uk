@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2027 가족여행 · 스위스 6박</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+      --border:#ececeb; --line-strong:#e0e0de;
+      --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+      --pick:#6b4cff; --pick-bg:#f0edff;
+      --radius:14px; --radius-sm:9px;
+      --shadow-sm:0 1px 2px rgba(20,20,18,.04),0 1px 3px rgba(20,20,18,.05);
+      --shadow-md:0 2px 8px rgba(20,20,18,.05),0 8px 24px rgba(20,20,18,.06);
+      --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+      --mono:'Google Sans Code',ui-monospace,'SF Mono',Menlo,monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: var(--sans); background: var(--bg); color: var(--text);
+      letter-spacing: -.01em; -webkit-font-smoothing: antialiased;
+      display: flex; flex-direction: column;
+    }
+
+    /* topbar */
+    .topbar {
+      position: sticky; top: 0; z-index: 20;
+      display: flex; align-items: center; gap: 16px;
+      background: rgba(251,251,250,.82); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 28px; flex-shrink: 0;
+    }
+    .brand { font-size: .98rem; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; }
+    .brand em { color: var(--pick); font-style: normal; }
+    .meta { margin-left: auto; font-family: var(--mono); font-size: .72rem; color: var(--ink-3); white-space: nowrap; }
+
+    /* navbar — 2계층 IA */
+    .navbar {
+      display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 11px 28px; flex-shrink: 0;
+    }
+    .navgroup { display: flex; align-items: center; gap: 10px; }
+    .navgroup .lbl {
+      font-size: .68rem; font-weight: 700; letter-spacing: .05em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .navgroup.primary .lbl { color: var(--pick); }
+    .navgroup.secondary .lbl { color: var(--ink-3); }
+    .divider { width: 1px; align-self: stretch; background: var(--line-strong); }
+
+    .seg {
+      display: inline-flex; gap: 2px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 11px; padding: 3px;
+    }
+    .seg button {
+      border: none; background: transparent; font-family: var(--sans);
+      padding: 7px 14px; border-radius: 8px;
+      font-size: .82rem; font-weight: 650; color: var(--muted);
+      cursor: pointer; white-space: nowrap; transition: .15s ease;
+    }
+    .seg button:hover { color: var(--text); }
+    .seg button.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); font-weight: 750; }
+    .navgroup.primary .seg button.active { color: var(--pick); }
+
+    .frame-wrap { flex: 1; position: relative; min-height: 0; background: var(--bg); }
+    .frame-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; background: var(--bg); }
+    .frame-wrap iframe.hidden { display: none; }
+
+    @media (max-width: 760px) {
+      .topbar { padding: 11px 16px; }
+      .navbar { padding: 10px 16px; gap: 10px; }
+      .divider { display: none; }
+      .navgroup { width: 100%; }
+      .seg { flex: 1; }
+      .seg button { flex: 1; padding: 7px 8px; font-size: .76rem; }
+      .meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="brand">2027 가족여행 · <em>스위스 6박 7일</em></span>
+    <span class="meta">9월 하순 · 5인 · 취리히 IN·OUT</span>
+  </div>
+
+  <nav class="navbar">
+    <div class="navgroup primary">
+      <span class="lbl">확정안</span>
+      <div class="seg">
+        <button class="active" id="nav-plan" onclick="showView('plan')">일정 · 동선</button>
+        <button id="nav-detail" onclick="showView('detail')">비용 · 상세</button>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="navgroup secondary">
+      <span class="lbl">검토 자료</span>
+      <div class="seg">
+        <button id="nav-dash" onclick="showView('dash')">시기 비교</button>
+        <button id="nav-swiss" onclick="showView('swiss')">박수 옵션</button>
+        <button id="nav-paris" onclick="showView('paris')">파리 대안</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="frame-wrap">
+    <iframe id="frame-plan" src="plan.html" title="일정·동선"></iframe>
+    <iframe id="frame-detail" class="hidden" src="detail.html" title="비용·상세"></iframe>
+    <iframe id="frame-dash" class="hidden" src="compare.html" title="시기 비교"></iframe>
+    <iframe id="frame-swiss" class="hidden" src="swiss.html" title="박수 옵션"></iframe>
+    <iframe id="frame-paris" class="hidden" src="paris.html" title="파리 대안"></iframe>
+  </div>
+
+  <script>
+    var VIEWS = ['plan', 'detail', 'dash', 'swiss', 'paris'];
+    function showView(v) {
+      VIEWS.forEach(function(name) {
+        document.getElementById('frame-' + name).classList.toggle('hidden', name !== v);
+        document.getElementById('nav-' + name).classList.toggle('active', name === v);
+      });
+      if (v === 'plan') {
+        var mf = document.getElementById('frame-plan');
+        if (mf && mf.contentWindow) mf.contentWindow.postMessage('refresh-map', '*');
+      }
+    }
+  </script>
+</body>
+</html>

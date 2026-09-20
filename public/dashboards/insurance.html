@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>보험 대시보드</title>
+<style>
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+  @import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+    --border:#ececeb; --line-strong:#e0e0de;
+    --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+    --pick:#6b4cff; --pick-bg:#f0edff; --pick-line:#dcd4ff;
+    --a:#b4690e; --a-bg:#fbf2e6; --a-line:#f0ddc0;       /* 옵션 A (다온생명) 주황 */
+    --a-bg2:#fdf8f1;
+    --feature:#1a7f4b; --feature-bg:#e7f4ec;
+    --security:#c8453a; --security-bg:#fbeae8;
+    --land:#b8860b; --land-soft:#fdf6e3; --land-line:#ecdca6;
+    --radius:14px; --radius-sm:9px;
+    --shadow-sm:0 1px 2px rgba(20,20,18,.04),0 1px 3px rgba(20,20,18,.05);
+    --shadow-md:0 2px 8px rgba(20,20,18,.05),0 8px 24px rgba(20,20,18,.06);
+    --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+    --mono:'Google Sans Code',ui-monospace,'SF Mono',Menlo,monospace;
+  }
+  [data-theme="dark"]{
+    --bg:#0f0f0e; --surface:#191917; --surface2:#222220;
+    --border:#2a2a27; --line-strong:#373734;
+    --text:#ededeb; --muted:#a0a09b; --ink-3:#6e6e69;
+    --pick:#9d86ff; --pick-bg:#241f3d; --pick-line:#3a3060;
+    --a:#d99a4e; --a-bg:#2a2114; --a-line:#4a3a1f;
+    --a-bg2:#211b12;
+    --feature:#3fb87a; --feature-bg:#13291d;
+    --security:#e07a6f; --security-bg:#2e1715;
+    --land:#d4af5a; --land-soft:#241f0e; --land-line:#4a3f1a;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.2);
+    --shadow-md:0 2px 8px rgba(0,0,0,.24),0 8px 24px rgba(0,0,0,.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html.theme-switching *{transition:none !important;}
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    letter-spacing:-.01em;
+    -webkit-font-smoothing:antialiased;
+    color-scheme: light;
+  }
+  [data-theme="dark"] body{ color-scheme: dark; }
+
+  /* ── 상단 바 (테마 토글) ── */
+  .topbar{
+    position:sticky; top:0; z-index:200;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 24px;
+    background:color-mix(in srgb, var(--surface) 82%, transparent);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar .brand{ font-size:.95rem; font-weight:800; letter-spacing:-.02em; }
+  .topbar .brand .dot{ color:var(--pick); }
+  .theme-toggle{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--mono); font-size:.72rem; font-weight:500;
+    color:var(--muted); background:var(--surface2);
+    border:1px solid var(--border); border-radius:20px;
+    padding:5px 12px; cursor:pointer; transition:.18s ease;
+  }
+  .theme-toggle:hover{ color:var(--text); border-color:var(--line-strong); }
+
+  /* ── 탭 네비게이션 ── */
+  .tab-nav {
+    position: sticky; top: 45px; z-index: 100;
+    background:color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter:blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; padding: 0 24px; max-width: 100%; overflow-x: auto;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0; padding: 13px 16px;
+    font-size: 14px; font-weight: 650; color: var(--ink-3);
+    background: none; border: none;
+    border-bottom: 2px solid transparent; cursor: pointer;
+    transition: color 0.15s, border-color 0.15s; white-space: nowrap;
+    font-family:var(--sans);
+  }
+  .tab-btn:hover{ color:var(--muted); }
+  .tab-btn.active { color: var(--pick); border-bottom-color: var(--pick); }
+
+  /* ── 탭 패널 ── */
+  .tab-panel { display: none; padding: 32px 24px 90px; }
+  .tab-panel.active { display: block; }
+
+  .container { max-width: 1120px; margin: 0 auto; }
+
+  /* ── 헤더 ── */
+  .header { padding: 24px 0 26px; border-bottom: 1px solid var(--border); margin-bottom: 26px; }
+  .header .tag {
+    display: inline-block; background: var(--pick-bg); color: var(--pick);
+    font-size: 12px; font-weight: 700; padding: 4px 11px;
+    border-radius: 100px; margin-bottom: 14px; font-family:var(--mono);
+  }
+  .header h1 { font-size: 2.05rem; font-weight: 800; line-height: 1.25; margin-bottom: 10px; letter-spacing:-.035em; }
+  .header .sub { font-size: 14px; color: var(--ink-3); }
+
+  /* ── 섹션 ── */
+  .section { margin-bottom: 22px; }
+  .section-title {
+    font-size: 1.15rem; font-weight: 750; color: var(--text);
+    letter-spacing: -.02em; margin-bottom: 12px; padding: 0 2px;
+  }
+
+  /* ── 카드 ── */
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 20px; margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title { font-size: 1.05rem; font-weight: 750; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; letter-spacing:-.02em; }
+
+  /* ── 결론 카드 ── */
+  .verdict-card {
+    background: var(--pick); border-radius: var(--radius); padding: 26px 22px;
+    margin-bottom: 10px; color: #fff; box-shadow: var(--shadow-md);
+  }
+  .verdict-card .label { font-size: 13px; opacity: 0.82; margin-bottom: 8px; }
+  .verdict-card .main { font-size: 1.4rem; font-weight: 800; line-height: 1.35; margin-bottom: 12px; letter-spacing:-.025em; }
+  .verdict-card .desc { font-size: 14px; opacity: 0.9; line-height: 1.65; }
+
+  /* ── 경고 카드 ── */
+  .warn-card { background: var(--surface); border:1px solid var(--land-line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 10px; }
+  .warn-card .warn-title { font-size: 13px; font-weight: 700; color: var(--land); margin-bottom: 6px; }
+  .warn-card .warn-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ── 두 컬럼 ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .col-card { background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); padding: 18px 16px; box-shadow:var(--shadow-sm); }
+  .col-card .col-tag { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 100px; display: inline-block; margin-bottom: 10px; }
+  .col-card.mirae .col-tag { background: var(--a-bg); color: var(--a); }
+  .col-card.kb .col-tag { background: var(--pick-bg); color: var(--pick); }
+  .col-card.ucheguk .col-tag { background: var(--feature-bg); color: var(--feature); }
+  .col-card.kb-loss .col-tag { background: var(--pick-bg); color: var(--pick); }
+  .col-card h3 { font-size: 15px; font-weight: 750; margin-bottom: 4px; }
+  .col-card .price { font-size: 26px; font-weight: 800; margin: 6px 0 2px; line-height: 1.2; letter-spacing:-.02em; }
+  .col-card.mirae .price { color: var(--a); }
+  .col-card.kb .price { color: var(--pick); }
+  .col-card.ucheguk .price { color: var(--feature); }
+  .col-card.kb-loss .price { color: var(--pick); }
+  .col-card .price-unit { font-size: 14px; font-weight: 400; }
+  .col-card .price-sub { font-size: 12px; color: var(--ink-3); margin-bottom: 12px; }
+  .col-card .detail { font-size: 13px; color: var(--muted); line-height: 1.8; }
+  .col-card .detail b { color: var(--text); }
+
+  /* ── 비교 행 ── */
+  .compare-row { display: flex; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+  .compare-row:last-child { border-bottom: none; }
+  .compare-row .row-label { font-size: 13px; color: var(--ink-3); width: 110px; flex-shrink: 0; padding-top: 2px; font-weight:600; }
+  .compare-row .row-content { flex: 1; font-size: 14px; line-height: 1.6; }
+  .compare-row .row-content .row-mirae { color: var(--ink-3); }
+  .compare-row .row-content .arrow { color: var(--line-strong); margin: 0 6px; }
+  .compare-row .row-content .row-kb { font-weight: 600; color: var(--pick); }
+  .compare-row .badge { font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 100px; flex-shrink: 0; align-self: flex-start; margin-top: 2px; }
+  .badge.kb-win { background: var(--pick-bg); color: var(--pick); }
+  .badge.mirae-win { background: var(--a-bg); color: var(--a); }
+  .badge.tie { background: var(--surface2); color: var(--muted); }
+  .badge.overlap { background: var(--feature-bg); color: var(--feature); }
+  .badge.caution { background: var(--land-soft); color: var(--land); }
+
+  /* ── 숫자 강조 ── */
+  .big-number-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .big-number-row:last-child { border-bottom: none; }
+  .big-number-row .bnr-label { font-size: 14px; color: var(--muted); }
+  .big-number-row .bnr-value { font-size: 18px; font-weight: 750; color: var(--text); }
+  .big-number-row .bnr-value.blue { color: var(--pick); }
+  .big-number-row .bnr-value.red { color: var(--security); }
+  .big-number-row .bnr-value.green { color: var(--feature); }
+
+  /* ── 리스트 ── */
+  .check-list { list-style: none; }
+  .check-list li { display: flex; gap: 9px; font-size: 14px; padding: 6px 0; line-height: 1.55; }
+  .check-list li::before { content: "✓"; color: var(--pick); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .check-list.warn li::before { content: "!"; color: var(--security); }
+  .check-list.neutral li::before { content: "·"; color: var(--ink-3); font-size: 18px; line-height: 1.2; }
+
+  /* ── 확률 바 ── */
+  .prob-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .prob-row:last-child { border-bottom: none; }
+  .prob-label { font-size: 13px; color: var(--muted); width: 120px; flex-shrink: 0; }
+  .prob-bar-wrap { flex: 1; }
+  .prob-bar-bg { background: var(--surface2); border-radius: 4px; height: 6px; }
+  .prob-bar { height: 6px; border-radius: 4px; background: var(--pick); }
+  .prob-bar.high { background: var(--security); }
+  .prob-bar.mid { background: var(--land); }
+  .prob-value { font-size: 13px; font-weight: 700; color: var(--text); width: 38px; text-align: right; flex-shrink: 0; }
+
+  /* ── 기대값 ── */
+  .ev-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .ev-row:last-child { border-bottom: none; }
+  .ev-label { font-size: 14px; color: var(--muted); flex: 1; }
+  .ev-value { font-size: 15px; font-weight: 750; }
+  .ev-value.blue { color: var(--pick); }
+  .ev-value.orange { color: var(--a); }
+
+  .total-row { background: var(--pick-bg); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+  .total-row .total-label { font-size: 14px; font-weight: 650; color: var(--muted); }
+  .total-row .total-value { font-size: 20px; font-weight: 800; color: var(--pick); letter-spacing:-.02em; }
+
+  /* ── 시나리오 ── */
+  .scenario { padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .scenario:last-child { border-bottom: none; }
+  .scenario .sc-title { font-size: 14px; font-weight: 650; margin-bottom: 4px; }
+  .scenario .sc-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .scenario .sc-prob { display: inline-block; background: var(--surface2); color: var(--muted); font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 100px; margin-top: 6px; font-family:var(--mono); }
+
+  /* ── 현황 표 ── */
+  .status-table { width: 100%; border-collapse: collapse; }
+  .status-table th { font-size: 12px; color: var(--ink-3); font-weight: 650; padding: 8px 0; border-bottom: 1px solid var(--border); text-align: left; }
+  .status-table td { font-size: 13px; padding: 10px 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
+  .status-table tr:last-child td { border-bottom: none; }
+  .status-table .item-name { font-weight: 650; color: var(--text); }
+  .status-table .item-sub { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+  .coverage-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; margin-right: 4px; margin-top: 2px; }
+  .coverage-tag.green { background: var(--feature-bg); color: var(--feature); }
+  .coverage-tag.orange { background: var(--land-soft); color: var(--land); }
+  .coverage-tag.blue { background: var(--pick-bg); color: var(--pick); }
+  .coverage-tag.red { background: var(--security-bg); color: var(--security); }
+  .coverage-tag.purple { background: var(--pick-bg); color: var(--pick); }
+
+  /* ── 배너 ── */
+  .danger-banner { background: var(--security-bg); border-radius: 12px; padding: 14px 16px; margin: 10px 0; display: flex; gap: 10px; align-items: flex-start; }
+  .danger-banner .icon { font-size: 18px; flex-shrink: 0; }
+  .danger-banner .text { font-size: 14px; color: var(--text); line-height: 1.6; }
+  .danger-banner .text b { color: var(--security); }
+
+  .tip-banner { background: var(--feature-bg); border-radius: 12px; padding: 14px 16px; margin: 10px 0; display: flex; gap: 10px; align-items: flex-start; }
+  .tip-banner .icon { font-size: 18px; flex-shrink: 0; }
+  .tip-banner .text { font-size: 14px; color: var(--text); line-height: 1.6; }
+  .tip-banner .text b { color: var(--feature); }
+
+  .info-banner { background: var(--pick-bg); border-radius: 12px; padding: 14px 16px; margin: 10px 0; display: flex; gap: 10px; align-items: flex-start; }
+  .info-banner .icon { font-size: 18px; flex-shrink: 0; }
+  .info-banner .text { font-size: 14px; color: var(--text); line-height: 1.6; }
+  .info-banner .text b { color: var(--pick); }
+
+  /* ── 보험 시스템 가이드 ── */
+  .layer { border-radius: 12px; padding: 16px; margin-bottom: 8px; }
+  .layer-1 { background: var(--pick-bg); border-left: 4px solid var(--pick); }
+  .layer-2 { background: var(--feature-bg); border-left: 4px solid var(--feature); }
+  .layer-label { font-size: 11px; font-weight: 700; color: var(--ink-3); margin-bottom: 4px; }
+  .layer-title { font-size: 15px; font-weight: 750; margin-bottom: 4px; }
+  .layer-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .gen-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .gen-row:last-child { border-bottom: none; }
+  .gen-badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 2px; font-family:var(--mono); }
+  .gen-badge.g1 { background: var(--pick); color: #fff; }
+  .gen-badge.g2 { background: color-mix(in srgb, var(--pick) 75%, #fff); color: #fff; }
+  .gen-badge.g3 { background: var(--pick-bg); color: var(--pick); }
+  .gen-badge.g4 { background: var(--pick-bg); color: var(--pick); }
+  .gen-badge.g5 { background: var(--surface2); color: var(--pick); border: 2px solid var(--pick-line); }
+  .gen-content { flex: 1; }
+  .gen-period { font-size: 11px; color: var(--ink-3); margin-bottom: 3px; font-family:var(--mono); }
+  .gen-name { font-size: 15px; font-weight: 750; margin-bottom: 4px; }
+  .gen-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .gen-tag { display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-weight: 700; }
+  .gen-tag.danger { background: var(--security-bg); color: var(--security); }
+  .gen-tag.good { background: var(--feature-bg); color: var(--feature); }
+  .gen-tag.warn { background: var(--land-soft); color: var(--land); }
+  .gen-tag.new { background: var(--pick-bg); color: var(--pick); }
+
+  .compare-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .compare-box { border-radius: 12px; padding: 14px; }
+  .compare-box.bad { background: var(--security-bg); border: 1px solid color-mix(in srgb,var(--security) 25%,transparent); }
+  .compare-box.good { background: var(--feature-bg); border: 1px solid color-mix(in srgb,var(--feature) 25%,transparent); }
+  .compare-box .cb-label { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .compare-box.bad .cb-label { color: var(--security); }
+  .compare-box.good .cb-label { color: var(--feature); }
+  .compare-box .cb-main { font-size: 22px; font-weight: 800; margin-bottom: 4px; letter-spacing:-.02em; }
+  .compare-box.bad .cb-main { color: var(--security); }
+  .compare-box.good .cb-main { color: var(--feature); }
+  .compare-box .cb-sub { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  .row-list-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+  .row-list-item:last-child { border-bottom: none; }
+  .rli-left { flex: 1; }
+  .rli-label { font-size: 13px; color: var(--ink-3); margin-bottom: 2px; }
+  .rli-main { font-size: 14px; font-weight: 500; line-height: 1.5; }
+  .rli-right { text-align: right; flex-shrink: 0; }
+  .rli-value { font-size: 16px; font-weight: 750; }
+  .rli-value.blue { color: var(--pick); }
+  .rli-value.red { color: var(--security); }
+  .rli-value.green { color: var(--feature); }
+  .rli-unit { font-size: 12px; color: var(--ink-3); }
+
+  .pattern-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .pattern-item:last-child { border-bottom: none; }
+  .pattern-num { width: 28px; height: 28px; background: var(--security-bg); color: var(--security); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; margin-top: 2px; font-family:var(--mono); }
+  .pattern-content .p-title { font-size: 15px; font-weight: 750; margin-bottom: 4px; }
+  .pattern-content .p-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .tax-row { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 12px; }
+  .tax-row:last-child { border-bottom: none; }
+  .tax-name { flex: 1; font-size: 14px; }
+  .tax-limit { font-size: 13px; color: var(--ink-3); width: 90px; text-align: center; }
+  .tax-rate { font-size: 13px; color: var(--ink-3); width: 60px; text-align: center; }
+  .tax-max { font-size: 15px; font-weight: 750; color: var(--pick); width: 80px; text-align: right; }
+
+  .insight-card { background: var(--pick); border-radius: var(--radius); padding: 24px 22px; color: #fff; margin-bottom: 10px; box-shadow:var(--shadow-md); }
+  .insight-card .ic-label { font-size: 12px; opacity: 0.75; margin-bottom: 6px; }
+  .insight-card .ic-main { font-size: 1.25rem; font-weight: 800; line-height: 1.45; margin-bottom: 12px; letter-spacing:-.02em; }
+  .insight-card .ic-list { list-style: none; }
+  .insight-card .ic-list li { font-size: 14px; opacity: 0.92; padding: 4px 0; display: flex; gap: 8px; }
+  .insight-card .ic-list li::before { content: "→"; opacity: 0.6; flex-shrink: 0; }
+
+  /* ── 공통 ── */
+  .divider { height: 1px; background: var(--border); margin: 8px 0; }
+  .footer { padding-top: 22px; font-size: 12px; color: var(--ink-3); text-align: center; line-height: 1.8; }
+
+  /* ── 세 컬럼 ── */
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  @media (max-width: 480px) { .three-col { grid-template-columns: 1fr 1fr; } }
+
+  /* ── A vs B 비교표 ── */
+  .cmp-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .cmp-table th { font-size: 12px; font-weight: 700; padding: 10px 8px; border-bottom: 2px solid var(--line-strong); text-align: left; }
+  .cmp-table th.col-label { color: var(--ink-3); width: 140px; padding-left: 16px; }
+  .cmp-table th.col-a { color: var(--a); }
+  .cmp-table th.col-b { color: var(--pick); }
+  .cmp-table td { font-size: 13px; padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; word-break: keep-all; }
+  .cmp-table tr:last-child td { border-bottom: none; }
+  .cmp-table td.row-cat { font-size: 11px; font-weight: 700; color: var(--muted); background: var(--surface2); padding: 8px 8px 8px 16px; letter-spacing: 0.03em; }
+  .cmp-table td.col-label { font-size: 12px; color: var(--ink-3); padding-left: 16px; width: 140px; }
+
+  /* ── 보험 현황 카드 ── */
+  .ins-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; border-top: 3px solid var(--line-strong); box-shadow:var(--shadow-sm); }
+  .ins-card.mirae-card { border-top-color: var(--a); }
+  .ins-card.ucheguk-card { border-top-color: var(--feature); }
+  .ins-card.kb-loss-card { border-top-color: var(--pick); }
+  .ins-card.kb-new-card { border-top-color: var(--pick); }
+  .ins-card .ins-company { font-size: 11px; font-weight: 700; color: var(--ink-3); margin-bottom: 4px; }
+  .ins-card .ins-name { font-size: 14px; font-weight: 750; margin-bottom: 8px; line-height: 1.4; }
+  .ins-card .ins-price { font-size: 20px; font-weight: 800; margin-bottom: 2px; letter-spacing:-.02em; }
+  .ins-card.mirae-card .ins-price { color: var(--a); }
+  .ins-card.ucheguk-card .ins-price { color: var(--feature); }
+  .ins-card.kb-loss-card .ins-price { color: var(--pick); }
+  .ins-card.kb-new-card .ins-price { color: var(--pick); }
+  .ins-card .ins-price-unit { font-size: 12px; color: var(--ink-3); margin-bottom: 10px; }
+  .ins-card .ins-detail { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .ins-card .ins-tag { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 100px; margin-bottom: 8px; }
+  .ins-card.mirae-card .ins-tag { background: var(--a-bg); color: var(--a); }
+  .ins-card.ucheguk-card .ins-tag { background: var(--feature-bg); color: var(--feature); }
+  .ins-card.kb-loss-card .ins-tag { background: var(--pick-bg); color: var(--pick); }
+  .ins-card.kb-new-card .ins-tag { background: var(--pick-bg); color: var(--pick); }
+
+  /* ── 중복 분석 표 ── */
+  .overlap-row { display: flex; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 10px; }
+  .overlap-row:last-child { border-bottom: none; }
+  .overlap-item { font-size: 13px; font-weight: 650; width: 90px; flex-shrink: 0; padding-top: 2px; }
+  .overlap-detail { flex: 1; font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .overlap-result { font-size: 12px; font-weight: 700; flex-shrink: 0; padding-top: 2px; }
+  .overlap-result.good { color: var(--feature); }
+  .overlap-result.warn { color: var(--land); }
+
+</style>
+<style id="anon-banner-css">.anon-banner{position:sticky;top:0;z-index:99999;background:#fef3c7;color:#92400e;font-size:13px;font-weight:600;text-align:center;padding:9px 16px;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:-0.01em;border-bottom:1px solid #fde68a;}[data-theme="dark"] .anon-banner{background:#241f0e;color:#d4af5a;border-bottom-color:#3a2f12}</style></head>
+<body><div class="anon-banner">ⓘ 가공된 예시 데이터 · 실제 개인정보 아님</div>
+
+<!-- ── 상단 바 ── -->
+<div class="topbar">
+  <div class="brand">보험 분석<span class="dot">.</span></div>
+  <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">◐ 라이트</button>
+</div>
+
+<!-- ── 탭 네비게이션 ── -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab(0)">보험 비교 분석</button>
+  <button class="tab-btn" onclick="switchTab(1)">기존 보험 현황</button>
+  <button class="tab-btn" onclick="switchTab(2)">보험 시스템 가이드</button>
+  <button class="tab-btn" onclick="switchTab(3)">통계·조사 자료</button>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     탭 1 — 보험 비교 분석 v3 (사실 기반)
+     ══════════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-0">
+<div class="container">
+
+  <div class="header">
+    <div class="tag">보험 비교 분석 · v3 사실 기반</div>
+    <h1>비용·통계 기준 B 전환이<br>합리적이에요</h1>
+    <div class="sub">청약서·제안서 기반 · 추측·확률 가정 제거 · 동연령 평균·적정 비율 통계 반영 · 2026-05-28</div>
+  </div>
+
+  <!-- ⚠ 분석의 한계 -->
+  <div class="section">
+    <div class="card" style="background:var(--land-soft);border:1px solid var(--land-line);padding:18px 20px;">
+      <div style="font-size:13px;font-weight:800;color:var(--land);margin-bottom:10px;">⚠ 이 v3 분석의 범위와 한계</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;">
+        <div style="margin-bottom:8px;"><b>다루는 것:</b> 청약서·제안서·약관에 명시된 보장 항목과 가입금액, 보험료, 환급금 표.</div>
+        <div style="margin-bottom:8px;"><b>다루지 않는 것:</b> 발병 확률 가정, 보장 항목 동시 발동 여부(약관 미확인), 한들손보 사망보장 포함 여부, 다온생명 합산 가능 여부, 가족력 가중치, "기대값" 계산.</div>
+        <div><b>왜 빼는가?</b> v1·v2에서 이런 추측 항목이 결론에 큰 영향을 미쳤고, 검증 없이는 신뢰할 수 없음. 의사결정은 <b>설계사 확인 후 본인이</b> 내려야 함.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 비교 구조 -->
+  <div class="section">
+    <div class="section-title">비교 구조 — A vs B 둘 중 하나</div>
+    <div class="card">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.7;">
+        두레생명과 한들손보 실손은 어느 옵션을 선택하든 그대로 유지돼요. 달라지는 건 세 번째 보험.
+      </div>
+      <div style="background:var(--surface2);border-radius:12px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--ink-3);margin-bottom:8px;">공통 베이스 — 양쪽 동일</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">
+          <div style="width:8px;height:8px;background:var(--feature);border-radius:50%;flex-shrink:0;"></div>
+          <div style="font-size:13px;">두레생명 헬스플랜 (갱신형, 10년 갱신) · 3대질병 3,000만</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div style="width:8px;height:8px;background:var(--pick);border-radius:50%;flex-shrink:0;"></div>
+          <div style="font-size:13px;">한들손보 손해 실손 3세대 (갱신형, 1년 갱신) · 월 28,000원</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div style="background:var(--a-bg);border-radius:12px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--a);margin-bottom:6px;">옵션 A (현재 유지)</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px;">+ 다온생명 메디안</div>
+          <div style="font-size:17px;font-weight:800;color:var(--a);">198,000원<span style="font-size:10px;font-weight:400;color:var(--ink-3);">/월</span></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">30년납 · 환급 0원 · 일부 갱신형 특약<br><span style="color:var(--ink-3);font-weight:600;">+공통 60,000 = <b>258,000원/월</b></span></div>
+        </div>
+        <div style="background:var(--pick-bg);border-radius:12px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--pick);margin-bottom:6px;">옵션 B (전환)</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:4px;">+ 한들손보 케어플러스 Young</div>
+          <div style="font-size:17px;font-weight:800;color:var(--pick);">156,000원<span style="font-size:10px;font-weight:400;color:var(--ink-3);">/월</span></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">30년납 · 환급 4,200만 · 주계약 비갱신<br><span style="color:var(--ink-3);font-weight:600;">+공통 60,000 = <b>216,000원/월</b></span></div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:1.7;">
+        ※ 4개 보험 동시 유지(옵션 C)는 비용 과부담으로 검토 제외. 두레생명·한들손보 실손 공통 + A 또는 B 중 택일. <b>공통 베이스 = 한들손보 실손 28,000원 + 두레생명 약 32,000원 가정 = 60,000원/월</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- 사실 기반 결론 — B 권장 -->
+  <div class="section">
+    <div class="section-title">알고 있는 사실 + 통계 기준 권장</div>
+    <div class="verdict-card">
+      <div class="label">청약서·제안서 + 동연령 평균 + 매몰비용·갱신 리스크 종합</div>
+      <div class="main">옵션 B 전환을 권장해요<br><span style="font-size:14px;font-weight:400;opacity:0.85;">— 다온생명 해지 + 한들손보 케어플러스 가입</span></div>
+      <div class="desc">⚠ 단, 설계사에게 한들손보 1억 항목 정체 + A 합산 가능 여부 확인 후 최종 결정. <b>건강 관리 자신 있어 30년 완납·만성질환 예방 가능하면 B 우위 +5,306만으로 명확</b>.</div>
+    </div>
+
+    <div class="card" style="margin-top:10px;">
+      <div style="font-size:14px;font-weight:700;margin-bottom:14px;">왜 B 전환을 권장하는지 — 알고 있는 사실 5가지</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--pick);margin-bottom:8px;">① 비용 적정성 (가장 결정적)</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.7;">
+            본인 현재 보험료 <b>25.8만/월</b> (다온생명 19.8만 + 한들손보 실손 2.8만 + 두레생명 3.2만 가정)<br>
+            20대 남성 평균: <b>약 18~25만</b> (시그널/생명보험협회)<br>
+            B 전환 시: <b>21.6만</b> → 평균 상단권<br>
+            A 유지 시: <b>25.8만 — 평균 초과</b> (시그널 평균 18.6만 대비 +7.2만)
+          </div>
+        </div>
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--pick);margin-bottom:8px;">② 30년 누적 절감 (확정)</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.7;">
+            월 42,000원 적게 냄 → 30년 <b>1,512만 확정 절감</b><br>
+            다온생명 매몰비용 약 410만 (1년 8개월분) — 30년 절감으로 충분히 회수<br>
+            회수 시점: <b>약 7년</b>이면 break-even
+          </div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--pick);margin-bottom:8px;">③ 갱신형 리스크 회피</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.7;">
+            A는 청약서에 [갱신형] 특약 다수: 표적항암 10년 갱신, 항암방사선·응급실수술비·일반암수술비·부정맥수술비 등<br>
+            B는 주계약 30년 비갱신 — 보험료 인상 리스크 낮음 (단, 일부 특약 갱신 여부 별도 확인)
+          </div>
+        </div>
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--pick);margin-bottom:8px;">④ 만성질환·납입면제 확장</div>
+          <div style="font-size:12px;color:var(--text);line-height:1.7;">
+            B만 고혈압 50만 + 고지혈증 50만 진단비 보유 — 가족력 시 발동 가능성 높음<br>
+            납입면제 B 11대(허혈심장·만성당뇨합병증 등 만성질환 다수 포함) vs A 3대(암·뇌출혈·심근경색만) — 만성질환 발병 시 B만 면제
+          </div>
+        </div>
+      </div>
+
+      <div style="background:var(--a-bg);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--a);margin-bottom:8px;">⑤ A가 유리한 단 하나 — 고액암·유사암 추가 보장</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.7;">
+          A는 고액암 추가 5,000만, 유사암 +1,350만이 더 많음. 단 <b>발생 확률이 매우 낮은 영역</b>(고액암 평생 발병률 5% 내외).<br>
+          항암 다층 보장(표적/방사선/약물)도 A 우위지만 — 합산 발동 여부 약관 미확인. 또한 일부 [갱신형]이라 60대 이후 보험료 인상 리스크.
+        </div>
+      </div>
+
+      <div style="background:var(--land-soft);border-radius:10px;padding:14px;">
+        <div style="font-size:12px;font-weight:700;color:var(--land);margin-bottom:8px;">⚠ B로 결론을 뒤집을 수 있는 변수 (설계사 확인 필수)</div>
+        <ul style="font-size:12px;color:var(--land);line-height:1.7;list-style:none;padding-left:0;">
+          <li>1. 한들손보 사망 1억 — 일반 사망보장이면 B 우위 강화 / 조건부 진단비면 영향 작음</li>
+          <li>2. A 뇌혈관 1,000+5,000=6,000만 합산 + 허혈성+심근경색 1억 합산 동시 발동 시 → A 우위 확장 (약관 확인)</li>
+          <li>3. A 항암 4종 동시 발동 확인 시 → A 항암 우위 확정 (1.3억까지)</li>
+          <li>4. 한들손보 환급금 최저보증 0.2% 시나리오 → B 확정 이득 감소</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- B 전환 손익 추산 -->
+  <div class="section">
+    <div class="section-title">B 전환 시 30년 손익 추산 (시나리오별)</div>
+
+    <div class="card">
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+        <b style="color:var(--pick);">확정 항목</b> (어떤 시나리오에서도 발생)과 <b style="color:var(--land);">조건부 항목</b> (특정 발병·진단 시에만 발동)을 분리. 동시 적용되지 않는 항목들이 한 표에 섞여 있으면 합산이 부정확해짐 — v3.8 정정.
+      </div>
+
+      <!-- 이득 -->
+      <div style="background:var(--pick-bg);border-radius:12px;padding:16px;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;color:var(--pick);margin-bottom:12px;">+ B 전환으로 얻는 것</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <thead><tr style="border-bottom:1px solid var(--pick-line);">
+            <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;">항목</th>
+            <th style="padding:6px 0;text-align:right;color:var(--pick);font-weight:600;">금액</th>
+            <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;padding-left:16px;">근거</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;"><b>① 30년 보험료 절감</b><br><span style="color:var(--ink-3);font-size:11px;">확정</span></td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--pick);">+1,512만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">월 42,000원 × 12 × 30년<br><span style="color:var(--ink-3);">청약서·제안서 보험료 차이</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;"><b>② 30년 환급금 (공시이율 1.6%)</b><br><span style="color:var(--ink-3);font-size:11px;">가정 — 공시이율 변동 시 달라짐</span></td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--pick);">+4,200만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">한들손보 제안서 5페이지 해약환급금 예시표<br><span style="color:var(--ink-3);">A는 환급 0원 (해약환급금 없는 유형)</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;"><b>③ 납입면제 범위 차이 (40세 심혈관 질환 진단 가정)</b><br><span style="color:var(--ink-3);font-size:11px;">조건부 — 미발동 시 0, 또한 ①과 일부 중복</span></td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--pick);">최대 +4,300만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">B만 면제 발동 시: A 30년 7,128만 vs B 8년 1,500만 = +5,628만<br><span style="color:var(--ink-3);">단, 이미 ①+③ 합산 시 약 1,000만 중복. 정확히 +4,310만이 ③의 순 효과</span></td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;"><b>④ 만성질환 진단비</b><br><span style="color:var(--ink-3);font-size:11px;">조건부</span></td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--pick);">최대 +100만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">고혈압 50만 + 고지혈증 50만<br><span style="color:var(--ink-3);">제안서 107·110번</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 손실: 확정 -->
+      <div style="background:var(--a-bg);border-radius:12px;padding:16px;margin-bottom:10px;">
+        <div style="font-size:13px;font-weight:800;color:var(--a);margin-bottom:6px;">− B 전환으로 잃는 것 (확정)</div>
+        <div style="font-size:11px;color:var(--a);margin-bottom:10px;">해지 시점에 무조건 발생.</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <thead><tr style="border-bottom:1px solid var(--a-line);">
+            <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;">항목</th>
+            <th style="padding:6px 0;text-align:right;color:var(--a);font-weight:600;">금액</th>
+            <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;padding-left:16px;">근거</th>
+          </tr></thead>
+          <tbody>
+            <tr><td style="padding:8px 0;"><b>① 다온생명 매몰비용</b></td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--a);">−406만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">198,000 × 20.5개월 (2024-09~2026-05). 해약환급금 없는 유형 → 해지 시 0원</td></tr>
+          </tbody>
+        </table>
+        <div style="background:var(--surface);border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:var(--a);font-weight:700;">
+          확정 손실 소계: −406만
+        </div>
+      </div>
+
+      <!-- 손실: 조건부 -->
+      <div style="background:var(--a-bg);border-radius:12px;padding:16px;margin-bottom:12px;border:1px dashed var(--a-line);">
+        <div style="font-size:13px;font-weight:800;color:var(--a);margin-bottom:6px;">− B 전환으로 잃는 것 (조건부 — 실제 발병 시에만)</div>
+        <div style="font-size:11px;color:var(--a);margin-bottom:10px;">해당 질병이 실제 발병해야만 발생. <b>건강관리로 예방하면 모두 0원</b>. 표의 "기대값"은 확률 × 손실액.</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <thead><tr style="border-bottom:1px solid var(--a-line);">
+            <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;">항목</th>
+            <th style="padding:6px 0;text-align:right;color:var(--ink-3);font-weight:600;">발병 시 손실</th>
+            <th style="padding:6px 0;text-align:right;color:var(--a);font-weight:600;">기대값</th>
+            <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;padding-left:16px;">발병률 가정</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--a-line);"><td style="padding:8px 0;"><b>② 고액암 (췌장·식도·담낭 등)</b></td><td style="padding:8px 0;text-align:right;color:var(--muted);">−5,000만</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--a);">−250만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">평생 5% (보수 추정)</td></tr>
+            <tr style="border-bottom:1px solid var(--a-line);"><td style="padding:8px 0;"><b>③ 유사암 (갑상선 등)</b></td><td style="padding:8px 0;text-align:right;color:var(--muted);">−1,350만</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--a);">−112만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">평생 8% (보수 추정)</td></tr>
+            <tr><td style="padding:8px 0;"><b>④ 항암 치료 다층 보장</b></td><td style="padding:8px 0;text-align:right;color:var(--muted);">−5,000만</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--a);">약 −1,160만</td><td style="padding:8px 0;padding-left:16px;color:var(--muted);">25% (암 진단 후 표적항암 받을 확률 추정)</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--a);margin-top:8px;line-height:1.6;">
+          ※ 기대값 합계 약 -1,490만은 "발병률만큼만 평균적으로 손실 본다"는 가정. 실제로는 발병하면 전액, 미발병이면 0. <b>건강관리로 발병 자체를 줄이면 이 손실 카테고리가 줄어듦</b>.
+        </div>
+      </div>
+
+      <!-- 시나리오 종합 -->
+      <div style="background:var(--surface2);border-radius:12px;padding:16px;">
+        <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px;">30년 시점 순 손익 — 시나리오 요약</div>
+        <div style="font-size:12px;color:var(--text);line-height:1.7;background:var(--surface);padding:14px;border-radius:10px;">
+          환급률과 조건부 항목(납입면제·진단) 발동 여부에 따라 30년 순손익이 달라져요. <b>보수·중립·낙관·건강관리·비관</b> 다섯 시나리오 중 <b>비관(고액암이 실제로 발병하는 경우)에서만 A 유지가 유리</b>하고, 나머지 네 시나리오는 모두 <b>B 전환이 유리</b>합니다. 발병 확률을 가중한 기대값 기준으로는 B 전환을 권장해요.
+        </div>
+
+        <div style="font-size:12px;color:var(--text);line-height:1.7;margin-top:14px;background:var(--surface);padding:12px;border-radius:10px;">
+          <b style="color:var(--pick);">정리:</b> 5개 시나리오 중 <b>4개에서 B 우위</b>. v3.8에서 항목 발동 조건을 명확히 분리:<br>
+          · <b>확정 이득 +5,712만 - 확정 손실 -406만 = +5,306만</b> (어떤 시나리오에서도 보장됨)<br>
+          · 조건부 이득/손실은 시나리오별 발동 여부에 따라 가감<br>
+          · <b>"건강관리 시나리오"의 +5,306만 = 확정 이득/손실만 합한 베이스라인</b>
+        </div>
+
+        <div style="background:var(--feature-bg);border-radius:10px;padding:14px;margin-top:14px;border-left:4px solid var(--feature);">
+          <div style="font-size:12px;font-weight:800;color:var(--feature);margin-bottom:8px;">💡 건강관리 시나리오 — A vs B 함의 (v3.7 추가)</div>
+          <table style="width:100%;font-size:12px;border-collapse:collapse;">
+            <thead><tr style="border-bottom:1px solid color-mix(in srgb,var(--feature) 30%,transparent);">
+              <th style="padding:6px 0;text-align:left;color:var(--feature);font-weight:700;">옵션</th>
+              <th style="padding:6px 0;text-align:right;color:var(--feature);font-weight:700;">30년 후 결과</th>
+              <th style="padding:6px 0;text-align:left;color:var(--feature);font-weight:700;padding-left:16px;">의미</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid color-mix(in srgb,var(--feature) 30%,transparent);">
+                <td style="padding:6px 0;"><b>A 유지 + 건강관리</b></td>
+                <td style="padding:6px 0;text-align:right;color:var(--a);font-weight:700;">−5,712만</td>
+                <td style="padding:6px 0;padding-left:16px;color:var(--muted);">30년간 +1,512만 더 냈는데 환급 0원. 보장 발동도 없음 → <b>그냥 비용만 더 냄</b></td>
+              </tr>
+              <tr>
+                <td style="padding:6px 0;"><b>B 전환 + 건강관리</b></td>
+                <td style="padding:6px 0;text-align:right;color:var(--pick);font-weight:700;">+5,306만</td>
+                <td style="padding:6px 0;padding-left:16px;color:var(--muted);">절감 1,290 + 환급 3,950 − 매몰 336 = 순 이득. <b>건강관리 자신 있으면 가장 명확한 결과</b></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:11px;color:var(--feature);margin-top:10px;line-height:1.6;">
+            <b>차이 약 1억 1,018만원</b>. 32세 공공기관 사무직, 비흡연·BMI 23.2(정상), 가족력 외엔 본인 건강 관리 가능 영역이 큼. A 유지의 합리적 이유는 "발병 시 추가 보장(고액암·항암)"인데 발병률이 5~10% 미만이라 기대값 측면에서 약함.
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:1.6;">
+          ※ v3.5 정정: 한들손보 사망 1억 — 공식 사이트에서도 명시 없음 (조건부 진단비 가능성 매우 높음). 시나리오에서 사망 보장 가치는 제외. A 합산 가능성 확인 시 손실 항목 ②③④ 재계산 필요. 본인 케이스에는 출산지원금 미적용 (자녀 계획 미정).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 확정 사실: 비용 -->
+  <div class="section">
+    <div class="section-title">① 비용 (확정된 사실)</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th class="col-label">항목</th>
+            <th class="col-a">A — 다온생명</th>
+            <th class="col-b">B — 한들손보 케어플러스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-label">월 보험료</td>
+            <td>198,000원</td>
+            <td>156,000원</td>
+          </tr>
+          <tr>
+            <td class="col-label">월 차이</td>
+            <td colspan="2"><b style="color:var(--pick);">B가 42,000원 적게 냄 (확정)</b></td>
+          </tr>
+          <tr>
+            <td class="col-label">30년 누적 보험료 절감</td>
+            <td colspan="2"><b style="color:var(--pick);">B 누적 약 1,512만원 적게 냄 (확정)</b></td>
+          </tr>
+          <tr>
+            <td class="col-label">납입기간</td>
+            <td>30년납</td>
+            <td>30년납</td>
+          </tr>
+          <tr>
+            <td class="col-label">만기</td>
+            <td>100세</td>
+            <td>100세</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 비용 적정성 (통계 기반) -->
+  <div class="section">
+    <div class="section-title">①-1 비용 적정성 — 동연령 평균·권장 비율 비교</div>
+    <div class="card">
+
+      <div style="font-size:13px;color:var(--ink-3);margin-bottom:14px;line-height:1.7;">
+        본인 현재 보험료를 동연령 평균·권장 비율과 비교했어요. <b>비용이 결정에 가장 직접적으로 작용</b>해요.
+      </div>
+
+      <!-- 본인 현재 보험료 -->
+      <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">본인 현재 월 보험료 (옵션 A 유지 시)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;font-size:12px;">
+          <div><span style="color:var(--ink-3);">다온생명</span><br><b style="color:var(--a);">198,000원</b></div>
+          <div><span style="color:var(--ink-3);">한들손보 실손</span><br><b>28,000원</b></div>
+          <div><span style="color:var(--ink-3);">두레생명 (가정)</span><br><b style="color:var(--feature);">32,000원</b></div>
+          <div><span style="color:var(--ink-3);">합계</span><br><b style="color:var(--text);font-size:14px;">258,000원</b></div>
+        </div>
+        <div style="font-size:10px;color:var(--ink-3);margin-top:6px;">※ 두레생명 실제 보험료 확인 시 갱신 필요. 일반 두레생명 헬스플랜(1구좌) 추정값.</div>
+      </div>
+
+      <!-- 옵션 비교 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--a-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--a);margin-bottom:4px;">옵션 A 유지 (현재)</div>
+          <div style="font-size:22px;font-weight:800;color:var(--a);">258,000<span style="font-size:11px;color:var(--ink-3);font-weight:400;">원/월</span></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">다온생명 + 한들손보 실손 + 두레생명(3.2만 가정)</div>
+        </div>
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--pick);margin-bottom:4px;">옵션 B 전환</div>
+          <div style="font-size:22px;font-weight:800;color:var(--pick);">216,000<span style="font-size:11px;color:var(--ink-3);font-weight:400;">원/월</span></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">A 대비 -42,000원/월 (30년 -1,512만)</div>
+        </div>
+      </div>
+
+      <!-- 동연령 평균 통계 -->
+      <div style="background:var(--feature-bg);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--feature);margin-bottom:10px;">20대 남성 평균 월 보험료 (2024 통계)</div>
+        <table style="width:100%;font-size:12px;border-collapse:collapse;">
+          <tbody>
+            <tr><td style="padding:4px 0;color:var(--muted);">생명보험협회·보험매일 (2030 세대)</td><td style="padding:4px 0;text-align:right;font-weight:700;">약 20만원 중반</td></tr>
+            <tr><td style="padding:4px 0;color:var(--muted);">SBS Biz — 20대 남성 (2024.7)</td><td style="padding:4px 0;text-align:right;font-weight:700;">238,000원</td></tr>
+            <tr><td style="padding:4px 0;color:var(--muted);">시그널플래너 40만 회원 데이터 — 20대</td><td style="padding:4px 0;text-align:right;font-weight:700;">179,500원</td></tr>
+            <tr><td style="padding:4px 0;color:var(--muted);">SBS Biz — 30대 남성</td><td style="padding:4px 0;text-align:right;font-weight:700;">290,000원</td></tr>
+            <tr><td style="padding:4px 0;color:var(--muted);">2030 세대 평균 가입 보험 개수</td><td style="padding:4px 0;text-align:right;font-weight:700;">5.2개</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:8px;line-height:1.6;">
+          ※ 보장성·저축성·일반·자동차보험 모두 포함. 본인은 자동차보험 미포함 기준이라 단순 비교 어려움.
+        </div>
+      </div>
+
+      <!-- 권장 비율 -->
+      <div style="background:var(--pick-bg);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:12px;font-weight:700;color:var(--pick);margin-bottom:10px;">권장 비율 — 소득 대비 보험료</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.7;">
+          전문가·생명보험협회 통계: <b>소득의 7~10%</b> (보장성+자동차 포함)<br>
+          관대 기준: 5~10%
+        </div>
+        <table style="width:100%;font-size:12px;margin-top:10px;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="padding:6px 0;text-align:left;color:var(--ink-3);font-weight:600;">월소득</th>
+              <th style="padding:6px 0;text-align:right;color:var(--a);font-weight:600;">A 유지 25.8만</th>
+              <th style="padding:6px 0;text-align:right;color:var(--pick);font-weight:600;">B 전환 21.6만</th>
+              <th style="padding:6px 0;text-align:right;color:var(--ink-3);font-weight:600;">판단</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:5px 0;">200만</td><td style="padding:5px 0;text-align:right;color:var(--security);font-weight:700;">12.9%</td><td style="padding:5px 0;text-align:right;color:var(--security);font-weight:700;">10.8%</td><td style="padding:5px 0;text-align:right;color:var(--ink-3);">둘 다 무리</td></tr>
+            <tr><td style="padding:5px 0;">300만</td><td style="padding:5px 0;text-align:right;color:var(--security);font-weight:700;">8.6%</td><td style="padding:5px 0;text-align:right;color:var(--land);font-weight:700;">7.2%</td><td style="padding:5px 0;text-align:right;color:var(--ink-3);">A 한계, B 적정</td></tr>
+            <tr><td style="padding:5px 0;">400만</td><td style="padding:5px 0;text-align:right;color:var(--land);font-weight:700;">6.5%</td><td style="padding:5px 0;text-align:right;color:var(--feature);font-weight:700;">5.4%</td><td style="padding:5px 0;text-align:right;color:var(--ink-3);">A 상단, B 적정</td></tr>
+            <tr><td style="padding:5px 0;">500만 이상</td><td style="padding:5px 0;text-align:right;color:var(--feature);font-weight:700;">5.2%</td><td style="padding:5px 0;text-align:right;color:var(--feature);font-weight:700;">4.3%</td><td style="padding:5px 0;text-align:right;color:var(--ink-3);">양쪽 적정</td></tr>
+          </tbody>
+        </table>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:8px;line-height:1.6;">
+          ※ 두레생명 3.2만원 가정 포함, 자동차보험 별도. 자동차보험 5~15만 추가 시 비율 더 높아짐. <b>월소득 300만 시 A 8.6%로 권장 상한선(10%) 근접</b> — B 전환 시 안전권.
+        </div>
+      </div>
+
+      <!-- 결론 -->
+      <div style="background:var(--land-soft);border-radius:10px;padding:14px;border-left:4px solid var(--land);">
+        <div style="font-size:13px;color:var(--text);line-height:1.7;">
+          <b>비용 측면 결론:</b> 본인 현재 <b>25.8만/월</b>(미래+한들손보 실손+두레생명 3.2만)은 20대 남성 평균(25.1만)과 비슷하지만 시그널 평균(18.6만)보다는 +7.2만. <b>월소득 300만 기준 A는 8.6%로 권장 상한선 근접</b>, B 전환 시 7.2%로 안정권. 30대 진입 + A 갱신형 특약 인상까지 더해지면 부담↑.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 확정 사실: 환급금 -->
+  <div class="section">
+    <div class="section-title">② 환급금 (제안서 5페이지 — 공시이율 가정)</div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+        다온생명은 "해약환급금 없는 유형"이라 <b>30년 후에도 환급 0원</b> (청약서 명시).
+        한들손보는 공시이율 가정에 따라 환급금이 달라짐.
+      </div>
+      <div style="background:var(--pick-bg);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:12px;color:var(--ink-3);margin-bottom:6px;">한들손보 케어플러스 환급금 — 30년 시점 (보험료 5,616만 납입)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <div style="font-size:11px;color:var(--ink-3);">평균 공시이율 1.6% 가정</div>
+            <div style="font-size:18px;font-weight:800;color:var(--pick);">4,200만</div>
+            <div style="font-size:10px;color:var(--ink-3);">환급률 74.8%</div>
+          </div>
+          <div>
+            <div style="font-size:11px;color:var(--ink-3);">최저보증 0.2% 가정</div>
+            <div style="font-size:18px;font-weight:800;color:var(--land);">제안서 표 확인 필요</div>
+            <div style="font-size:10px;color:var(--ink-3);">"환급률 훨씬 낮음"</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+        <div style="font-size:12px;color:var(--ink-3);margin-bottom:6px;">한들손보 케어플러스 환급금 — 100세 만기</div>
+        <div style="font-size:14px;color:var(--muted);">평균 공시이율 1.6%: 1,950만 (환급률 34.7%)</div>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">→ 30년 시점 이후 환급률은 감소함 (해약환급금 표)</div>
+      </div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:1.6;">
+        ※ 공시이율은 미래에 변동하므로 4,200만은 추정. 실제 수령액은 그때 시점의 공시이율에 따름.
+      </div>
+    </div>
+  </div>
+
+  <!-- 확정 사실: 보장 비교 -->
+  <div class="section">
+    <div class="section-title">③ 보장 항목 — 청약서·제안서에 명시된 수치만</div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th class="col-label">항목</th>
+            <th class="col-a">A — 다온생명</th>
+            <th class="col-b">B — 한들손보 케어플러스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" class="row-cat">암 진단비</td></tr>
+          <tr>
+            <td class="col-label">일반 암</td>
+            <td>1억 (청약서)</td>
+            <td>1억 (제안서 46번)</td>
+          </tr>
+          <tr>
+            <td class="col-label">고액암 추가</td>
+            <td style="color:var(--a);font-weight:700;">+5,000만 (별도 특약)</td>
+            <td style="color:var(--ink-3);">제안서 별도 명시 안 보임</td>
+          </tr>
+          <tr>
+            <td class="col-label">유사암</td>
+            <td>2,000만</td>
+            <td>600만 (51번)</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">뇌혈관 — 합산 여부 약관 확인 필요</td></tr>
+          <tr>
+            <td class="col-label">뇌출혈</td>
+            <td>1,000만</td>
+            <td style="color:var(--ink-3);">(한들손보는 단일 뇌혈관진단비로 통합)</td>
+          </tr>
+          <tr>
+            <td class="col-label">32대 뇌혈관</td>
+            <td>1,000만 + 5,000만 <span style="color:var(--land);font-size:11px;">(청약서 두 줄)</span></td>
+            <td>2,000만 (52번)</td>
+          </tr>
+          <tr>
+            <td class="col-label" style="color:var(--land);">⚠ 합산 여부</td>
+            <td colspan="2" style="color:var(--land);font-size:12px;">A의 두 줄(1,000만 + 5,000만)이 동일 진단 시 둘 다 발동되어 6,000만 지급되는지, 한 쪽만 적용되는지 약관 확인 필요</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">심장 — 합산 여부 약관 확인 필요</td></tr>
+          <tr>
+            <td class="col-label">허혈성심장질환</td>
+            <td>5,000만</td>
+            <td>심장질환진단비(특화) 1,000만 (95번)</td>
+          </tr>
+          <tr>
+            <td class="col-label">급성심근경색</td>
+            <td>5,000만 (별도 특약)</td>
+            <td>심장질환진단비(특화) 2,000만 (101번)</td>
+          </tr>
+          <tr>
+            <td class="col-label" style="color:var(--land);">⚠ 합산 여부</td>
+            <td colspan="2" style="color:var(--land);font-size:12px;">A: 허혈성심장 + 급성심근경색 동시 발동? / B: 95번과 101번이 명칭 동일한데 별도 특약? — 양쪽 모두 약관 확인 필요</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">항암 치료비 — 합산·동시 발동 약관 확인 필요</td></tr>
+          <tr>
+            <td class="col-label">표적항암 약물 허가</td>
+            <td style="color:var(--land);">5,000만 <span style="font-size:10px;">[10년 갱신]</span></td>
+            <td>회당 정액 — 1,000만 (314번)</td>
+          </tr>
+          <tr>
+            <td class="col-label">항암제기조정방사선</td>
+            <td style="color:var(--land);">2,000만 <span style="font-size:10px;">[10년 갱신]</span></td>
+            <td>회당 정액 (제안서 별도)</td>
+          </tr>
+          <tr>
+            <td class="col-label">항암방사선치료</td>
+            <td>4,000만</td>
+            <td>회당 정액</td>
+          </tr>
+          <tr>
+            <td class="col-label">항암약물치료</td>
+            <td>4,000만</td>
+            <td>회당 정액</td>
+          </tr>
+          <tr>
+            <td class="col-label"><span style="color:var(--land);">합산 여부</span></td>
+            <td colspan="2" style="color:var(--land);font-size:12px;">⚠ A 항암 4개 특약이 동시 발동? B 회당 정액의 누적 총액은? — 약관 확인 필요</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">만성·기타 진단비</td></tr>
+          <tr>
+            <td class="col-label">부정맥</td>
+            <td>15만 (수술비)</td>
+            <td>500만 (102번 진단비)</td>
+          </tr>
+          <tr>
+            <td class="col-label">고혈압 진단비</td>
+            <td>없음</td>
+            <td>50만 (107번)</td>
+          </tr>
+          <tr>
+            <td class="col-label">고지혈증 진단비</td>
+            <td>없음</td>
+            <td>50만 (110번)</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">사망·후유장해 — 핵심 확인 필요</td></tr>
+          <tr>
+            <td class="col-label">사망보험금 (주보험)</td>
+            <td>400만 (청약서 명시)</td>
+            <td style="color:var(--land);">⚠ 제안서에 명확한 사망보장 항목 없음</td>
+          </tr>
+          <tr>
+            <td class="col-label">1억 항목들의 정체</td>
+            <td colspan="2" style="color:var(--land);font-size:12px;">⚠ B 제안서 108·109·111·112번(각 1억 / 보험료 49~540원) — 일반 사망인지, "고혈압/고지혈증 중증중증 합병증 시 일시금"인지 약관 확인 필요</td>
+          </tr>
+          <tr>
+            <td class="col-label">후유장해 (기본계약)</td>
+            <td>청약서 일반상해 항목 있음</td>
+            <td>기본계약 1·3·4번 일반상해후유장해 1억 (제안서)</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">납입면제</td></tr>
+          <tr>
+            <td class="col-label">발동 질병 수</td>
+            <td>3대 (암·뇌출혈·심근경색)</td>
+            <td>11대 (정확 목록 → Tab 4 ③ 참조)</td>
+          </tr>
+
+          <tr><td colspan="3" class="row-cat">갱신형 특약 (보험료 인상 리스크)</td></tr>
+          <tr>
+            <td class="col-label">주계약</td>
+            <td>비갱신형 (청약서 100세)</td>
+            <td>비갱신형 (제안서 30년 고정)</td>
+          </tr>
+          <tr>
+            <td class="col-label">갱신형 특약 존재</td>
+            <td style="color:var(--land);">표적항암, 항암방사선, 응급실수술비, 일반암수술비, 표적항암약수술비, 부정맥수술비 등 [갱신형/갱신유형] 표시</td>
+            <td style="color:var(--land);">⚠ 제안서에서 항목별 [갱신] 표시 확인 필요</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 설계사에게 확인할 핵심 7가지 -->
+  <div class="section">
+    <div class="section-title">④ 설계사에게 꼭 확인할 7가지 (결정 핵심)</div>
+    <div class="card" style="border:2px solid var(--land);">
+      <ol style="font-size:13px;color:var(--text);line-height:1.8;padding-left:18px;">
+        <li><b>한들손보 케어플러스에 일반 사망보험금이 포함되어 있나요?</b> 제안서 108·109·111·112번(각 1억 / 보험료 49·300·60·540원)은 사망 보장인가요, 아니면 "고혈압·고지혈증 중증중증 합병증 시 일시금" 같은 조건부 진단비인가요?</li>
+        <li><b>다온생명 32대 뇌혈관진단비</b>가 청약서에 1,000만 + 5,000만 두 줄로 나옴 — 동일 진단 시 둘 다 발동되어 6,000만 지급되나요, 아니면 한 쪽만 적용되나요?</li>
+        <li><b>다온생명 허혈성심장 5,000만 + 급성심근경색 5,000만</b> — 심근경색 진단 시 둘 다 발동되어 1억 지급되나요, 아니면 어느 한 쪽만 적용되나요?</li>
+        <li><b>다온생명 항암 4종</b> (표적·기조정방사선·항암방사선·항암약물) — 동일 항암 치료 시 동시에 발동 가능한가요?</li>
+        <li><b>한들손보 케어플러스 환급금 — 최저보증이율 0.2% 기준</b> 30년 시점 / 100세 만기 시 실제 수령액은 얼마인가요? (제안서 5페이지 표 확인)</li>
+        <li><b>한들손보 케어플러스의 갱신형 특약 목록</b> — 어떤 특약이 비갱신, 어떤 게 갱신형이며 갱신 주기는 몇 년인가요?</li>
+        <li><b>다온생명 갱신형 특약</b> (표적항암·항암방사선 등 10년 갱신) — 70세·80세·90세 시점 예상 보험료 인상폭은 어느 정도인가요?</li>
+      </ol>
+      <div style="background:var(--land-soft);border-radius:10px;padding:12px;margin-top:14px;font-size:12px;color:var(--land);line-height:1.7;">
+        ① 답변에 따라 결론이 가장 크게 바뀝니다 (한들손보 사망 포함 ↔ 미포함). ②③④ 답변에 따라 다온생명의 보장 폭이 결정됩니다. ⑤ 환급금이 확정 이득의 핵심입니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 의사결정 프레임 -->
+  <div class="section">
+    <div class="section-title">⑤ 시나리오별 어느 쪽이 유리한지 (단정 X)</div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--ink-3);line-height:1.7;margin-bottom:14px;">
+        설계사 확인 결과에 따라 결론이 달라집니다. 각 시나리오의 방향만 표시.
+      </div>
+      <table style="width:100%;font-size:13px;border-collapse:collapse;">
+        <thead>
+          <tr style="background:var(--surface2);">
+            <th style="padding:10px 8px;text-align:left;font-size:12px;color:var(--muted);font-weight:700;">시나리오</th>
+            <th style="padding:10px 8px;text-align:right;font-size:12px;color:var(--muted);font-weight:700;">유리한 쪽</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">한들손보 사망 1억이 일반 사망으로 확인됨</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--pick);font-weight:700;">B 우위 강화</td></tr>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">한들손보 사망 항목이 조건부 진단비로 확인됨</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--a);font-weight:700;">A 우위 가능</td></tr>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">A 뇌혈관·심장·항암 합산 발동 OK</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--a);font-weight:700;">A 보장 폭 확장</td></tr>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">A 합산 불가 (단일 적용)</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--ink-3);">차이 좁혀짐</td></tr>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">환급금 공시이율 보수 시나리오</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--a);font-weight:700;">B 확정 이득 감소</td></tr>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">환급금 낙관 (공시이율 유지)</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--pick);font-weight:700;">B 확정 +5,712만</td></tr>
+          <tr><td style="padding:10px 8px;border-bottom:1px solid var(--border);">A 갱신형 특약 70대 보험료 폭등</td><td style="padding:10px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--pick);font-weight:700;">B 우위 (안정)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 본인 결정 항목 -->
+  <div class="section">
+    <div class="section-title">⑥ 본인이 정해야 할 사실 (대시보드에서 추측 안 함)</div>
+    <div class="card">
+      <ul class="check-list">
+        <li><b>가족력</b> — 직계 가족의 심혈관 질환력이 있다면 관련 보장 가중치를 높게 둘 수 있어요 (가족력 여부에 따라 판단이 달라짐)</li>
+        <li><b>월 가용 보험료</b> — 현재 월소득 대비 얼마까지 보험료에 쓸 수 있나요? 일반 권장은 소득의 8~10%이지만 본인 기준이 더 중요</li>
+        <li><b>30년 가입 의지</b> — 30년 동안 해지 없이 유지 가능한가요? (해지 시 다온생명 0원, 한들손보도 30년 전 해지 시 환급 손실)</li>
+        <li><b>5세대 실손 전환 의향</b> — 한들손보 실손 5세대 전환 할인 (2026.11~) 활용 의향?</li>
+        <li><b>건강 상태 변화 우려</b> — 30대 후반 고지혈증·고혈압 진단 가능성을 본인이 어느 정도로 보는지</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ⑦ 설계사 소통 전략 -->
+  <div class="section">
+    <div class="section-title">⑦ 설계사 소통 전략 (관계 + 협상)</div>
+
+    <!-- 핵심: 둘 다 중립 아님 -->
+    <div class="card" style="margin-bottom:10px;">
+      <div style="font-size:14px;font-weight:750;margin-bottom:6px;">먼저 알아둘 것 — 두 설계사 다 "중립이 아니다"</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;">설계사는 판매 수수료로 일해요. 어느 쪽 말도 100% 그대로 믿지 말고, 약관·숫자(④ 질문)로 본인이 중심을 잡아야 해요.</div>
+      <table class="cmp-table">
+        <thead><tr>
+          <th class="col-label">설계사</th>
+          <th class="col-a">본인에게 이득인 결론</th>
+          <th class="col-b">그래서 생기는 편향</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="col-label">A — 지인 소개<br><span style="font-size:11px;color:var(--ink-3);">(다온생명)</span></td>
+            <td style="color:var(--a);font-weight:650;">다온생명 유지</td>
+            <td>해지 시 본인 수수료 환수 가능 → "그 보험 좋은 거예요" 방어 경향</td>
+          </tr>
+          <tr>
+            <td class="col-label">B — 최근 상담한 설계사<br><span style="font-size:11px;color:var(--ink-3);">(한들손보)</span></td>
+            <td style="color:var(--pick);font-weight:650;">한들손보 신규 가입</td>
+            <td>새 계약 = 새 수수료 → "갈아타세요" 권유 경향</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- A·B 소통법 나란히 -->
+    <div class="two-col">
+      <div class="col-card mirae">
+        <div class="col-tag">A 설계사 — 부드럽게, 질문부터</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;">
+          지인 소개라 <b>바로 해지 통보는 위험</b>. 설계사가 지인을 통해 알려지면 관계가 불편해질 수 있어요. "질문 → 보장 확인 → 자연스러운 결론" 순서로.
+        </div>
+        <div style="background:var(--a-bg2);border-radius:9px;padding:12px;font-size:12px;color:var(--text);line-height:1.6;font-style:italic;margin-bottom:12px;">
+          "보장 정리를 하고 있는데, 가입한 메디안 내용을 정확히 이해하고 싶어서요. 몇 가지만 확인 부탁드려요."
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+          물어볼 것 (④ 참조):<br>
+          · 32대 뇌혈관 두 줄(1,000+5,000) 동시 지급?<br>
+          · 허혈성심장 + 급성심근경색 합산?<br>
+          · 항암 4종 동시 발동 가능?<br>
+          · 갱신형 특약 60~80세 보험료 인상폭?
+        </div>
+        <div style="font-size:12px;color:var(--a);line-height:1.6;margin-top:10px;font-weight:600;">
+          → 답이 "보장이 생각보다 약하다"로 나오면, "확인해보니 제 상황엔 안 맞아서"라는 해지 명분이 생겨요.
+        </div>
+      </div>
+
+      <div class="col-card kb">
+        <div class="col-tag">B 설계사 — 검증 모드</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;">
+          적극 영업하는 설계사일수록 <b>구체 질문에 명확히 답하는지</b>로 신뢰도를 가늠. 두루뭉술하게 넘기면 경계.
+        </div>
+        <div style="background:var(--pick-bg);border-radius:9px;padding:12px;font-size:12px;color:var(--text);line-height:1.6;font-style:italic;margin-bottom:12px;">
+          "제안 주신 케어플러스 검토 중인데, 확정 전에 약관 몇 개 확인하고 싶어요."
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+          물어볼 것 (④ 참조):<br>
+          · 108·109·111·112번 1억 항목이 <b>사망보장인지 조건부 진단비인지</b> (가장 중요)<br>
+          · 11대 납입면제 정확한 질병 목록?<br>
+          · 갱신형 특약 유무?<br>
+          · 환급금 최저보증이율(0.2%) 기준 실제 금액?
+        </div>
+        <div style="font-size:12px;color:var(--pick);line-height:1.6;margin-top:10px;font-weight:600;">
+          → 사망 1억의 정체가 이 결정의 가장 큰 변수예요.
+        </div>
+      </div>
+    </div>
+
+    <!-- 관계-돈 분리 프레임 -->
+    <div class="info-banner" style="margin-top:10px;">
+      <div class="icon">🧭</div>
+      <div class="text"><b>관계와 돈을 분리하는 한 문장:</b> "보험은 30년 가는 거라 감정 말고 약관으로 정하고 싶다." 이 프레임을 본인 안에 세우면 누가 권하든 "그건 약관에서 확인하고요"로 받을 수 있어요. 프로 설계사는 이 태도를 존중합니다.</div>
+    </div>
+
+    <!-- 제3자 검증 -->
+    <div class="card" style="margin-top:10px;">
+      <div style="font-size:14px;font-weight:750;margin-bottom:10px;">양쪽 다 못 믿을 때 — 제3자 객관 검증</div>
+      <div class="row-list-item" style="padding-top:0;">
+        <div class="rli-left">
+          <div class="rli-main">금융감독원 "파인"</div>
+          <div class="rli-label">내 보험 전체 조회 + 비교 (fine.fss.or.kr)</div>
+        </div>
+      </div>
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-main">보험다모아</div>
+          <div class="rli-label">공식 보험 비교 사이트 (e-insmarket.or.kr)</div>
+        </div>
+      </div>
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-main">GA (법인보험대리점) / 보험 비교 앱</div>
+          <div class="rli-label">특정사 편향 적은 곳에서 교차 검토</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 한국인 흔한 실수 -->
+    <div class="card" style="margin-top:10px;">
+      <div style="font-size:14px;font-weight:750;margin-bottom:10px;">한국 사람들이 보통 하는 흔한 실수</div>
+      <ul class="check-list warn">
+        <li><b>정에 이끌려 결정</b> — "아는 분 소개인데..." 하며 비합리적으로 유지하거나 새 설계사 쪽으로 갈아탐</li>
+        <li><b>한쪽 말만 듣고 결정</b> — 비교 없이 "전문가가 그렇다니까"</li>
+        <li><b>리모델링 함정</b> — "기존 거 비효율적이에요, 갈아타시죠"에 넘어가 또 수수료 내고 보장은 더 나빠짐</li>
+        <li><b>청약철회 기간 놓침</b> — 가입 후 15일(청약철회)·30일(품질보증해지) 안엔 무조건 환불 가능. 결정 전 이 기간 활용</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    v3 사실 기반 · 다온생명 청약서 · 한들손보 제안서 5장 · 두레생명 약관 별표1 · 한들손보 실손 약관<br>
+    추측·확률·합산 가정 모두 제거. 의사결정은 ④ 확인 후 본인이 · 재작성 2026-05-28
+  </div>
+
+</div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     탭 2 — 기존 보험 현황 + 중복 분석
+     ══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-1">
+<div class="container">
+
+  <div class="header">
+    <div class="tag">기존 보험 현황</div>
+    <h1>지금 든 보험들,<br>이렇게 정리돼요</h1>
+    <div class="sub">3개 보험 전체 보장 매핑 · 한들손보 제안 추가 시 중복 분석</div>
+  </div>
+
+  <!-- 현재 보험 현황 -->
+  <div class="section">
+    <div class="section-title">지금 가입된 보험 3개</div>
+
+    <div class="ins-card mirae-card" style="margin-bottom:10px;">
+      <div class="ins-company">다온생명</div>
+      <div class="ins-tag">옵션 A — 현재 가입 중</div>
+      <div class="ins-name">메디안 건강보험(무)<br>해약환급금 없는 유형</div>
+      <div class="ins-price">198,000<span style="font-size:12px;font-weight:400;color:var(--ink-3);">원/월</span></div>
+      <div class="ins-price-unit">30년납 · 100세만기 · 주계약 비갱신 · 일부 특약 갱신형</div>
+      <div class="ins-detail">
+        · 일반암 <b>1억</b> · 고액암 추가 <b>5,000만</b> · 유사암 <b>2,000만</b><br>
+        · 32대 뇌혈관 <b>1,000만 + 5,000만</b> (두 줄, 합산 약관 확인 필요)<br>
+        · 허혈성심장 <b>5,000만</b> · 급성심근경색 <b>5,000만</b> (합산 확인 필요)<br>
+        · 항암: 표적 5,000만[갱신] · 방사선 4,000만 · 약물 4,000만 · 기조정방사선 2,000만[갱신]<br>
+        · 납입면제: 3대 (암·뇌출혈·심근경색)<br>
+        · 주보험 사망 <b>400만</b> · 해약환급금 <b>0원</b>
+      </div>
+    </div>
+
+    <div class="ins-card ucheguk-card" style="margin-bottom:10px;">
+      <div class="ins-company">두레생명</div>
+      <div class="ins-tag">유지 권장</div>
+      <div class="ins-name">무배당 두레생명 헬스플랜보험<br>(갱신형)</div>
+      <div class="ins-price">32,000<span style="font-size:12px;font-weight:400;color:var(--ink-3);">원/월 (가정)</span></div>
+      <div class="ins-price-unit">10년만기 갱신 · 종신 갱신 가능 · 실제 보험료 확인 필요</div>
+      <div class="ins-detail">
+        · 3대질병(암·뇌출혈·심근경색) <b>3,000만</b> (2년 경과 후)<br>
+        · 갑상선암·경계성종양 등 <b>300만</b><br>
+        · 10대성인질환 입원급부금 1일 <b>3만원</b> (4일 이상)<br>
+        · 10대성인질환 수술급부금 <b>50만원</b>/회<br>
+        · 입원급부금 1일 <b>2만원</b> (120일 한도)<br>
+        · 수술급부금 최대 <b>500만원</b> (5종)<br>
+        · 골절치료자금 <b>30만원</b><br>
+        · 납입면제 <b>없음</b>
+      </div>
+    </div>
+
+    <div class="ins-card kb-loss-card" style="margin-bottom:10px;">
+      <div class="ins-company">한들손해보험</div>
+      <div class="ins-tag">실손보험 · 유지</div>
+      <div class="ins-name">(무)한들손해보 실손의료비보장보험<br>(3세대)</div>
+      <div class="ins-price">28,000<span style="font-size:12px;font-weight:400;color:var(--ink-3);">원/월</span></div>
+      <div class="ins-price-unit">1년 갱신형 · 비례보상 구조</div>
+      <div class="ins-detail">
+        · 질병·상해 의료비 실비 보상<br>
+        · 급여 본인부담금 80% 보상<br>
+        · 비급여 70% 보상<br>
+        · 3세대: 도수치료·주사·MRI 특약 별도<br>
+        · 비례보상 → 중복 실손 가입 불필요
+      </div>
+    </div>
+
+    <div class="ins-card kb-new-card" style="margin-bottom:10px;">
+      <div class="ins-company">한들손해보험 (제안)</div>
+      <div class="ins-tag">옵션 B — 가입 검토 중</div>
+      <div class="ins-name">케어플러스 건강보험<br>(무배당) 26.04 세만기</div>
+      <div class="ins-price">156,000<span style="font-size:12px;font-weight:400;color:var(--ink-3);">원/월</span></div>
+      <div class="ins-price-unit">30년납 · 100세만기 · 11대 납입면제 기본플랜 · 주계약 비갱신</div>
+      <div class="ins-detail">
+        · 일반암 <b>1억</b> · 유사암 <b>600만</b><br>
+        · 뇌혈관진단비 <b>2,000만</b> · 심장진단비(특화) <b>1,000만 + 2,000만</b> (95·101번)<br>
+        · 부정맥 <b>500만</b> · 고혈압 <b>50만</b> · 고지혈증 <b>50만</b><br>
+        · 항암 회당 정액 (수술·약물·방사선·호르몬·중환자실 각각 매년 지급)<br>
+        · 납입면제: 11대 (심혈관 질환·뇌혈관·심부전 등)<br>
+        · <span style="color:var(--land);">⚠ 108·109·111·112번 1억 항목들의 정체 (사망/조건부 진단비) 약관 확인 필요</span><br>
+        · 30년 환급금 4,200만 (공시이율 1.6% 가정)
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <div class="icon">💡</div>
+      <div class="text">위 4개 보험 중 두레생명·한들손보 실손은 공통 유지. 다온생명(A) vs 한들손보 케어플러스(B) 중 택일이 의사결정 대상.</div>
+    </div>
+  </div>
+
+  <!-- 옵션별 월 보험료 -->
+  <div class="section">
+    <div class="section-title">옵션별 월 총 보험료</div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--a-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--a);margin-bottom:4px;">옵션 A — 현재 유지</div>
+          <div style="font-size:13px;color:var(--text);margin-bottom:8px;">다온생명 + 공통</div>
+          <div style="font-size:20px;font-weight:800;color:var(--a);">258,000<span style="font-size:11px;color:var(--ink-3);font-weight:400;">원/월</span></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:6px;">미래 198,000 + 한들손보 실손 28,000 + 두레생명 32,000(가정)</div>
+        </div>
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;font-weight:700;color:var(--pick);margin-bottom:4px;">옵션 B — 전환</div>
+          <div style="font-size:13px;color:var(--text);margin-bottom:8px;">한들손보 케어플러스 + 공통</div>
+          <div style="font-size:20px;font-weight:800;color:var(--pick);">216,000<span style="font-size:11px;color:var(--ink-3);font-weight:400;">원/월</span></div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:6px;">A 대비 월 42,000원 절감 (30년 누적 1,512만)</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--ink-3);line-height:1.7;">
+        ※ 두레생명 실제 보험료를 확인해야 전체 비교가 가능. 어느 옵션이든 공통 베이스(두레생명 + 한들손보 실손 28,000원)는 동일하게 추가됨.
+      </div>
+    </div>
+  </div>
+
+  <!-- 중복 보장 (사실 기반) -->
+  <div class="section">
+    <div class="section-title">정액 진단비 중복수령 (어느 옵션이든 적용)</div>
+    <div class="card">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.7;">
+        정액보험은 여러 회사 중복 가입 시 <b>각각 따로 지급</b> (중복수령 합법). 두레생명이 공통이라 A·B·C 어느 옵션이든 적용됨.
+      </div>
+
+      <div class="overlap-row">
+        <div class="overlap-item">암 진단비</div>
+        <div class="overlap-detail">두레생명 3,000만 + 다온생명 1억 (A) 또는 한들손보 1억 (B) = <b>1.3억</b></div>
+        <div class="overlap-result good">중복수령</div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-item">뇌혈관</div>
+        <div class="overlap-detail">두레생명 3,000만 + A 청약서 1,000+5,000만 (합산 미확정) 또는 B 2,000만</div>
+        <div class="overlap-result warn">A 합산 확인</div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-item">심장</div>
+        <div class="overlap-detail">두레생명 3,000만 + A 허혈성 5,000+심근경색 5,000 (합산 미확정) 또는 B 95·101번 (합산 미확정)</div>
+        <div class="overlap-result warn">합산 확인</div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-item">실손 (의료비)</div>
+        <div class="overlap-detail">한들손보 손해 실손 1개. 비례보상이라 추가 실손 무의미</div>
+        <div class="overlap-result good">중복 없음</div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-item">입원 급부금</div>
+        <div class="overlap-detail">두레생명 1일 2만원 (3일 초과부터, 120일 한도) + 다른 보험 정액 별도 지급</div>
+        <div class="overlap-result good">중복수령</div>
+      </div>
+      <div class="overlap-row">
+        <div class="overlap-item">일배책 10억</div>
+        <div class="overlap-detail">한들손보 실손에 이미 있을 가능성 + 한들손보 케어플러스에도 포함 가능 → 중복 시 한 쪽 빼서 보험료 절감</div>
+        <div class="overlap-result warn">확인 필요</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 두레생명 갱신형 리스크 -->
+  <div class="section">
+    <div class="section-title">두레생명 갱신형 보험 주의사항</div>
+    <div class="card">
+      <div class="danger-banner" style="margin-top:0;">
+        <div class="icon">⚠️</div>
+        <div class="text">두레생명 헬스플랜보험은 <b>10년만기 갱신형</b>이에요. 10년마다 나이·건강 기준으로 보험료가 재산출돼요. 60대 이후 보험료가 크게 오를 수 있어요.</div>
+      </div>
+      <ul class="check-list warn" style="margin-top:12px;">
+        <li>다음 갱신 시점에 보험료 확인 후 유지 여부 재검토해요</li>
+        <li>갱신 거절 사유 발생 시 보장이 끊길 수 있어요</li>
+        <li>납입면제가 없어서 아프면 계속 보험료 내야 해요</li>
+        <li>입원 급부금이 3일 초과 4일째부터 지급 (대기일 주의)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 옵션 무관 보장 공백 -->
+  <div class="section">
+    <div class="section-title">옵션과 무관하게 비어있는 보장</div>
+    <div class="card">
+      <div style="font-size:14px;color:var(--muted);margin-bottom:14px;">A·B·C 어느 옵션을 선택해도 4개 보험에 포함되지 않는 보장.</div>
+
+      <div class="compare-row" style="padding-top:0;">
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;">두레생명 보험료 (현재 미확인)</div>
+          <div style="font-size:13px;color:var(--ink-3);margin-top:3px;">두레생명 실제 월 보험료를 확인해야 옵션별 총 비용 비교 가능. 10년 갱신 시 인상폭도 확인.</div>
+        </div>
+        <span class="badge caution">확인 필요</span>
+      </div>
+      <div class="compare-row">
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;">치매·요양 보장</div>
+          <div style="font-size:13px;color:var(--ink-3);margin-top:3px;">4개 보험 모두 치매·요양 보장 없음. 50~60대에 별도 검토 영역.</div>
+        </div>
+        <span class="badge caution">장기 검토</span>
+      </div>
+      <div class="compare-row">
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:600;">정신과·치과·임신/출산</div>
+          <div style="font-size:13px;color:var(--ink-3);margin-top:3px;">실손 3세대에서 비급여 일부 제한 또는 미포함. 5세대 실손 전환 시 임신·출산 포함 추가.</div>
+        </div>
+        <span class="badge caution">실손 전환 시 변동</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    다온생명 청약서 · 한들손보 손해보험 실손 증권 · 한들손보 케어플러스 제안서 · 두레생명 헬스플랜보험 약관 기반<br>
+    보험료는 계약일 기준이며 갱신 시 변동 가능 · 2026-05-28 사실 기반 v3
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     탭 3 — 한국 보험 시스템 가이드
+     ══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-2">
+<div class="container">
+
+  <div class="header">
+    <div class="tag">보험 완전 정리</div>
+    <h1>한국 보험 시스템,<br>이렇게 생겼어요</h1>
+    <div class="sub">모르면 수천만원 손해보는 구조 · 2026년 5월 기준</div>
+  </div>
+
+  <!-- 2층 구조 -->
+  <div class="section">
+    <div class="section-title">기본 구조</div>
+    <div class="card">
+      <div class="card-title">한국 의료보험은 2층 구조예요</div>
+      <div class="layer layer-1">
+        <div class="layer-label">1층 — 의무 가입</div>
+        <div class="layer-title">국민건강보험</div>
+        <div class="layer-desc">모든 국민이 자동 가입. 병원비의 30~60%를 국가가 내줘요. 나머지가 본인부담금.</div>
+      </div>
+      <div class="layer layer-2">
+        <div class="layer-label">2층 — 선택 가입</div>
+        <div class="layer-title">실손보험 + 정액보험</div>
+        <div class="layer-desc">실손: 1층에서 안 커버된 본인부담금을 돌려받아요.<br>정액: 암·뇌·심장 등 진단 시 약속한 금액을 한 번에 받아요.</div>
+      </div>
+      <div class="info-banner" style="margin-top:14px;margin-bottom:0;">
+        <div class="icon">💡</div>
+        <div class="text">실손과 정액은 성격이 달라요. <b>실손은 중복 가입해봐야 의미 없고</b>, <b>정액은 여러 개 가입하면 여러 번 받아요.</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 정액 vs 실손 -->
+  <div class="section">
+    <div class="section-title">중복 가입하면 두 배 받을 수 있어요?</div>
+    <div class="card">
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-label">실손보험</div>
+          <div class="rli-main">100만원 치료비가 발생하면, 두 회사에 가입해도 합산 100만원만 받아요. <b>낭비예요.</b></div>
+        </div>
+        <div class="rli-right"><div class="rli-value red">비례보상</div></div>
+      </div>
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-label">암진단비 같은 정액보험</div>
+          <div class="rli-main">5,000만원짜리 2개 가입하면 암 진단 시 <b>1억 받아요.</b> 합법이에요.</div>
+        </div>
+        <div class="rli-right"><div class="rli-value green">중복수령</div></div>
+      </div>
+      <div class="tip-banner" style="margin-top:4px;margin-bottom:0;">
+        <div class="icon">💡</div>
+        <div class="text">한국 보험에서 가장 기이한 규칙이에요. <b>정액 진단비는 여러 회사에 나눠서 가입할수록 큰 사고 시 더 많이 받아요.</b> 이걸 아는 사람이 드물어요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 실손 세대 -->
+  <div class="section">
+    <div class="section-title">실손보험 세대 — 같은 보험인데 가치가 달라요</div>
+    <div class="card">
+      <div class="gen-row">
+        <div class="gen-badge g1">1</div>
+        <div class="gen-content">
+          <div class="gen-period">~2009년</div>
+          <div class="gen-name">1세대 실손</div>
+          <div class="gen-desc">100세 보장, 비급여 거의 전부 커버. 표준화 이전 상품이라 보장 범위가 가장 넓어요.</div>
+          <span class="gen-tag danger">절대 해지하면 안 돼요</span>
+        </div>
+      </div>
+      <div class="gen-row">
+        <div class="gen-badge g2">2</div>
+        <div class="gen-content">
+          <div class="gen-period">2009~2017년</div>
+          <div class="gen-name">2세대 실손</div>
+          <div class="gen-desc">1년 갱신, 비급여 포함. 현재 가입자의 43%로 가장 많아요.</div>
+          <span class="gen-tag good">여전히 좋아요</span>
+        </div>
+      </div>
+      <div class="gen-row">
+        <div class="gen-badge g3">3</div>
+        <div class="gen-content">
+          <div class="gen-period">2017~2021년</div>
+          <div class="gen-name">3세대 실손</div>
+          <div class="gen-desc">도수치료·주사치료·MRI가 기본에서 빠지고 별도 특약으로 분리됐어요. 특약 가입 여부가 중요해요.</div>
+          <span class="gen-tag warn">특약 확인 필요</span>
+        </div>
+      </div>
+      <div class="gen-row">
+        <div class="gen-badge g4">4</div>
+        <div class="gen-content">
+          <div class="gen-period">2021~2026.4월</div>
+          <div class="gen-name">4세대 실손</div>
+          <div class="gen-desc">자기부담금 20~30%. 비급여를 많이 쓰면 다음 해 보험료 최대 +300%. 청구 안 하면 할인.</div>
+          <span class="gen-tag warn">많이 쓸수록 더 내요</span>
+        </div>
+      </div>
+      <div class="gen-row">
+        <div class="gen-badge g5">5</div>
+        <div class="gen-content">
+          <div class="gen-period">2026.5월~ (신규)</div>
+          <div class="gen-name">5세대 실손</div>
+          <div class="gen-desc">중증 환자 중심으로 개편. 경증 보장 대폭 축소, 임신·출산 추가. 보험료는 4세대 대비 30% 인하.</div>
+          <span class="gen-tag new">2026.5 출시</span>
+        </div>
+      </div>
+      <div class="danger-banner" style="margin-top:4px;margin-bottom:0;">
+        <div class="icon">⚠️</div>
+        <div class="text">2026.11부터 기존 가입자 대상 5세대 전환 할인이 예고된 것으로 알려져 있어요. 정확한 할인폭·기간은 금융위 공식 발표 또는 보험사 안내로 확인해야 해요. 1~2세대는 전환 시 보장이 줄어드니 신중하게 결정.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 갱신형 함정 -->
+  <div class="section">
+    <div class="section-title">갱신형 보험의 진짜 비용</div>
+    <div class="card">
+      <div class="card-title">암진단비 5,000만원, 30년 총납입 비교</div>
+      <div class="compare-two">
+        <div class="compare-box bad">
+          <div class="cb-label">갱신형 (처음엔 저렴)</div>
+          <div class="cb-main">1억 3,560만</div>
+          <div class="cb-sub">30세 18,500원 → 60세 ~70,000원+<br>나이 들수록 폭증</div>
+        </div>
+        <div class="compare-box good">
+          <div class="cb-label">비갱신형 (처음엔 비쌈)</div>
+          <div class="cb-main">1,580만원</div>
+          <div class="cb-sub">30세~60세 73,800원 고정<br>30년 내내 동일</div>
+        </div>
+      </div>
+      <div class="danger-banner">
+        <div class="icon">⚠️</div>
+        <div class="text"><b>갱신형이 30년 후 8배 더 내는 구조예요.</b> 초기 보험료만 보고 갱신형을 선택하면 60대에 감당 못 하고 해지하게 돼요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 변액·종신 함정 -->
+  <div class="section">
+    <div class="section-title">변액·종신보험 함정</div>
+    <div class="card">
+      <div class="row-list-item" style="padding-top:0;">
+        <div class="rli-left">
+          <div class="rli-label">사업비 (수수료)</div>
+          <div class="rli-main">초기 7년 보험료의 <b>20~30%가 설계사 수수료·사업비</b>로 빠져나가요.</div>
+        </div>
+      </div>
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-label">무·저해지 환급형</div>
+          <div class="rli-main">납입 기간 중 해지하면 <b>환급금 0원</b>이에요. 보험료가 저렴한 이유가 바로 이것.</div>
+        </div>
+      </div>
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-label">단기납 종신 "130% 환급" 조건</div>
+          <div class="rli-main">납입 완납 + 10년 이상 유지 + 약관 대출 없음. <b>조건 하나라도 어기면 환급률 급락</b>해요.</div>
+        </div>
+      </div>
+      <div class="danger-banner" style="margin-bottom:0;">
+        <div class="icon">⚠️</div>
+        <div class="text">변액·저축성 보험을 <b>저축 목적으로 가입하면 안 돼요.</b> 사업비 20~30% 손실 후 출발해서 웬만한 수익률로는 손해예요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 납입면제 -->
+  <div class="section">
+    <div class="section-title">납입면제 — 한국에만 있는 독특한 제도</div>
+    <div class="card">
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+        특정 질병에 걸리면 그 이후 보험료를 내지 않아도 100세까지 보장이 유지돼요.
+      </div>
+      <div class="row-list-item" style="padding-top:0;">
+        <div class="rli-left">
+          <div class="rli-label">면제 범위 예시</div>
+          <div class="rli-main">3대 질병형: 암·뇌출혈·급성심근경색만 해당<br>11대 질병형: 심혈관 질환·뇌혈관·심부전 등 훨씬 넓게 해당</div>
+        </div>
+      </div>
+      <div class="row-list-item">
+        <div class="rli-left">
+          <div class="rli-label">절약 효과 (40세 발병, 잔여 18년 기준)</div>
+          <div class="rli-main">월 20만원짜리 보험이면 <b>약 4,010만원의 보험료를 더 안 내도 돼요.</b></div>
+        </div>
+      </div>
+      <div class="tip-banner" style="margin-bottom:0;">
+        <div class="icon">💡</div>
+        <div class="text">가족력이 있다면 <b>납입면제 범위가 넓은 상품</b>이 특히 중요해요. 3대보다 11대가 훨씬 유리해요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 세액공제 -->
+  <div class="section">
+    <div class="section-title">아는 사람만 챙기는 세액공제</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-3);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:4px;">
+        <span>항목</span>
+        <span style="display:flex;gap:24px;"><span>한도</span><span>공제율</span><span>최대환급</span></span>
+      </div>
+      <div class="tax-row">
+        <div class="tax-name"><div style="font-weight:600;margin-bottom:2px;">보장성 보험료</div><div style="font-size:12px;color:var(--ink-3);">암보험·실손·상해보험 등</div></div>
+        <div class="tax-limit">연 100만원</div>
+        <div class="tax-rate">12%</div>
+        <div class="tax-max">연 12만원</div>
+      </div>
+      <div class="tax-row">
+        <div class="tax-name"><div style="font-weight:600;margin-bottom:2px;">연금저축</div><div style="font-size:12px;color:var(--ink-3);">연금저축펀드·보험 등</div></div>
+        <div class="tax-limit">연 600만원</div>
+        <div class="tax-rate">13.2~16.5%</div>
+        <div class="tax-max">연 99만원</div>
+      </div>
+      <div class="tax-row">
+        <div class="tax-name"><div style="font-weight:600;margin-bottom:2px;">연금저축 + IRP 합산</div><div style="font-size:12px;color:var(--ink-3);">IRP 추가 납입 시</div></div>
+        <div class="tax-limit">연 900만원</div>
+        <div class="tax-rate">13.2~16.5%</div>
+        <div class="tax-max" style="color:var(--security);">연 148만원</div>
+      </div>
+      <div class="danger-banner" style="margin-top:8px;margin-bottom:0;">
+        <div class="icon">⚠️</div>
+        <div class="text"><b>변액·저축성 보험은 세액공제 안 돼요.</b> 같은 보험인데 보장성이냐 저축성이냐에 따라 세법 취급이 달라요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 보험나이 -->
+  <div class="section">
+    <div class="section-title">보험나이 — 모르면 수십만원 손해</div>
+    <div class="card">
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+        실제 나이와 달리, <b>생일 6개월 전부터 이미 1살 올라가요.</b> 보험나이가 높을수록 보험료가 비싸요.
+      </div>
+      <div class="tip-banner" style="margin-bottom:0;">
+        <div class="icon">💡</div>
+        <div class="text">생일이 6개월 이내에 있다면 지금 바로 가입해요. 6개월 후면 보험나이가 올라가서 30년 기준 <b>수십~수백만원 더 내게 돼요.</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 손해 패턴 -->
+  <div class="section">
+    <div class="section-title">사람들이 가장 많이 손해보는 패턴</div>
+    <div class="card">
+      <div class="pattern-item">
+        <div class="pattern-num">1</div>
+        <div class="pattern-content">
+          <div class="p-title">갱신형 보험 장기 유지</div>
+          <div class="p-desc">60대 되면 보험료 감당 못하고 해지해요. 수십 년 납입한 돈을 못 건지고 끝나요.</div>
+        </div>
+      </div>
+      <div class="pattern-item">
+        <div class="pattern-num">2</div>
+        <div class="pattern-content">
+          <div class="p-title">변액·저축성 보험을 저축 목적으로 가입</div>
+          <div class="p-desc">사업비 20~30% 손실 후 출발해서 은행 적금보다 수익률이 낮은 경우가 많아요.</div>
+        </div>
+      </div>
+      <div class="pattern-item">
+        <div class="pattern-num">3</div>
+        <div class="pattern-content">
+          <div class="p-title">실손보험 여러 개 가입</div>
+          <div class="p-desc">비례보상이라 중복 가입해봐야 받는 돈은 똑같아요. 보험료만 이중으로 내는 거예요.</div>
+        </div>
+      </div>
+      <div class="pattern-item">
+        <div class="pattern-num">4</div>
+        <div class="pattern-content">
+          <div class="p-title">1세대 실손 해지</div>
+          <div class="p-desc">돈으로 환산 불가한 자산이에요. 새 상품으로 교체하면 보장이 크게 줄어요. 절대 해지하면 안 돼요.</div>
+        </div>
+      </div>
+      <div class="pattern-item">
+        <div class="pattern-num">5</div>
+        <div class="pattern-content">
+          <div class="p-title">보험나이 올라간 후 가입</div>
+          <div class="p-desc">생일 6개월 전이 지나면 보험나이가 올라가는 걸 몰라서 비싼 보험료를 30년간 내요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 요약 -->
+  <div class="section">
+    <div class="section-title">한 줄 요약</div>
+    <div class="insight-card">
+      <div class="ic-label">알면 이득, 모르면 손해</div>
+      <div class="ic-main">한국 보험은 구조를 알아야<br>제대로 쓸 수 있어요</div>
+      <ul class="ic-list">
+        <li>실손은 중복 가입하지 말고, 정액 진단비는 여러 회사에 나눠도 돼요</li>
+        <li>1세대 실손은 절대 해지하면 안 돼요</li>
+        <li>갱신형은 장기로 보면 8배 더 내요</li>
+        <li>변액·저축성 보험은 저축 수단이 아니에요</li>
+        <li>납입면제 범위가 넓을수록, 보험나이 낮을수록 유리해요</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    2026년 5월 기준 · 금융감독원·금융위원회 자료 및 각사 공시 기반<br>
+    실제 가입·해지·전환 결정 전 보험설계사 또는 금융 전문가 상담을 권장해요
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     탭 4 — 통계·조사 자료 (v3 검증 근거)
+     ══════════════════════════════════════════ -->
+<div class="tab-panel" id="tab-3">
+<div class="container">
+
+  <div class="header">
+    <div class="tag">통계·조사 자료</div>
+    <h1>v3 결론의 근거가 된<br>외부 통계와 출처</h1>
+    <div class="sub">동연령 평균 보험료 · 권장 비율 · 본인 케이스 위치 · 2026-05-28 조사</div>
+  </div>
+
+  <!-- 조사 배경 -->
+  <div class="section">
+    <div class="card" style="background:var(--surface2);">
+      <div style="font-size:13px;color:var(--text);line-height:1.7;">
+        <b>왜 통계를 봐야 하나:</b><br>
+        보험은 "보장이 더 좋으니까 비싼 게 낫다"가 정답이 아님. 본인 소득·연령대 대비 <b>적정 범위 안에서</b> 가성비를 따져야 함. 동연령 평균과 권장 비율은 "내가 너무 많이 내고 있는가?"를 판단하는 객관 기준.
+      </div>
+    </div>
+  </div>
+
+  <!-- 20·30대 평균 월 보험료 -->
+  <div class="section">
+    <div class="section-title">① 20·30대 평균 월 보험료 (2024 기준)</div>
+
+    <div class="card">
+      <div style="font-size:13px;color:var(--ink-3);line-height:1.7;margin-bottom:14px;">
+        조사 기관별로 수치가 다름. <b>같은 인구라도 어떤 통계인지에 따라 18만~30만 범위</b>. 보장성+저축성+자동차보험 포함 여부에 따라 다르므로 출처 확인 필수.
+      </div>
+
+      <table style="width:100%;font-size:13px;border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);">
+            <th style="padding:10px 0;text-align:left;color:var(--muted);font-weight:700;">연령·성별</th>
+            <th style="padding:10px 0;text-align:right;color:var(--muted);font-weight:700;">월 평균 보험료</th>
+            <th style="padding:10px 0;text-align:left;color:var(--muted);font-weight:700;padding-left:16px;">출처</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>20대 남성</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;color:var(--pick);">238,000원</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">SBS Biz (2024.7, 해빗팩토리 데이터)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>20대 여성</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;">204,500원</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">SBS Biz (2024.7)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--land-soft);">
+            <td style="padding:10px 0;"><b>20대 평균 (남녀 통합)</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;">179,500원</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">시그널플래너 (40만 회원 데이터)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>30대 남성</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;color:var(--security);">290,000원</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">SBS Biz (2024.7)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>30대 여성</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;">258,000원</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">SBS Biz (2024.7)</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:var(--land-soft);">
+            <td style="padding:10px 0;"><b>30대 평균 (남녀 통합)</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;">246,200원</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">시그널플래너 (40만 회원 데이터)</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;"><b>2030 세대 (전체)</b></td>
+            <td style="padding:10px 0;text-align:right;font-weight:700;">약 20만원 중반</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">보험매일·생명보험협회 (2030세대 집계)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="background:var(--pick-bg);border-radius:10px;padding:12px;margin-top:14px;font-size:12px;color:var(--text);line-height:1.7;">
+        <b>해석:</b> 조사 기관 간 차이가 큰 이유 — SBS Biz는 보장성·저축성·일반·자동차 <b>모두 포함</b>한 평균, 시그널플래너는 회원 가입 보험만 집계. <b>자동차보험을 빼면 시그널플래너 쪽이 본인 케이스에 더 가까움</b> (본인은 자동차보험 미가입 기준 분석).
+      </div>
+    </div>
+  </div>
+
+  <!-- 평균 보험 가입 개수 -->
+  <div class="section">
+    <div class="section-title">② 가입 보험 개수 평균</div>
+    <div class="card">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--surface2);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;color:var(--ink-3);margin-bottom:4px;">2030 세대 평균</div>
+          <div style="font-size:24px;font-weight:800;color:var(--text);">5.2개</div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">보험매일 (해빗팩토리 분석)</div>
+        </div>
+        <div style="background:var(--pick-bg);border-radius:10px;padding:14px;">
+          <div style="font-size:11px;color:var(--pick);margin-bottom:4px;">본인 현재 (옵션 A)</div>
+          <div style="font-size:24px;font-weight:800;color:var(--pick);">3개</div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">다온생명 + 한들손보 실손 + 두레생명</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--ink-3);line-height:1.7;">
+        ※ B 전환 시에도 3개로 유지 (다온생명 → 한들손보 케어플러스 교체). 평균(5.2개)보다 적어서 보험 개수 측면에선 추가 부담 없음.
+      </div>
+    </div>
+  </div>
+
+  <!-- 권장 비율 -->
+  <div class="section">
+    <div class="section-title">③ 소득 대비 권장 보험료 비율</div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px;">
+        한국 보험 전문가·생명보험협회·재무설계사들의 공통된 가이드:
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:var(--security-bg);border-radius:10px;padding:14px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--security);margin-bottom:6px;">위험</div>
+          <div style="font-size:18px;font-weight:800;color:var(--security);">11% 이상</div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">저축·투자 위축</div>
+        </div>
+        <div style="background:var(--feature-bg);border-radius:10px;padding:14px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--feature);margin-bottom:6px;">적정 (권장)</div>
+          <div style="font-size:18px;font-weight:800;color:var(--feature);">5~10%</div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">생명보험협회·전문가 공통</div>
+        </div>
+        <div style="background:var(--land-soft);border-radius:10px;padding:14px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--land);margin-bottom:6px;">미흡</div>
+          <div style="font-size:18px;font-weight:800;color:var(--land);">5% 미만</div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">의료비 돌발 위험 노출</div>
+        </div>
+      </div>
+
+      <div style="background:var(--pick-bg);border-radius:10px;padding:14px;font-size:13px;color:var(--text);line-height:1.7;">
+        <b>예시 (월소득 기준):</b><br>
+        · 300만 → 보험료 15만~30만이 적정<br>
+        · 400만 → 보험료 20만~40만이 적정<br>
+        · 500만 → 보험료 25만~50만이 적정
+      </div>
+
+      <div style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:1.7;">
+        ※ 보장성+저축성+자동차보험 모두 합산 기준. 자동차보험을 빼면 권장 범위 더 좁아질 수 있음.
+      </div>
+    </div>
+  </div>
+
+  <!-- 본인 케이스 위치 -->
+  <div class="section">
+    <div class="section-title">④ 본인 케이스 — 통계 속 위치</div>
+    <div class="card">
+
+      <div style="background:var(--surface2);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:12px;color:var(--ink-3);margin-bottom:4px;">본인 (32세 가입성, 옵션 A 유지 시 — 두레생명 3.2만 가정)</div>
+        <div style="font-size:24px;font-weight:800;color:var(--text);">258,000<span style="font-size:13px;color:var(--ink-3);font-weight:400;">원/월</span></div>
+        <div style="font-size:11px;color:var(--ink-3);margin-top:4px;">자동차보험 미포함</div>
+      </div>
+
+      <div style="font-size:13px;color:var(--text);line-height:1.8;margin-bottom:14px;">
+        · 20대 남성 평균(SBS Biz 25.1만) 대비: <b style="color:var(--land);">약간 높음 (+0.7만)</b><br>
+        · 시그널플래너 20대 평균(18.6만) 대비: <b style="color:var(--security);">현저히 높음 (+7.2만)</b><br>
+        · 2030 세대 평균(20만 중반) 대비: <b style="color:var(--land);">상단권</b><br>
+        · 30대 남성 평균(30.6만) 대비: <b style="color:var(--feature);">낮음 (−4.8만)</b>
+      </div>
+
+      <div style="background:var(--land-soft);border-radius:10px;padding:14px;border-left:4px solid var(--land);">
+        <div style="font-size:13px;color:var(--text);line-height:1.7;">
+          <b>주의점:</b> 위 통계는 자동차보험 포함이라 단순 비교 어려움. 본인이 자동차보험 가입 시 추가 5~15만/월 더해지면 평균 초과 가능성↑. 또한 <b>30대 진입 시 평균 30만으로 점프</b>하고 A의 갱신형 특약 인상 더해지면 <b>40대에 평균 초과 가능</b>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B 전환 시 비율 변화 -->
+  <div class="section">
+    <div class="section-title">⑤ B 전환 시 비율 변화</div>
+    <div class="card">
+      <table style="width:100%;font-size:13px;border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);">
+            <th style="padding:10px 0;text-align:left;color:var(--muted);font-weight:700;">월소득</th>
+            <th style="padding:10px 0;text-align:right;color:var(--a);font-weight:700;">A 유지 (25.8만)</th>
+            <th style="padding:10px 0;text-align:right;color:var(--pick);font-weight:700;">B 전환 (21.6만)</th>
+            <th style="padding:10px 0;text-align:left;color:var(--muted);font-weight:700;padding-left:16px;">판단</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>200만</b></td>
+            <td style="padding:10px 0;text-align:right;color:var(--security);font-weight:700;">12.9%</td>
+            <td style="padding:10px 0;text-align:right;color:var(--security);font-weight:700;">10.8%</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--ink-3);">둘 다 무리</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>300만</b></td>
+            <td style="padding:10px 0;text-align:right;color:var(--security);font-weight:700;">8.6%</td>
+            <td style="padding:10px 0;text-align:right;color:var(--land);font-weight:700;">7.2%</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--ink-3);">A 한계, B 적정</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>400만</b></td>
+            <td style="padding:10px 0;text-align:right;color:var(--land);font-weight:700;">6.5%</td>
+            <td style="padding:10px 0;text-align:right;color:var(--feature);font-weight:700;">5.4%</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--ink-3);">A 상단, B 적정</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;"><b>500만+</b></td>
+            <td style="padding:10px 0;text-align:right;color:var(--feature);font-weight:700;">5.2%</td>
+            <td style="padding:10px 0;text-align:right;color:var(--feature);font-weight:700;">4.3%</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--ink-3);">비용보단 보장 우위로 결정</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 출처 -->
+  <div class="section">
+    <div class="section-title">⑥ 출처 (직접 확인 권장)</div>
+    <div class="card">
+      <ul style="list-style:none;font-size:13px;color:var(--text);line-height:2;padding-left:0;">
+        <li>· <a href="https://biz.sbs.co.kr/article/20000186017" style="color:var(--pick);text-decoration:none;">SBS Biz — "20대 평균 월 보험료는 얼마?"</a> (2024.8, 해빗팩토리 데이터 기반)</li>
+        <li>· <a href="https://www.fins.co.kr/news/articleView.html?idxno=101580" style="color:var(--pick);text-decoration:none;">보험매일 — "2030세대 평균 보험 가입 5.2개"</a></li>
+        <li>· <a href="https://blog.signalplanner.co.kr/549/" style="color:var(--pick);text-decoration:none;">시그널플래너 — "월 보험료, 얼마가 적당할까?"</a> (40만 회원 데이터)</li>
+        <li>· <a href="https://kbthink.com/main/asset-management/insurance/insurance-2-240828.html" style="color:var(--pick);text-decoration:none;">한들손보의 생각 — "적정 보험료, 20대 30대 평균"</a></li>
+        <li>· <a href="https://www.asiae.co.kr/article/2022090111044793006" style="color:var(--pick);text-decoration:none;">아시아경제 — "내 소득 대비 알맞은 보험료"</a></li>
+        <li>· <a href="https://www.banksalad.com/articles/%EB%B3%B4%ED%97%98-%EB%B3%B4%ED%97%98%EB%A6%AC%EB%AA%A8%EB%8D%B8%EB%A7%81-%EB%B3%B4%ED%97%98%EB%A3%8C" style="color:var(--pick);text-decoration:none;">뱅크샐러드 — "내 보험료 적정할까? 소득·연령별 총정리"</a></li>
+        <li>· <a href="https://m.joseilbo.com/news/view.htm?newsid=523038" style="color:var(--pick);text-decoration:none;">조세일보 — "2030세대 월 평균 보험료" (해빗팩토리)</a></li>
+        <li>· <a href="https://www.klia.or.kr/consumer/stats/yearBook/list.do" style="color:var(--pick);text-decoration:none;">생명보험협회 — 연간 통계연감</a></li>
+      </ul>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+        <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:8px;">v3.5 추가 출처 (한들손보 공식 + 암 통계)</div>
+        <ul style="list-style:none;font-size:13px;color:var(--text);line-height:2;padding-left:0;">
+          <li>· <a href="https://insight.kbinsure.co.kr/health-insurance-kb5-10-10youngplus-260408/" style="color:var(--pick);text-decoration:none;">한들손해보험 인사이트 — 케어플러스 출시 (2026.04)</a></li>
+          <li>· <a href="https://www.kbinsure.co.kr/CG302290001.ec" style="color:var(--pick);text-decoration:none;">한들손해보험 공식 — 상품안내 페이지</a></li>
+          <li>· <a href="https://www.cancer.go.kr/lay1/S1T639C640/contents.do" style="color:var(--pick);text-decoration:none;">국가암정보센터 — 통계로 보는 암 (발생률)</a></li>
+          <li>· <a href="https://www.cancer.go.kr/lay1/S1T639C641/contents.do" style="color:var(--pick);text-decoration:none;">국가암정보센터 — 암종별 발생 현황</a></li>
+          <li>· <a href="https://news.mt.co.kr/mtview.php?no=2024052711202819414" style="color:var(--pick);text-decoration:none;">머니투데이 — 다온생명 메디안 최대 6.5억 보장</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 한국 암 발병률 통계 (v3.5 신규) -->
+  <div class="section">
+    <div class="section-title">⑦ 한국 암 발병률 통계 (국가암정보센터 2024)</div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--ink-3);margin-bottom:14px;line-height:1.7;">
+        손익 추산에서 사용한 "고액암 5%·유사암 8%" 가정의 근거 통계. <b>2024년 국가암정보센터 공식 자료</b>.
+      </div>
+
+      <div style="background:var(--security-bg);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--security);margin-bottom:10px;">평생 암 발생 확률 (기대수명 기준 누적위험도)</div>
+        <table style="width:100%;font-size:13px;border-collapse:collapse;">
+          <tbody>
+            <tr style="border-bottom:1px solid color-mix(in srgb,var(--security) 30%,transparent);"><td style="padding:8px 0;color:var(--muted);">남자 (기대수명 80.6세)</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--security);">39.1%</td><td style="padding:8px 0;padding-left:16px;color:var(--ink-3);">5명 중 2명</td></tr>
+            <tr style="border-bottom:1px solid color-mix(in srgb,var(--security) 30%,transparent);"><td style="padding:8px 0;color:var(--muted);">여자 (기대수명 86.6세)</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--security);">36.0%</td><td style="padding:8px 0;padding-left:16px;color:var(--ink-3);">3명 중 1명</td></tr>
+            <tr><td style="padding:8px 0;color:var(--muted);">남녀 평균</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--security);">38.1%</td><td style="padding:8px 0;padding-left:16px;color:var(--ink-3);">기준 통계</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="background:var(--land-soft);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--land);margin-bottom:10px;">암종별 (한국)</div>
+        <table style="width:100%;font-size:13px;border-collapse:collapse;">
+          <thead><tr style="border-bottom:1px solid var(--land-line);">
+            <th style="padding:6px 0;text-align:left;color:var(--muted);font-weight:700;">암종</th>
+            <th style="padding:6px 0;text-align:right;color:var(--muted);font-weight:700;">발생률 순위·특성</th>
+            <th style="padding:6px 0;text-align:right;color:var(--muted);font-weight:700;">5년 생존율</th>
+          </tr></thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--land-line);"><td style="padding:8px 0;"><b>갑상선암</b></td><td style="padding:8px 0;text-align:right;">2023년 전체 1위 (유사암 영역)</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--feature);">100.1%</td></tr>
+            <tr style="border-bottom:1px solid var(--land-line);"><td style="padding:8px 0;"><b>유방암</b></td><td style="padding:8px 0;text-align:right;">여자 1위</td><td style="padding:8px 0;text-align:right;color:var(--feature);">93%+</td></tr>
+            <tr style="border-bottom:1px solid var(--land-line);"><td style="padding:8px 0;"><b>췌장암</b></td><td style="padding:8px 0;text-align:right;">고액암 — 평생 약 2~3%</td><td style="padding:8px 0;text-align:right;font-weight:700;color:var(--security);">16.5%</td></tr>
+            <tr style="border-bottom:1px solid var(--land-line);"><td style="padding:8px 0;"><b>식도암·담낭암</b></td><td style="padding:8px 0;text-align:right;">고액암 — 평생 약 1~2% 각</td><td style="padding:8px 0;text-align:right;color:var(--security);">29.4%</td></tr>
+            <tr><td style="padding:8px 0;"><b>전체 암 (참고)</b></td><td style="padding:8px 0;text-align:right;color:var(--ink-3);">남자 평생 39.1%</td><td style="padding:8px 0;text-align:right;color:var(--feature);">72.9% (전체 평균)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="background:var(--pick-bg);border-radius:10px;padding:14px;font-size:13px;color:var(--text);line-height:1.7;">
+        <b>손익 추산 시 사용한 가정값 정당화:</b><br>
+        · <b>고액암 5%</b> = 췌장(2~3%) + 식도(1~2%) + 담낭(1~2%) 등 합산 (보수적 추정)<br>
+        · <b>유사암 8%</b> = 갑상선암 1위 + 경계성종양 + 기타 추정 (보수적)<br>
+        · <b>일반 암 39.1%</b> = 국가암정보센터 남자 평생 발생률 (정확)
+      </div>
+
+      <div style="font-size:11px;color:var(--ink-3);margin-top:10px;line-height:1.7;">
+        ※ 평생 발생률은 기대수명까지 생존 가정. 32세 시점 발병률은 훨씬 낮음. 가족력 시 가중치 +50~+200% 추정 가능 (의학적 근거).
+      </div>
+    </div>
+  </div>
+
+  <!-- 한들손보 케어플러스 v3.5 신규 발견 보장 -->
+  <div class="section">
+    <div class="section-title">⑧ 한들손보 케어플러스 — v3.5 신규 발견 보장</div>
+    <div class="card" style="border:2px solid var(--feature);">
+      <div style="font-size:13px;color:var(--ink-3);margin-bottom:14px;line-height:1.7;">
+        한들손보 공식 사이트 재확인 결과 v3 분석에서 누락된 보장 항목들. <b>결론에 직접적 영향</b>은 작지만 정확성 위해 추가.
+      </div>
+
+      <table style="width:100%;font-size:13px;border-collapse:collapse;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);">
+            <th style="padding:10px 0;text-align:left;color:var(--muted);font-weight:700;">항목</th>
+            <th style="padding:10px 0;text-align:right;color:var(--muted);font-weight:700;">금액·내용</th>
+            <th style="padding:10px 0;text-align:left;color:var(--muted);font-weight:700;padding-left:16px;">의의</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);opacity:0.45;">
+            <td style="padding:10px 0;"><b>출산지원금</b> <span style="background:var(--surface2);color:var(--ink-3);font-size:9px;padding:1px 5px;border-radius:6px;font-weight:700;">본인 미적용</span></td>
+            <td style="padding:10px 0;text-align:right;color:var(--ink-3);">첫째 50만<br>둘째 100만<br>셋째 200만</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--ink-3);">본인 자녀 계획 미정 — 분석에서 제외</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>일상통합치료비</b></td>
+            <td style="padding:10px 0;text-align:right;">독감·응급실·창상봉합 등</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">제안서 446·486번 등. 일반 일상 케어 보강</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 0;"><b>장기유지 할인</b></td>
+            <td style="padding:10px 0;text-align:right;">계약 유지 시 추가 할인</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">2026년 신상품 핵심 차별점. 정확한 할인율은 약관 확인</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 0;"><b>가입 대상</b></td>
+            <td style="padding:10px 0;text-align:right;">5~40세 (어른이 보험)</td>
+            <td style="padding:10px 0;padding-left:16px;color:var(--muted);">32세 본인 가입 가능. 40세 넘기면 가입 불가</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 조사 한계 -->
+  <div class="section">
+    <div class="card" style="background:var(--land-soft);">
+      <div style="font-size:13px;color:var(--land);line-height:1.7;">
+        <b>⚠ 이 통계 자료의 한계:</b><br>
+        · 2024년 기준 자료 — 2026년 시점에선 약간의 인플레이션 반영 필요<br>
+        · 자동차보험 포함 여부가 출처마다 다름 — 본인은 별도 확인 필요<br>
+        · "평균"은 분포의 중간을 보여줄 뿐 — 본인 케이스(사무직 32세)의 적정값은 다를 수 있음<br>
+        · 한국 보험 시장 특성: <b>2030세대가 평균 5.2개 가입한다는 게 적정한가</b>는 별개 논쟁
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    v3 통계·조사 자료 · 2024 기준 외부 출처 종합 · 2026-05-28 정리<br>
+    수치는 출처 발표 시점 기준이며 본인 상황에 따라 적정선은 달라질 수 있음
+  </div>
+
+</div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  html.classList.add('theme-switching');
+  html.setAttribute('data-theme', next);
+  document.getElementById('themeBtn').textContent = next === 'dark' ? '◑ 다크' : '◐ 라이트';
+  try { localStorage.setItem('insurance-theme', next); } catch(e) {}
+  requestAnimationFrame(() => requestAnimationFrame(() => html.classList.remove('theme-switching')));
+}
+(function() {
+  let saved = 'light';
+  try { saved = localStorage.getItem('insurance-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch(e) {}
+  document.documentElement.setAttribute('data-theme', saved);
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('themeBtn');
+    if (btn) btn.textContent = saved === 'dark' ? '◑ 다크' : '◐ 라이트';
+  });
+})();
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.tab-panel').forEach((panel, i) => {
+    panel.classList.toggle('active', i === idx);
+  });
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>

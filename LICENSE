@@ -24,4 +24,5 @@ SOFTWARE.
 
 이 라이선스는 **코드에만** 적용된다. 아래는 대상이 아니며 저작권을 보유한다.
 
-- 페이지에 담긴 글·문구
+- 이력서 본문 (`public/index.html`·`public/en/index.html`)
+- 프로젝트 소개 글 (`src/content/projects/`)

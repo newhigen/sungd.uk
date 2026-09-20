@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>독서 기록 · Reading</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root{
+    --bg:#fbfbfa; --surface:#ffffff; --surface2:#f6f6f5;
+    --border:#ececeb; --line-strong:#e0e0de;
+    --text:#1a1a18; --muted:#6b6b66; --ink-3:#9a9a94;
+    --pick:#6b4cff; --pick-bg:#f0edff;
+    --gold:#b8860b; --gold-soft:#fdf6e3; --gold-line:#ecdca6;
+    --pos:#1a7f4b; --neg:#c8453a; --warn:#b4690e;
+    --radius:14px; --radius-sm:9px;
+    --shadow-sm:0 1px 2px rgba(20,20,18,.04),0 1px 3px rgba(20,20,18,.05);
+    --shadow-md:0 2px 8px rgba(20,20,18,.05),0 8px 24px rgba(20,20,18,.06);
+    --sans:'Pretendard Variable',Pretendard,-apple-system,system-ui,sans-serif;
+    /* 장르 그룹 색 — 카테고리 인코딩에만 사용 */
+    --g-knowledge:#6b4cff; --g-growth:#1a7f4b; --g-emotion:#b4690e;
+  }
+  [data-theme="dark"]{
+    --bg:#0f0f0e; --surface:#191917; --surface2:#222220;
+    --border:#2a2a27; --line-strong:#373734;
+    --text:#ededeb; --muted:#a0a09b; --ink-3:#6e6e69;
+    --pick:#9d86ff; --pick-bg:#241f3d;
+    --gold:#d4af5a; --gold-soft:#241f0e; --gold-line:#4a3f1a;
+    --pos:#3fb87a; --neg:#e07a6f; --warn:#d99a4e;
+    --shadow-sm:0 1px 2px rgba(0,0,0,.2);
+    --shadow-md:0 2px 8px rgba(0,0,0,.24),0 8px 24px rgba(0,0,0,.3);
+    --g-knowledge:#9d86ff; --g-growth:#3fb87a; --g-emotion:#d99a4e;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html.theme-switching *{transition:none !important}
+  body{
+    font-family:var(--sans); background:var(--bg); color:var(--text);
+    letter-spacing:-.01em; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  /* ─ Topbar ─ */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1120px; margin:0 auto; padding:12px 28px;
+    display:flex; align-items:center; gap:16px;
+  }
+  .brand{ display:flex; align-items:baseline; gap:9px; }
+  .brand-mark{ font-size:1.05rem; font-weight:800; letter-spacing:-.03em; color:var(--text); }
+  .brand-sub{ font-size:.78rem; color:var(--ink-3); font-weight:500; }
+  .topbar-spacer{ flex:1; }
+  .topbar-meta{ font-size:.78rem; color:var(--ink-3); }
+  .theme-btn{
+    width:34px; height:34px; border-radius:9px; border:1px solid var(--border);
+    background:var(--surface); color:var(--muted); cursor:pointer;
+    display:grid; place-items:center; font-size:.95rem; transition:.16s ease;
+  }
+  .theme-btn:hover{ border-color:var(--line-strong); color:var(--text); }
+
+  /* ─ Tabs ─ */
+  .tabbar{ position:sticky; top:58px; z-index:40; background:var(--bg); border-bottom:1px solid var(--border); }
+  .tabbar-inner{ max-width:1120px; margin:0 auto; padding:0 28px; display:flex; gap:2px; }
+  .tab{
+    appearance:none; border:0; background:none; cursor:pointer;
+    font-family:var(--sans); font-size:.92rem; font-weight:650; color:var(--ink-3);
+    padding:14px 16px; border-bottom:2px solid transparent; transition:.16s ease;
+    letter-spacing:-.01em;
+  }
+  .tab:hover{ color:var(--muted); }
+  .tab.active{ color:var(--text); border-bottom-color:var(--pick); }
+
+  /* ─ Layout ─ */
+  .wrap{ max-width:1120px; margin:0 auto; padding:28px 28px 64px; }
+  .panel{ display:none; }
+  .panel.active{ display:block; animation:fade .22s ease; }
+  @keyframes fade{ from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .grid-hero{ display:grid; grid-template-columns:1.35fr 1fr; gap:14px; align-items:stretch; }
+  @media(max-width:860px){ .grid-2,.grid-hero{ grid-template-columns:1fr; } }
+
+  /* ─ Card ─ */
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px; box-shadow:var(--shadow-sm); margin-bottom:14px;
+  }
+  .card.hover{ transition:.18s ease; }
+  .card.hover:hover{ border-color:var(--line-strong); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+  .sec-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:16px; }
+  .card-title{ font-size:1.06rem; font-weight:750; letter-spacing:-.02em; color:var(--text); }
+  .card-subtitle{ font-size:.82rem; color:var(--ink-3); font-weight:500; }
+  .card-subtitle.block{ display:block; margin-top:-10px; margin-bottom:14px; }
+
+  /* ─ Hero / Persona ─ */
+  .hero{ padding:6px 2px 18px; }
+  .hero h1{ font-size:2rem; font-weight:800; letter-spacing:-.035em; line-height:1.12; }
+  .hero h1 .accent{ color:var(--pick); }
+  .hero p{ margin-top:8px; font-size:.95rem; color:var(--muted); }
+  .persona-row{ display:flex; gap:11px; align-items:flex-start; padding:10px 0; border-top:1px solid var(--border); }
+  .persona-row:first-child{ border-top:0; padding-top:2px; }
+  .persona-emoji{ font-size:1.05rem; flex-shrink:0; width:22px; text-align:center; opacity:.9; }
+  .persona-row>div{ font-size:.9rem; color:var(--muted); line-height:1.55; }
+  .persona-row strong{ color:var(--text); font-weight:700; }
+  .persona-row em{ font-style:normal; font-weight:650; color:var(--pick); }
+
+  /* ─ Stat ─ */
+  .stat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+  .stat-item{ background:var(--surface); padding:15px 16px; }
+  .stat-num{ font-size:1.85rem; font-weight:800; letter-spacing:-.03em; line-height:1; color:var(--text); }
+  .stat-unit{ font-size:.9rem; font-weight:650; color:var(--muted); margin-left:2px; }
+  .stat-desc{ font-size:.82rem; color:var(--text); font-weight:600; margin-top:7px; }
+  .stat-sub{ font-size:.74rem; color:var(--ink-3); margin-top:2px; }
+  .stat-up{ color:var(--pos); font-weight:700; }
+
+  /* ─ Insights ─ */
+  .insight-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(252px,1fr)); gap:10px; }
+  .insight-row{ display:flex; gap:11px; align-items:flex-start; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; }
+  .insight-icon{ font-size:1.05rem; flex-shrink:0; margin-top:1px; opacity:.9; }
+  .insight-label{ font-size:.68rem; font-weight:750; color:var(--pick); letter-spacing:.03em; text-transform:uppercase; margin-bottom:4px; }
+  .insight-text{ font-size:.86rem; color:var(--text); line-height:1.5; }
+
+  /* ─ Bars ─ */
+  .bar-track{ flex:1; background:var(--surface2); border-radius:99px; height:8px; overflow:hidden; }
+  .bar-track.sm{ height:6px; }
+  .bar-fill{ height:100%; background:var(--pick); border-radius:99px; }
+
+  /* ─ Year bars ─ */
+  .yr-row{ display:flex; align-items:center; gap:11px; margin-bottom:11px; }
+  .yr-row:last-child{ margin-bottom:0; }
+  .yr-label{ width:38px; font-size:.82rem; color:var(--muted); font-weight:650; }
+  .yr-cnt{ font-size:.85rem; font-weight:700; color:var(--text); white-space:nowrap; }
+  .yr-note{ font-size:.72rem; color:var(--ink-3); font-weight:500; margin-left:5px; }
+
+  /* ─ Journey legend / story ─ */
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 18px; margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+  .legend-group{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .legend-group-label{ font-size:.68rem; font-weight:750; color:var(--ink-3); text-transform:uppercase; letter-spacing:.06em; padding-right:7px; border-right:1px solid var(--border); }
+  .legend-item{ display:inline-flex; align-items:center; gap:5px; font-size:.76rem; color:var(--muted); }
+  .legend-dot{ width:8px; height:8px; border-radius:3px; display:inline-block; }
+  .story-flow{ display:flex; align-items:center; flex-wrap:wrap; gap:5px; margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+  .story-chip{ font-size:.74rem; font-weight:650; padding:3px 9px; border-radius:99px; border:1px solid; }
+  .story-arrow{ color:var(--ink-3); font-size:.72rem; margin:0 2px; }
+
+  /* ─ Year in Review ─ */
+  .yir-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(264px,1fr)); gap:12px; }
+  .yir-card{ background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:15px 16px; }
+  .yir-header{ display:flex; align-items:baseline; gap:9px; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .yir-year{ font-size:1.5rem; font-weight:800; letter-spacing:-.03em; line-height:1; color:var(--text); }
+  .yir-total{ font-size:.95rem; font-weight:750; color:var(--pick); }
+  .yir-badge{ margin-left:auto; font-size:.68rem; font-weight:700; padding:3px 8px; border-radius:99px; }
+  .yir-current{ background:var(--pick-bg); color:var(--pick); }
+  .yir-row{ display:flex; gap:8px; align-items:baseline; font-size:.82rem; padding:4px 0; }
+  .yir-label{ width:74px; flex-shrink:0; color:var(--ink-3); font-weight:650; }
+  .yir-val{ color:var(--text); flex:1; line-height:1.4; }
+
+  /* ─ Genre / Library ─ */
+  .cat-item{ margin-bottom:16px; }
+  .cat-item:last-child{ margin-bottom:0; }
+  .cat-meta{ display:flex; justify-content:space-between; align-items:center; margin-bottom:7px; }
+  .cat-label{ font-size:.9rem; font-weight:650; color:var(--text); }
+  .cat-num{ font-size:.85rem; font-weight:750; }
+  .cat-pct{ font-size:.72rem; color:var(--ink-3); font-weight:500; }
+  .cat-sample{ font-size:.76rem; color:var(--ink-3); margin-top:6px; line-height:1.4; }
+
+  /* ─ Authors ─ */
+  .author-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(252px,1fr)); gap:10px; }
+  .author-row{ background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; }
+  .author-head{ display:flex; align-items:baseline; gap:8px; margin-bottom:5px; }
+  .author-name{ font-size:.9rem; font-weight:750; color:var(--text); flex:1; }
+  .author-cnt{ font-size:.8rem; font-weight:700; color:var(--pick); }
+  .author-rate{ font-size:.78rem; color:var(--gold); font-weight:700; }
+  .author-books{ font-size:.76rem; color:var(--ink-3); line-height:1.4; }
+
+  /* ─ Mood / Pace / Coverage ─ */
+  .mp-row{ display:flex; align-items:center; gap:11px; margin-bottom:9px; }
+  .mp-row:last-child{ margin-bottom:0; }
+  .mp-label{ width:112px; flex-shrink:0; font-size:.82rem; color:var(--text); font-weight:500; }
+  .mp-cnt{ font-size:.76rem; color:var(--muted); font-weight:650; min-width:62px; text-align:right; }
+  .cov-row{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .cov-row:last-child{ margin-bottom:0; }
+  .cov-label{ width:60px; flex-shrink:0; font-size:.84rem; font-weight:650; color:var(--text); }
+  .cov-pct{ font-size:.76rem; color:var(--muted); font-weight:650; min-width:104px; text-align:right; }
+
+  /* ─ Recent months ─ */
+  .rmonth-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(172px,1fr)); gap:11px; }
+  .rmonth-card{ background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 14px; }
+  .rmonth-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px; }
+  .rmonth-date{ font-size:.84rem; font-weight:700; color:var(--text); }
+  .rmonth-cnt{ font-size:.92rem; font-weight:800; color:var(--pick); }
+  .rmonth-chips{ display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
+  .month-chip{ font-size:.68rem; font-weight:650; padding:2px 7px; border-radius:99px; }
+  .rmonth-sample{ font-size:.72rem; color:var(--ink-3); line-height:1.35; }
+
+  /* ─ To-read / Rec ─ */
+  .rec-list{ display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:14px; }
+  .rec-group{ padding:4px 0; }
+  .rec-group-decided{ background:var(--gold-soft); padding:14px 16px; border-radius:var(--radius); border:1px solid var(--gold-line); }
+  .rec-group-keep{ background:var(--pick-bg); padding:14px 16px; border-radius:var(--radius); border:1px solid color-mix(in srgb,var(--pick) 30%, transparent); }
+  .rec-group-excl{ opacity:.5; }
+  .rec-group-label{ font-size:.85rem; font-weight:750; color:var(--text); margin-bottom:11px; padding-bottom:7px; border-bottom:1px solid var(--border); }
+  .rec-row{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:13px 15px; margin-bottom:9px; }
+  .rec-row:last-child{ margin-bottom:0; }
+  .rec-head{ display:flex; flex-wrap:wrap; align-items:baseline; gap:7px; margin-bottom:6px; }
+  .rec-title{ font-size:.92rem; font-weight:750; color:var(--text); }
+  .rec-author{ font-size:.76rem; color:var(--ink-3); }
+  .rec-tag{ margin-left:auto; font-size:.68rem; font-weight:700; padding:3px 8px; border-radius:99px; white-space:nowrap; }
+  .rec-status-pref{ background:var(--gold-soft); color:var(--gold); }
+  .rec-status-done{ background:color-mix(in srgb,var(--pos) 14%,transparent); color:var(--pos); }
+  .rec-status-keep{ background:var(--pick-bg); color:var(--pick); border:1px solid color-mix(in srgb,var(--pick) 35%,transparent); }
+  .rec-status-owned{ background:var(--surface2); color:var(--muted); }
+  .rec-status-excl{ background:color-mix(in srgb,var(--neg) 12%,transparent); color:var(--neg); text-decoration:line-through; }
+  .rec-status-pending{ background:var(--pick-bg); color:var(--pick); }
+  .rec-status-ref{ background:var(--surface2); color:var(--muted); }
+  .rec-meta{ display:flex; flex-wrap:wrap; gap:9px; font-size:.75rem; color:var(--ink-3); margin-bottom:6px; }
+  .rec-rating{ font-weight:650; color:var(--pick); }
+  .rec-note{ font-size:.8rem; color:var(--muted); line-height:1.45; }
+
+  .empty{ color:var(--ink-3); font-size:.85rem; }
+  .footer{ text-align:center; font-size:.74rem; color:var(--ink-3); margin-top:32px; }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">독서 기록</span>
+        <span class="brand-sub">Reading Analytics</span>
+      </div>
+      <div class="topbar-spacer"></div>
+      <span class="topbar-meta">94권 · 2022–2026</span>
+      <button class="theme-btn" id="themeBtn" aria-label="테마 전환">◐</button>
+    </div>
+  </header>
+
+  <nav class="tabbar">
+    <div class="tabbar-inner">
+      <button class="tab active" data-tab="overview">개요</button>
+      <button class="tab" data-tab="journey">흐름</button>
+      <button class="tab" data-tab="library">서재</button>
+      <button class="tab" data-tab="toread">읽을 책</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <!-- ═══ 개요 ═══ -->
+    <section class="panel active" id="overview">
+      <div class="hero">
+        <h1>당신은 <span class="accent">탐구 폭풍형</span> 독자입니다</h1>
+        <p>꽂히면 몰아 읽고, 점화되면 멈추지 않는 — 94권의 기록이 말하는 독서 성향.</p>
+      </div>
+
+      <div class="grid-hero">
+        <div class="card">
+    <div class="persona-row">
+      <span class="persona-emoji">🌪</span>
+      <div><strong>꽂히면 몰아 읽는 탐구 폭풍러</strong> — 4년간 <strong>5번의 폭풍</strong>.
+      한 번 꽂히면 한 달에 같은 장르 6권을 갈아치우고, 다음 달엔 또 다른 주제로 갈아탑니다.</div>
+    </div>
+    <div class="persona-row">
+      <span class="persona-emoji">📈</span>
+      <div><strong>느린 출발, 폭발적 성장</strong> — 처음 18개월에 5권 → 2025년 46권 → 2026년 월 5.6권. 점화 늦지만, 점화되면 안 멈춥니다.</div>
+    </div>
+    <div class="persona-row">
+      <span class="persona-emoji">🚀</span>
+      <div><strong>의사결정·메타인지·습관에 약한 사람</strong> — 자기계발 23권으로 1위.
+      인생책 4권이 모두 그 결. <em>자기만의 트랙</em>·<em>함께 자라기</em>는 두 번씩 읽었습니다.</div>
+    </div>
+    <div class="persona-row">
+      <span class="persona-emoji">🔍</span>
+      <div><strong>검증주의자 + 효율 우선</strong> — 짧고 임팩트 있는 책 선호. Goodreads 4.0+만 골라 읽고, 소설은 4년에 4권뿐.</div>
+    </div>
+    <div class="persona-row">
+      <span class="persona-emoji">🪞</span>
+      <div><strong>INFJ 성찰형</strong> — "정말 이해한 게 아닐 수 있다"는 메타인지 자각의 독자.</div>
+    </div></div>
+        <div class="card">
+          <div class="stat-grid">
+            <div class="stat-item">
+              <div class="stat-num">94<span class="stat-unit">권</span></div>
+              <div class="stat-desc">총 독서</div>
+              <div class="stat-sub">2022.07 시작</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">46<span class="stat-unit">권</span></div>
+              <div class="stat-desc">2025년 · 역대 최다</div>
+              <div class="stat-sub">월평균 3.8권</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">29<span class="stat-unit">권</span></div>
+              <div class="stat-desc">2026년 · 5개월</div>
+              <div class="stat-sub">월평균 <span class="stat-up">5.8권 ↑</span></div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">5<span class="stat-unit">번</span></div>
+              <div class="stat-desc">탐구 폭풍</div>
+              <div class="stat-sub">한 달 같은 장르 3권+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card hover">
+        <div class="sec-head"><span class="card-title">독서 가속 곡선</span><span class="card-subtitle">실선=실제 · 점선=최근 6개월 예상 · 회색=평균 기준선</span></div>
+        <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:190px">
+  <defs>
+    <linearGradient id="curveGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--pick)" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="var(--pick)" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <line x1="28" y1="162.0" x2="692" y2="162.0" stroke="var(--border)" stroke-width="1"/><text x="24.0" y="165.0" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">0</text><line x1="28" y1="122.6" x2="692" y2="122.6" stroke="var(--border)" stroke-width="1"/><text x="24.0" y="125.6" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">50</text><line x1="28" y1="83.1" x2="692" y2="83.1" stroke="var(--border)" stroke-width="1"/><text x="24.0" y="86.1" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">100</text><line x1="28" y1="43.7" x2="692" y2="43.7" stroke="var(--border)" stroke-width="1"/><text x="24.0" y="46.7" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">150</text>
+  <line x1="28.0" y1="20" x2="28.0" y2="162" stroke="var(--border)" stroke-width="1"/><text x="31.0" y="175.0" font-size="9.5" fill="#94A3B8" font-family="sans-serif">2022</text><line x1="96.7" y1="20" x2="96.7" y2="162" stroke="var(--border)" stroke-width="1"/><text x="99.7" y="175.0" font-size="9.5" fill="#94A3B8" font-family="sans-serif">2023</text><line x1="234.1" y1="20" x2="234.1" y2="162" stroke="var(--border)" stroke-width="1"/><text x="237.1" y="175.0" font-size="9.5" fill="#94A3B8" font-family="sans-serif">2024</text><line x1="371.4" y1="20" x2="371.4" y2="162" stroke="var(--border)" stroke-width="1"/><text x="374.4" y="175.0" font-size="9.5" fill="#94A3B8" font-family="sans-serif">2025</text><line x1="508.8" y1="20" x2="508.8" y2="162" stroke="var(--border)" stroke-width="1"/><text x="511.8" y="175.0" font-size="9.5" fill="#94A3B8" font-family="sans-serif">2026</text><line x1="646.2" y1="20" x2="646.2" y2="162" stroke="var(--border)" stroke-width="1"/><text x="649.2" y="175.0" font-size="9.5" fill="#C0C8D2" font-family="sans-serif">2027</text>
+
+  <!-- 추세선: (0,0)에서 평균 페이스 -->
+  <line x1="28.0" y1="162.0" x2="692.0" y2="68.5"
+        stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="2,3" opacity="0.6"/>
+
+  <!-- 실제 -->
+  <path d="M 28.0,161.2 L 62.3,160.4 L 131.0,159.6 L 211.2,158.8 L 222.6,158.1 L 245.5,156.5 L 257.0,155.7 L 268.4,154.9 L 279.9,154.1 L 291.3,153.3 L 314.2,152.5 L 325.7,150.2 L 337.1,149.4 L 348.6,148.6 L 360.0,147.0 L 371.4,144.6 L 382.9,141.5 L 394.3,137.5 L 405.8,133.6 L 417.2,132.8 L 428.7,132.0 L 440.1,128.9 L 451.6,124.1 L 463.0,118.6 L 474.5,117.8 L 485.9,113.9 L 497.4,110.7 L 508.8,106.0 L 520.3,100.5 L 531.7,95.7 L 543.2,91.8 L 554.6,87.8 L 554.6,162 L 28.0,162 Z" fill="url(#curveGrad)"/>
+  <path d="M 28.0,161.2 L 62.3,160.4 L 131.0,159.6 L 211.2,158.8 L 222.6,158.1 L 245.5,156.5 L 257.0,155.7 L 268.4,154.9 L 279.9,154.1 L 291.3,153.3 L 314.2,152.5 L 325.7,150.2 L 337.1,149.4 L 348.6,148.6 L 360.0,147.0 L 371.4,144.6 L 382.9,141.5 L 394.3,137.5 L 405.8,133.6 L 417.2,132.8 L 428.7,132.0 L 440.1,128.9 L 451.6,124.1 L 463.0,118.6 L 474.5,117.8 L 485.9,113.9 L 497.4,110.7 L 508.8,106.0 L 520.3,100.5 L 531.7,95.7 L 543.2,91.8 L 554.6,87.8" fill="none" stroke="var(--pick)" stroke-width="2.5" stroke-linejoin="round"/>
+
+  <!-- 예상 (점선) -->
+  <path d="M 554.6,87.8 L 566.1,83.5 L 577.5,79.2 L 589.0,74.8 L 600.4,70.5 L 611.9,66.2 L 623.3,61.8 L 634.8,57.5 L 646.2,53.1 L 657.7,48.8 L 669.1,44.5 L 680.6,40.1 L 692.0,35.8" fill="none" stroke="var(--pick)" stroke-width="2" stroke-dasharray="5,4" opacity="0.65" stroke-linejoin="round"/>
+
+  <!-- 현재 점 -->
+  <circle cx="554.6" cy="87.8" r="4" fill="var(--pick)"/>
+  <text x="560.6" y="81.8" font-size="10" fill="var(--pick)" font-family="sans-serif" font-weight="600">94권</text>
+
+  <!-- 예상 종점 -->
+  <circle cx="692.0" cy="35.8" r="3.5" fill="var(--surface)" stroke="var(--pick)" stroke-width="1.5"/>
+  <text x="686.0" y="29.8" font-size="9.5" fill="var(--muted)" text-anchor="end" font-family="sans-serif">≈ 160권</text>
+  <text x="686.0" y="41.8" font-size="8.5" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">2027.05</text>
+
+  <!-- 추세선 라벨 -->
+  <text x="688.0" y="79.5" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">평균 페이스</text>
+</svg>
+      </div>
+
+      
+  <div class="card">
+    <div class="card-title">✨ 독서 인사이트</div>
+    <div class="card-subtitle">페이스·성향·폭풍·번아웃·블라인드스팟까지 한눈에</div>
+    <div class="insight-grid">
+      
+              <div class="insight-row">
+                <div class="insight-icon">📖</div>
+                <div class="insight-body">
+                  <div class="insight-label">독서 속도</div>
+                  <div class="insight-text">월평균 2.9권 — 꾸준한 독서 리듬</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">📈</div>
+                <div class="insight-body">
+                  <div class="insight-label">가속 중</div>
+                  <div class="insight-text">2025년 3.8/월 → 2026년 5.8/월</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">🚀</div>
+                <div class="insight-body">
+                  <div class="insight-label">주력 장르</div>
+                  <div class="insight-text">자기계발 23권으로 1위</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">✨</div>
+                <div class="insight-body">
+                  <div class="insight-label">최근 관심사</div>
+                  <div class="insight-text">최근 6개월은 글쓰기/소통 9권 집중</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">⚡</div>
+                <div class="insight-body">
+                  <div class="insight-label">최강 탐구 폭풍</div>
+                  <div class="insight-text">2026.02 글쓰기/소통 6권 (그달 85%)</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">😮‍💨</div>
+                <div class="insight-body">
+                  <div class="insight-label">독서 급감</div>
+                  <div class="insight-text">2025.04 5권 → 2025.05 1권</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">🔍</div>
+                <div class="insight-body">
+                  <div class="insight-label">오래 안 읽은 장르</div>
+                  <div class="insight-text">건강 14개월 · 소설/문학 12개월 · 여행 8개월</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">💝</div>
+                <div class="insight-body">
+                  <div class="insight-label">다시 읽은 책</div>
+                  <div class="insight-text">자기만의 트랙 · 함께 자라기 — 본인에게 특별한 책</div>
+                </div>
+              </div>
+              <div class="insight-row">
+                <div class="insight-icon">⭐</div>
+                <div class="insight-body">
+                  <div class="insight-label">인생책</div>
+                  <div class="insight-text">자기만의 트랙 · 자기만의 트랙 · 완벽한 선택은 없다</div>
+                </div>
+              </div>
+    </div>
+  </div>
+    </section>
+
+    <!-- ═══ 흐름 ═══ -->
+    <section class="panel" id="journey">
+      <div class="card hover">
+        <div class="sec-head"><span class="card-title">관심사 변천 여정</span><span class="card-subtitle">분기별 독서량과 장르 구성 — 막대 높이는 그 분기 권수</span></div>
+        <svg viewBox="0 0 1480 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <line x1="44" y1="154.7" x2="1436" y2="154.7" stroke="var(--border)" stroke-width="1"/><text x="38" y="157.7" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">1</text><line x1="44" y1="140.2" x2="1436" y2="140.2" stroke="var(--border)" stroke-width="1"/><text x="38" y="143.2" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">3</text><line x1="44" y1="125.7" x2="1436" y2="125.7" stroke="var(--border)" stroke-width="1"/><text x="38" y="128.7" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">5</text><line x1="44" y1="111.2" x2="1436" y2="111.2" stroke="var(--border)" stroke-width="1"/><text x="38" y="114.2" font-size="9" fill="var(--ink-3)" text-anchor="end" font-family="sans-serif">7</text>
+  <text x="93.7" y="184.0" font-size="9.5" fill="#191F28" text-anchor="middle" font-family="sans-serif" font-weight="600">22Q3</text><text x="93.7" y="196.0" font-size="9" fill="var(--pick)" text-anchor="middle" font-family="sans-serif" font-weight="600">2022</text><text x="93.7" y="148.7" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">1</text><rect x="72.7" y="154.7" width="42.0" height="7.3" fill="#3182F6"><title>2022Q3 기술/개발: 1권</title></rect><rect x="72.7" y="154.7" width="42.0" height="7.3" rx="4" ry="4" fill="#3182F6"/><text x="193.1" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">22Q4</text><text x="193.1" y="148.7" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">1</text><rect x="172.1" y="154.7" width="42.0" height="7.3" fill="#00C471"><title>2022Q4 자기계발: 1권</title></rect><rect x="172.1" y="154.7" width="42.0" height="7.3" rx="4" ry="4" fill="#00C471"/><text x="292.6" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">23Q2</text><text x="292.6" y="148.7" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">1</text><rect x="271.6" y="154.7" width="42.0" height="7.3" fill="#00C471"><title>2023Q2 자기계발: 1권</title></rect><rect x="271.6" y="154.7" width="42.0" height="7.3" rx="4" ry="4" fill="#00C471"/><text x="392.0" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">23Q4</text><text x="392.0" y="141.5" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">2</text><rect x="371.0" y="147.5" width="42.0" height="14.5" fill="#34D399"><title>2023Q4 커리어/일: 2권</title></rect><rect x="371.0" y="147.5" width="42.0" height="8.0" rx="4" ry="4" fill="#34D399"/><text x="491.4" y="184.0" font-size="9.5" fill="#191F28" text-anchor="middle" font-family="sans-serif" font-weight="600">24Q1</text><text x="491.4" y="196.0" font-size="9" fill="var(--pick)" text-anchor="middle" font-family="sans-serif" font-weight="600">2024</text><text x="491.4" y="134.2" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">3</text><rect x="470.4" y="140.2" width="42.0" height="14.5" fill="#3182F6"><title>2024Q1 기술/개발: 2권</title></rect><rect x="470.4" y="154.7" width="42.0" height="7.3" fill="#00C471"><title>2024Q1 자기계발: 1권</title></rect><rect x="470.4" y="140.2" width="42.0" height="8.0" rx="4" ry="4" fill="#3182F6"/><text x="590.9" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">24Q2</text><text x="590.9" y="134.2" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">3</text><rect x="569.9" y="140.2" width="42.0" height="7.3" fill="#3182F6"><title>2024Q2 기술/개발: 1권</title></rect><rect x="569.9" y="147.5" width="42.0" height="7.3" fill="#4D91F5"><title>2024Q2 글쓰기/소통: 1권</title></rect><rect x="569.9" y="154.7" width="42.0" height="7.3" fill="#00C471"><title>2024Q2 자기계발: 1권</title></rect><rect x="569.9" y="140.2" width="42.0" height="7.3" rx="4" ry="4" fill="#3182F6"/><text x="690.3" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">24Q3</text><text x="690.3" y="126.9" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">4</text><rect x="669.3" y="132.9" width="42.0" height="7.3" fill="#3182F6"><title>2024Q3 기술/개발: 1권</title></rect><rect x="669.3" y="140.2" width="42.0" height="14.5" fill="#00C471"><title>2024Q3 자기계발: 2권</title></rect><rect x="669.3" y="154.7" width="42.0" height="7.3" fill="#FB923C"><title>2024Q3 소설/문학: 1권</title></rect><rect x="669.3" y="132.9" width="42.0" height="7.3" rx="4" ry="4" fill="#3182F6"/><text x="789.7" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">24Q4</text><text x="789.7" y="126.9" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">4</text><rect x="768.7" y="132.9" width="42.0" height="14.5" fill="#7BB0F9"><title>2024Q4 인문/철학: 2권</title></rect><rect x="768.7" y="147.5" width="42.0" height="7.3" fill="#00C471"><title>2024Q4 자기계발: 1권</title></rect><rect x="768.7" y="154.7" width="42.0" height="7.3" fill="#FB923C"><title>2024Q4 소설/문학: 1권</title></rect><rect x="768.7" y="132.9" width="42.0" height="8.0" rx="4" ry="4" fill="#7BB0F9"/><text x="889.1" y="184.0" font-size="9.5" fill="#191F28" text-anchor="middle" font-family="sans-serif" font-weight="600">25Q1</text><text x="889.1" y="196.0" font-size="9" fill="var(--pick)" text-anchor="middle" font-family="sans-serif" font-weight="600">2025</text><text x="889.1" y="68.8" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">12</text><rect x="868.1" y="74.8" width="42.0" height="7.3" fill="#3182F6"><title>2025Q1 기술/개발: 1권</title></rect><rect x="868.1" y="82.1" width="42.0" height="21.8" fill="#00C471"><title>2025Q1 자기계발: 3권</title></rect><rect x="868.1" y="103.9" width="42.0" height="29.1" fill="#6EE7B7"><title>2025Q1 건강: 4권</title></rect><rect x="868.1" y="132.9" width="42.0" height="7.3" fill="#F59E0B"><title>2025Q1 에세이/라이프: 1권</title></rect><rect x="868.1" y="140.2" width="42.0" height="21.8" fill="#FDBA74"><title>2025Q1 라이프스타일: 3권</title></rect><rect x="868.1" y="74.8" width="42.0" height="7.3" rx="4" ry="4" fill="#3182F6"/><text x="988.6" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">25Q2</text><text x="988.6" y="105.2" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">7</text><rect x="967.6" y="111.2" width="42.0" height="7.3" fill="#3182F6"><title>2025Q2 기술/개발: 1권</title></rect><rect x="967.6" y="118.4" width="42.0" height="7.3" fill="#7BB0F9"><title>2025Q2 인문/철학: 1권</title></rect><rect x="967.6" y="125.7" width="42.0" height="7.3" fill="#34D399"><title>2025Q2 커리어/일: 1권</title></rect><rect x="967.6" y="132.9" width="42.0" height="14.5" fill="#FBBF24"><title>2025Q2 여행: 2권</title></rect><rect x="967.6" y="147.5" width="42.0" height="14.5" fill="#FB923C"><title>2025Q2 소설/문학: 2권</title></rect><rect x="967.6" y="111.2" width="42.0" height="7.3" rx="4" ry="4" fill="#3182F6"/><text x="1088.0" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">25Q3</text><text x="1088.0" y="32.5" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">17</text><rect x="1067.0" y="38.5" width="42.0" height="14.5" fill="#3182F6"><title>2025Q3 기술/개발: 2권</title></rect><rect x="1067.0" y="53.1" width="42.0" height="14.5" fill="#7BB0F9"><title>2025Q3 인문/철학: 2권</title></rect><rect x="1067.0" y="67.6" width="42.0" height="29.1" fill="#00C471"><title>2025Q3 자기계발: 4권</title></rect><rect x="1067.0" y="96.6" width="42.0" height="7.3" fill="#34D399"><title>2025Q3 커리어/일: 1권</title></rect><rect x="1067.0" y="103.9" width="42.0" height="43.6" fill="#F59E0B"><title>2025Q3 에세이/라이프: 6권</title></rect><rect x="1067.0" y="147.5" width="42.0" height="14.5" fill="#FBBF24"><title>2025Q3 여행: 2권</title></rect><rect x="1067.0" y="38.5" width="42.0" height="8.0" rx="4" ry="4" fill="#3182F6"/><text x="1187.4" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">25Q4</text><text x="1187.4" y="83.4" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">10</text><rect x="1166.4" y="89.4" width="42.0" height="14.5" fill="#3182F6"><title>2025Q4 기술/개발: 2권</title></rect><rect x="1166.4" y="103.9" width="42.0" height="14.5" fill="#4D91F5"><title>2025Q4 글쓰기/소통: 2권</title></rect><rect x="1166.4" y="118.4" width="42.0" height="14.5" fill="#00C471"><title>2025Q4 자기계발: 2권</title></rect><rect x="1166.4" y="132.9" width="42.0" height="21.8" fill="#34D399"><title>2025Q4 커리어/일: 3권</title></rect><rect x="1166.4" y="154.7" width="42.0" height="7.3" fill="#F59E0B"><title>2025Q4 에세이/라이프: 1권</title></rect><rect x="1166.4" y="89.4" width="42.0" height="8.0" rx="4" ry="4" fill="#3182F6"/><text x="1286.9" y="184.0" font-size="9.5" fill="#191F28" text-anchor="middle" font-family="sans-serif" font-weight="600">26Q1</text><text x="1286.9" y="196.0" font-size="9" fill="var(--pick)" text-anchor="middle" font-family="sans-serif" font-weight="600">2026</text><text x="1286.9" y="18.0" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">19</text><rect x="1265.9" y="24.0" width="42.0" height="21.8" fill="#3182F6"><title>2026Q1 기술/개발: 3권</title></rect><rect x="1265.9" y="45.8" width="42.0" height="50.8" fill="#4D91F5"><title>2026Q1 글쓰기/소통: 7권</title></rect><rect x="1265.9" y="96.6" width="42.0" height="21.8" fill="#7BB0F9"><title>2026Q1 인문/철학: 3권</title></rect><rect x="1265.9" y="118.4" width="42.0" height="36.3" fill="#00C471"><title>2026Q1 자기계발: 5권</title></rect><rect x="1265.9" y="154.7" width="42.0" height="7.3" fill="#FDBA74"><title>2026Q1 라이프스타일: 1권</title></rect><rect x="1265.9" y="24.0" width="42.0" height="8.0" rx="4" ry="4" fill="#3182F6"/><text x="1386.3" y="184.0" font-size="9.5" fill="#8B95A1" text-anchor="middle" font-family="sans-serif" font-weight="400">26Q2</text><text x="1386.3" y="83.4" font-size="10" fill="var(--muted)" text-anchor="middle" font-family="sans-serif" font-weight="600">10</text><rect x="1365.3" y="89.4" width="42.0" height="7.3" fill="#4D91F5"><title>2026Q2 글쓰기/소통: 1권</title></rect><rect x="1365.3" y="96.6" width="42.0" height="14.5" fill="#7BB0F9"><title>2026Q2 인문/철학: 2권</title></rect><rect x="1365.3" y="111.2" width="42.0" height="14.5" fill="#00C471"><title>2026Q2 자기계발: 2권</title></rect><rect x="1365.3" y="125.7" width="42.0" height="7.3" fill="#34D399"><title>2026Q2 커리어/일: 1권</title></rect><rect x="1365.3" y="132.9" width="42.0" height="29.1" fill="#F59E0B"><title>2026Q2 에세이/라이프: 4권</title></rect><rect x="1365.3" y="89.4" width="42.0" height="7.3" rx="4" ry="4" fill="#4D91F5"/>
+</svg>
+        <div class="legend"><div class="legend-group"><span class="legend-group-label">지식</span><span class="legend-item"><span class="legend-dot" style="background:#3182F6"></span>기술/개발</span><span class="legend-item"><span class="legend-dot" style="background:#4D91F5"></span>글쓰기/소통</span><span class="legend-item"><span class="legend-dot" style="background:#7BB0F9"></span>인문/철학</span></div><div class="legend-group"><span class="legend-group-label">성장</span><span class="legend-item"><span class="legend-dot" style="background:#00C471"></span>자기계발</span><span class="legend-item"><span class="legend-dot" style="background:#34D399"></span>커리어/일</span><span class="legend-item"><span class="legend-dot" style="background:#6EE7B7"></span>건강</span></div><div class="legend-group"><span class="legend-group-label">감성</span><span class="legend-item"><span class="legend-dot" style="background:#F59E0B"></span>에세이/라이프</span><span class="legend-item"><span class="legend-dot" style="background:#FBBF24"></span>여행</span><span class="legend-item"><span class="legend-dot" style="background:#FB923C"></span>소설/문학</span><span class="legend-item"><span class="legend-dot" style="background:#FDBA74"></span>라이프스타일</span></div></div>
+        <div class="story-flow"><span class="story-chip" style="background:#3182F620;color:#3182F6;border-color:#3182F640">🛠 기술/개발</span><span class="story-arrow">→</span><span class="story-chip" style="background:#00C47120;color:#00C471;border-color:#00C47140">🚀 자기계발</span><span class="story-arrow">→</span><span class="story-chip" style="background:#34D39920;color:#34D399;border-color:#34D39940">💼 커리어/일</span><span class="story-arrow">→</span><span class="story-chip" style="background:#3182F620;color:#3182F6;border-color:#3182F640">🛠 기술/개발</span><span class="story-arrow">→</span><span class="story-chip" style="background:#00C47120;color:#00C471;border-color:#00C47140">🚀 자기계발</span><span class="story-arrow">→</span><span class="story-chip" style="background:#7BB0F920;color:#7BB0F9;border-color:#7BB0F940">📖 인문/철학</span><span class="story-arrow">→</span><span class="story-chip" style="background:#6EE7B720;color:#6EE7B7;border-color:#6EE7B740">💪 건강</span><span class="story-arrow">→</span><span class="story-chip" style="background:#FB923C20;color:#FB923C;border-color:#FB923C40">📚 소설/문학</span><span class="story-arrow">→</span><span class="story-chip" style="background:#F59E0B20;color:#F59E0B;border-color:#F59E0B40">🌿 에세이/라이프</span><span class="story-arrow">→</span><span class="story-chip" style="background:#34D39920;color:#34D399;border-color:#34D39940">💼 커리어/일</span><span class="story-arrow">→</span><span class="story-chip" style="background:#4D91F520;color:#4D91F5;border-color:#4D91F540">✍️ 글쓰기/소통</span><span class="story-arrow">→</span><span class="story-chip" style="background:#F59E0B20;color:#F59E0B;border-color:#F59E0B40">🌿 에세이/라이프</span></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="sec-head"><span class="card-title">연도별 독서량</span></div>
+          
+        <div class="yr-row">
+          <span class="yr-label">2022</span>
+          <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+          <span class="yr-cnt">2권</span>
+        </div>
+        <div class="yr-row">
+          <span class="yr-label">2023</span>
+          <div class="bar-track"><div class="bar-fill" style="width:6%"></div></div>
+          <span class="yr-cnt">3권</span>
+        </div>
+        <div class="yr-row">
+          <span class="yr-label">2024</span>
+          <div class="bar-track"><div class="bar-fill" style="width:30%"></div></div>
+          <span class="yr-cnt">14권</span>
+        </div>
+        <div class="yr-row">
+          <span class="yr-label">2025</span>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          <span class="yr-cnt">46권</span>
+        </div>
+        <div class="yr-row">
+          <span class="yr-label">2026</span>
+          <div class="bar-track"><div class="bar-fill" style="width:63%"></div></div>
+          <span class="yr-cnt">29권<span class="yr-note">(5개월, 월평균 5.8권)</span></span>
+        </div>
+        </div>
+        <div class="card">
+          <div class="sec-head"><span class="card-title">최근 6개월 흐름</span><span class="card-subtitle">33권</span></div>
+          <div class="rmonth-grid">
+        <div class="rmonth-card">
+          <div class="rmonth-head">
+            <span class="rmonth-date">2026.05</span>
+            <span class="rmonth-cnt">5권</span>
+          </div>
+          <div class="rmonth-chips"><span class="month-chip" style="background:#00C47115;color:#00C471">🚀 자기계발 2</span><span class="month-chip" style="background:#F59E0B15;color:#F59E0B">🌿 에세이/라이프 2</span><span class="month-chip" style="background:#34D39915;color:#34D399">💼 커리어/일 1</span></div>
+          <div class="rmonth-sample">아주 작은 습관의 힘 외 4권</div>
+        </div>
+        <div class="rmonth-card">
+          <div class="rmonth-head">
+            <span class="rmonth-date">2026.04</span>
+            <span class="rmonth-cnt">5권</span>
+          </div>
+          <div class="rmonth-chips"><span class="month-chip" style="background:#7BB0F915;color:#7BB0F9">📖 인문/철학 2</span><span class="month-chip" style="background:#F59E0B15;color:#F59E0B">🌿 에세이/라이프 2</span><span class="month-chip" style="background:#4D91F515;color:#4D91F5">✍️ 글쓰기/소통 1</span></div>
+          <div class="rmonth-sample">철학은 날씨를 바꾼다 외 4권</div>
+        </div>
+        <div class="rmonth-card">
+          <div class="rmonth-head">
+            <span class="rmonth-date">2026.03</span>
+            <span class="rmonth-cnt">6권</span>
+          </div>
+          <div class="rmonth-chips"><span class="month-chip" style="background:#7BB0F915;color:#7BB0F9">📖 인문/철학 3</span><span class="month-chip" style="background:#3182F615;color:#3182F6">🛠 기술/개발 2</span><span class="month-chip" style="background:#00C47115;color:#00C471">🚀 자기계발 1</span></div>
+          <div class="rmonth-sample">대한민국 헌법 외 5권</div>
+        </div>
+        <div class="rmonth-card">
+          <div class="rmonth-head">
+            <span class="rmonth-date">2026.02</span>
+            <span class="rmonth-cnt">7권</span>
+          </div>
+          <div class="rmonth-chips"><span class="month-chip" style="background:#4D91F515;color:#4D91F5">✍️ 글쓰기/소통 6</span><span class="month-chip" style="background:#00C47115;color:#00C471">🚀 자기계발 1</span></div>
+          <div class="rmonth-sample">내 인생을 빛내줄 스마트폰 사진 외 6권</div>
+        </div>
+        <div class="rmonth-card">
+          <div class="rmonth-head">
+            <span class="rmonth-date">2026.01</span>
+            <span class="rmonth-cnt">6권</span>
+          </div>
+          <div class="rmonth-chips"><span class="month-chip" style="background:#00C47115;color:#00C471">🚀 자기계발 3</span><span class="month-chip" style="background:#FDBA7415;color:#FDBA74">🏠 라이프스타일 1</span><span class="month-chip" style="background:#4D91F515;color:#4D91F5">✍️ 글쓰기/소통 1</span><span class="month-chip" style="background:#3182F615;color:#3182F6">🛠 기술/개발 1</span></div>
+          <div class="rmonth-sample">#100일챌린지 외 5권</div>
+        </div>
+        <div class="rmonth-card">
+          <div class="rmonth-head">
+            <span class="rmonth-date">2025.12</span>
+            <span class="rmonth-cnt">4권</span>
+          </div>
+          <div class="rmonth-chips"><span class="month-chip" style="background:#4D91F515;color:#4D91F5">✍️ 글쓰기/소통 1</span><span class="month-chip" style="background:#3182F615;color:#3182F6">🛠 기술/개발 1</span><span class="month-chip" style="background:#34D39915;color:#34D399">💼 커리어/일 1</span><span class="month-chip" style="background:#00C47115;color:#00C471">🚀 자기계발 1</span></div>
+          <div class="rmonth-sample">노 하드 필링스 외 3권</div>
+        </div></div>
+        </div>
+      </div>
+
+      
+  <div class="card">
+    <div class="card-title">📅 연도별 회고 (Year in Review)</div>
+    <div class="card-subtitle">각 연도의 하이라이트 — 최다 장르·독서월·탐구 폭풍·인생책</div>
+    <div class="yir-grid">
+      
+            <div class="yir-card">
+              <div class="yir-header">
+                <span class="yir-year">2022</span>
+                <span class="yir-total">2권</span>
+                
+              </div>
+              <div class="yir-row"><span class="yir-label">최다 장르</span><span class="yir-val">🚀 자기계발 · 1권</span></div><div class="yir-row"><span class="yir-label">최다 독서월</span><span class="yir-val">10월 · 1권</span></div>
+            </div>
+            <div class="yir-card">
+              <div class="yir-header">
+                <span class="yir-year">2023</span>
+                <span class="yir-total">3권</span>
+                
+              </div>
+              <div class="yir-row"><span class="yir-label">최다 장르</span><span class="yir-val">💼 커리어/일 · 2권</span></div><div class="yir-row"><span class="yir-label">최다 독서월</span><span class="yir-val">12월 · 1권</span></div>
+            </div>
+            <div class="yir-card">
+              <div class="yir-header">
+                <span class="yir-year">2024</span>
+                <span class="yir-total">14권</span>
+                
+              </div>
+              <div class="yir-row"><span class="yir-label">최다 장르</span><span class="yir-val">🚀 자기계발 · 5권</span></div><div class="yir-row"><span class="yir-label">최다 독서월</span><span class="yir-val">9월 · 3권</span></div>
+            </div>
+            <div class="yir-card">
+              <div class="yir-header">
+                <span class="yir-year">2025</span>
+                <span class="yir-total">46권</span>
+                
+              </div>
+              <div class="yir-row"><span class="yir-label">최다 장르</span><span class="yir-val">🚀 자기계발 · 9권</span></div><div class="yir-row"><span class="yir-label">최다 독서월</span><span class="yir-val">9월 · 7권</span></div><div class="yir-row"><span class="yir-label">탐구 폭풍</span><span class="yir-val">9월 에세이/라이프 3권</span></div><div class="yir-row"><span class="yir-label">인생책 ⭐</span><span class="yir-val">자기만의 트랙 · 자기만의 트랙 · 완벽한 선택은 없다</span></div><div class="yir-row"><span class="yir-label">★5 책</span><span class="yir-val">자기만의 트랙 · 자기만의 트랙 외 2권</span></div>
+            </div>
+            <div class="yir-card">
+              <div class="yir-header">
+                <span class="yir-year">2026</span>
+                <span class="yir-total">29권</span>
+                <span class="yir-badge yir-current">진행 중 · 5개월</span>
+              </div>
+              <div class="yir-row"><span class="yir-label">최다 장르</span><span class="yir-val">✍️ 글쓰기/소통 · 8권</span></div><div class="yir-row"><span class="yir-label">최다 독서월</span><span class="yir-val">2월 · 7권</span></div><div class="yir-row"><span class="yir-label">탐구 폭풍</span><span class="yir-val">2월 글쓰기/소통 6권</span></div><div class="yir-row"><span class="yir-label">★5 책</span><span class="yir-val">아주 작은 습관의 힘</span></div>
+            </div>
+    </div>
+  </div>
+    </section>
+
+    <!-- ═══ 서재 ═══ -->
+    <section class="panel" id="library">
+      <div class="card">
+        <div class="sec-head"><span class="card-title">장르별 현황</span><span class="card-subtitle">전체 94권의 분포</span></div>
+        
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">🚀 자기계발</span>
+            <span class="cat-num" style="color:#00C471">23권 <span class="cat-pct">24%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:100%;background:#00C471"></div></div>
+          <div class="cat-sample">아주 작은 습관의 힘  ·  누가 내 치즈를 옮겼을까? 외 21권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">🛠 기술/개발</span>
+            <span class="cat-num" style="color:#3182F6">14권 <span class="cat-pct">15%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:60%;background:#3182F6"></div></div>
+          <div class="cat-sample">미니멀리즘 프로그래머  ·  데이터 과학자 원칙 외 12권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">🌿 에세이/라이프</span>
+            <span class="cat-num" style="color:#F59E0B">12권 <span class="cat-pct">13%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:52%;background:#F59E0B"></div></div>
+          <div class="cat-sample">이렇게 작지만 확실한 행복  ·  좋다고 하니까 나도 좋다 외 10권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">✍️ 글쓰기/소통</span>
+            <span class="cat-num" style="color:#4D91F5">11권 <span class="cat-pct">12%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:47%;background:#4D91F5"></div></div>
+          <div class="cat-sample">와인버그에게 배우는 차곡차곡 글쓰기  ·  글쓰기로 나를 찾다 외 9권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">📖 인문/철학</span>
+            <span class="cat-num" style="color:#7BB0F9">10권 <span class="cat-pct">11%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:43%;background:#7BB0F9"></div></div>
+          <div class="cat-sample">철학은 날씨를 바꾼다  ·  지적 대화를 위한 넓고 얕은 지식 2 외 8권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">💼 커리어/일</span>
+            <span class="cat-num" style="color:#34D399">8권 <span class="cat-pct">9%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:34%;background:#34D399"></div></div>
+          <div class="cat-sample">일의 기쁨과 슬픔  ·  리크루터의 채용 실무 가이드 외 6권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">🗺 여행</span>
+            <span class="cat-num" style="color:#FBBF24">4권 <span class="cat-pct">4%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:17%;background:#FBBF24"></div></div>
+          <div class="cat-sample">뉴욕에게 묻다  ·  뉴욕은 어떻게 뉴욕이 됐을까? 외 2권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">📚 소설/문학</span>
+            <span class="cat-num" style="color:#FB923C">4권 <span class="cat-pct">4%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:17%;background:#FB923C"></div></div>
+          <div class="cat-sample">진홍색 연구  ·  그리고 아무도 없었다 외 2권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">💪 건강</span>
+            <span class="cat-num" style="color:#6EE7B7">4권 <span class="cat-pct">4%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:17%;background:#6EE7B7"></div></div>
+          <div class="cat-sample">헬스는 쪼렙입니다만  ·  현직 약사가 알려주는 영양제 특강 외 2권</div>
+        </div>
+        <div class="cat-item">
+          <div class="cat-meta">
+            <span class="cat-label">🏠 라이프스타일</span>
+            <span class="cat-num" style="color:#FDBA74">4권 <span class="cat-pct">4%</span></span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" style="width:17%;background:#FDBA74"></div></div>
+          <div class="cat-sample">요리를 한다는 것  ·  더 머니북 외 2권</div>
+        </div>
+      </div>
+
+      
+  <div class="card">
+    <div class="card-title">👤 저자별 현황 (12명)</div>
+    <div class="card-subtitle">메타 입력된 책 한정 — book-meta.json에 author 추가 시 자동 반영</div>
+    <div class="author-grid">
+      
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">박지수</span>
+                    <span class="author-cnt">2권</span>
+                    <span class="author-rate">★ 5.0</span>
+                  </div>
+                  <div class="author-books">자기만의 트랙 · 자기만의 트랙</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">김창준</span>
+                    <span class="author-cnt">2권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">함께 자라기 · 함께 자라기</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">James Clear</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 5.0</span>
+                  </div>
+                  <div class="author-books">아주 작은 습관의 힘</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">배리 슈워츠</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 5.0</span>
+                  </div>
+                  <div class="author-books">완벽한 선택은 없다</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Kelly McGonigal</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 5.0</span>
+                  </div>
+                  <div class="author-books">왜 나는 항상 결심만 할까?</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Adam Grant</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">안다는 착각</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Steve Krug</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">(사용자를) 생각하게 하지 마!</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Anders Ericsson</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">1만 시간의 재발견</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Sönke Ahrens</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">제텔카스텐</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Tom DeMarco, Timothy Lister</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">피플웨어</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Cal Newport</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">딥 워크</div>
+                </div>
+                <div class="author-row">
+                  <div class="author-head">
+                    <span class="author-name">Kent Beck</span>
+                    <span class="author-cnt">1권</span>
+                    <span class="author-rate">★ 4.0</span>
+                  </div>
+                  <div class="author-books">Tidy First?</div>
+                </div>
+    </div>
+  </div>
+      
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">🎭 Mood 분포</div>
+      <div class="card-subtitle">메타 입력된 책의 분위기 태그 (StoryGraph 영감)</div>
+      
+                <div class="mp-row">
+                  <span class="mp-label">informative</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:100%"></div></div>
+                  <span class="mp-cnt">17</span>
+                </div>
+                <div class="mp-row">
+                  <span class="mp-label">reflective</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:70%"></div></div>
+                  <span class="mp-cnt">12</span>
+                </div>
+                <div class="mp-row">
+                  <span class="mp-label">hopeful</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:41%"></div></div>
+                  <span class="mp-cnt">7</span>
+                </div>
+                <div class="mp-row">
+                  <span class="mp-label">lighthearted</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:11%"></div></div>
+                  <span class="mp-cnt">2</span>
+                </div>
+                <div class="mp-row">
+                  <span class="mp-label">dark</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:11%"></div></div>
+                  <span class="mp-cnt">2</span>
+                </div>
+                <div class="mp-row">
+                  <span class="mp-label">emotional</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:5%"></div></div>
+                  <span class="mp-cnt">1</span>
+                </div>
+                <div class="mp-row">
+                  <span class="mp-label">challenging</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:5%"></div></div>
+                  <span class="mp-cnt">1</span>
+                </div>
+    </div>
+    <div class="card">
+      <div class="card-title">⏩ Pace 분포</div>
+      <div class="card-subtitle">slow / medium / fast</div>
+      
+                <div class="mp-row">
+                  <span class="mp-label">fast</span>
+                  <div class="bar-track sm"><div class="bar-fill" style="width:100%;background:#1B64DA"></div></div>
+                  <span class="mp-cnt">3 (100%)</span>
+                </div>
+    </div>
+  </div>
+      
+  <div class="card cov-card">
+    <div class="card-title">📊 메타 입력 진행률</div>
+    <div class="card-subtitle">book-meta.json에 입력하면 위 분석들이 자동 확장</div>
+    <div class="cov-row"><span class="cov-label">저자</span><div class="bar-track sm"><div class="bar-fill" style="width:26%;background:#3182F6"></div></div><span class="cov-pct">25/94 (26%)</span></div>
+    <div class="cov-row"><span class="cov-label">별점</span><div class="bar-track sm"><div class="bar-fill" style="width:15%;background:#F59E0B"></div></div><span class="cov-pct">15/94 (15%)</span></div>
+    <div class="cov-row"><span class="cov-label">Mood</span><div class="bar-track sm"><div class="bar-fill" style="width:24%;background:#A78BFA"></div></div><span class="cov-pct">23/94 (24%)</span></div>
+    <div class="cov-row"><span class="cov-label">Pace</span><div class="bar-track sm"><div class="bar-fill" style="width:3%;background:#00C471"></div></div><span class="cov-pct">3/94 (3%)</span></div>
+  </div>
+    </section>
+
+    <!-- ═══ 읽을 책 ═══ -->
+    <section class="panel" id="toread">
+      
+  <!-- 추천 받은 책 -->
+  <div class="card">
+    <div class="card-title">📌 추천 받은 책 (18권)</div>
+    <div class="card-subtitle">세션 2026-05-28 — 검토 중인 책 모음</div>
+    <div class="rec-list">
+      
+            <div class="rec-group rec-group-decided">
+              <div class="rec-group-label">📖 읽기로 결정</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">UX/UI의 10가지 심리학 법칙 (2024 개정증보판)</span>
+                    <span class="rec-author">— 존 야블론스키</span>
+                    <span class="rec-tag rec-status-pref">확정 ⭐</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.34 (1.5K) · 한국어판 204쪽</span>
+                    <span class="rec-lang">한국어 (책만)</span>
+                  </div>
+                  <div class="rec-note">Jakob's·Hick's·Fitts's 등 UX 심리 법칙. 짧고 즉시 적용. 본인 *Don't Make Me Think* 다음 단계로 완벽</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">디자인 구구단</span>
+                    <span class="rec-author">— 에이핫</span>
+                    <span class="rec-tag rec-status-pref">확정 ⭐</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">알라딘 9.8/10 (34 리뷰) · 2024.08 신간</span>
+                    <span class="rec-lang">한국어 (길벗)</span>
+                  </div>
+                  <div class="rec-note">9개 디자인 원리 (비율·공간·균형·색·서체 등). 한국 저자, 비전공자 fit. UI 외에도 두루 적용</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">횡설수설하지 않고 정확하게 설명하는 법</span>
+                    <span class="rec-author">— 고구레 다이치</span>
+                    <span class="rec-tag rec-status-pref">확정 ⭐</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">알라딘 7.5/10 (50 리뷰) · 224쪽</span>
+                    <span class="rec-lang">한국어 (갈매나무)</span>
+                  </div>
+                  <div class="rec-note">조리있게 설명하기 일본 번역서. 평점 7.5로 다른 두 권보다는 살짝 약하지만 본인 관심사 직격</div>
+                </div>
+            </div>
+            <div class="rec-group rec-group-keep">
+              <div class="rec-group-label">🎯 킵 (다음 라운드 후보)</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">Refactoring UI</span>
+                    <span class="rec-author">— Adam Wathan, Steve Schoger</span>
+                    <span class="rec-tag rec-status-keep">킵 ⭐</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.65 (2.1K) · 디자인서 평점 최상위급</span>
+                    <span class="rec-lang">영어 PDF (한국어판 없음)</span>
+                  </div>
+                  <div class="rec-note">개발자가 디자인 실무 배우는 책의 결정판. 색·간격·타이포 before/after 사례. 영어 PDF지만 시각 위주라 부담 낮음. ~$99. 다음 라운드 우선순위</div>
+                </div>
+            </div>
+            <div class="rec-group ">
+              <div class="rec-group-label">🛠 기술·검토</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">The Soul of a New Machine</span>
+                    <span class="rec-author">— Tracy Kidder</span>
+                    <span class="rec-tag rec-status-pending">회사 신청 후보</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.12 (9.5K)</span>
+                    <span class="rec-lang">영어 원서 (한국어판 절판)</span>
+                  </div>
+                  <div class="rec-note">퓰리처상. 본인 *피플웨어*·*함께 자라기* 결의 내러티브 깊이판. 한국어판 절판 — 영어 원서 또는 중고</div>
+                </div>
+            </div>
+            <div class="rec-group ">
+              <div class="rec-group-label">🗣 말하기·검토</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">말투가 고민이라면 유재석처럼</span>
+                    <span class="rec-author">— 정재영</span>
+                    <span class="rec-tag rec-status-pending">재미있게 일상</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">알라딘 9.5/10 (17 리뷰)</span>
+                    <span class="rec-lang">한국어</span>
+                  </div>
+                  <div class="rec-note">유재석·강호동·김구라 분석. 본인 선호 결</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">말하지 않고 말하기</span>
+                    <span class="rec-author">— 김정운</span>
+                    <span class="rec-tag rec-status-pending">신간 베스트셀러</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">알라딘 9.6/10 (39 리뷰)</span>
+                    <span class="rec-lang">한국어</span>
+                  </div>
+                  <div class="rec-note">2026.05 출간. 인문 top 3. 비언어 소통·심리. 김정운 재치 있는 톤</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">강원국의 결국은 말입니다</span>
+                    <span class="rec-author">— 강원국</span>
+                    <span class="rec-tag rec-status-pending">조리있게 권위</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">알라딘 9.9/10 (35 리뷰)</span>
+                    <span class="rec-lang">한국어</span>
+                  </div>
+                  <div class="rec-note">청와대 연설비서관 출신. 한국 말하기 분야 최고 권위자</div>
+                </div>
+            </div>
+            <div class="rec-group ">
+              <div class="rec-group-label">🎨 디자인·검토</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">이것이 UX/UI 디자인이다 (개정판)</span>
+                    <span class="rec-author">— 조성봉</span>
+                    <span class="rec-tag rec-status-pending">한국 저자·신간</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">신간 (2025.10), 평점 모수 부족</span>
+                    <span class="rec-lang">한국어 (위키북스)</span>
+                  </div>
+                  <div class="rec-note">위키북스 UX 시리즈. 입문 + 실무 방법론, 308쪽</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">About Face 4: 인터랙션 디자인의 본질</span>
+                    <span class="rec-author">— 앨런 쿠퍼</span>
+                    <span class="rec-tag rec-status-pending">분야 백과사전</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">pxd 등 시니어 UX 회사 다수 추천</span>
+                    <span class="rec-lang">한국어 (에이콘)</span>
+                  </div>
+                  <div class="rec-note">인터랙션 디자인 분야 클래식. 두꺼움 — 사전식 활용 추천</div>
+                </div>
+            </div>
+            <div class="rec-group ">
+              <div class="rec-group-label">✅ 완독</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">아주 작은 습관의 힘 (Atomic Habits)</span>
+                    <span class="rec-author">— James Clear</span>
+                    <span class="rec-tag rec-status-done">완독</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.31 (1.37M)</span>
+                    <span class="rec-lang">한국어 / 영어</span>
+                  </div>
+                  <div class="rec-note">2026-05-27 하루 만에 완독. 본인 호평. 자기계발 22권 중 강선호 결</div>
+                </div>
+            </div>
+            <div class="rec-group ">
+              <div class="rec-group-label">📚 보유</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">DDIA (Designing Data-Intensive Applications)</span>
+                    <span class="rec-author">— Martin Kleppmann</span>
+                    <span class="rec-tag rec-status-owned">이미 보유</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.69 (10.9K)</span>
+                    <span class="rec-lang">한국어 / 영어</span>
+                  </div>
+                  <div class="rec-note">본인 보유</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">실용주의 프로그래머 (The Pragmatic Programmer)</span>
+                    <span class="rec-author">— Andy Hunt, Dave Thomas</span>
+                    <span class="rec-tag rec-status-owned">이미 보유·호평</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.33 (24K)</span>
+                    <span class="rec-lang">한국어 / 영어</span>
+                  </div>
+                  <div class="rec-note">본인 보유, 좋아함</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">A Philosophy of Software Design</span>
+                    <span class="rec-author">— John Ousterhout</span>
+                    <span class="rec-tag rec-status-owned">이미 보유</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.22 (4.7K)</span>
+                    <span class="rec-lang">한국어 / 영어</span>
+                  </div>
+                  <div class="rec-note">본인 보유</div>
+                </div>
+            </div>
+            <div class="rec-group rec-group-excl">
+              <div class="rec-group-label">❌ 제외</div>
+              
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">스틱! (Made to Stick)</span>
+                    <span class="rec-author">— Chip & Dan Heath</span>
+                    <span class="rec-tag rec-status-excl">476쪽 너무 김</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 3.98 · 한국어판 476쪽</span>
+                    <span class="rec-lang">한국어 / 영어</span>
+                  </div>
+                  <div class="rec-note">본인이 분량 부담으로 제외</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">Hackers & Painters</span>
+                    <span class="rec-author">— Paul Graham</span>
+                    <span class="rec-tag rec-status-excl">별로 평 들음</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.03 (8K)</span>
+                    <span class="rec-lang">영어</span>
+                  </div>
+                  <div class="rec-note">본인이 '별로'라는 평을 들음. 결 안 맞음</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">The Mythical Man-Month</span>
+                    <span class="rec-author">— Fred Brooks</span>
+                    <span class="rec-tag rec-status-excl">dated (1975)</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.01 (15K)</span>
+                    <span class="rec-lang">한국어 / 영어</span>
+                  </div>
+                  <div class="rec-note">본인이 시대 뒤떨어짐 우려</div>
+                </div>
+                <div class="rec-row">
+                  <div class="rec-head">
+                    <span class="rec-title">Hooked</span>
+                    <span class="rec-author">— Nir Eyal</span>
+                    <span class="rec-tag rec-status-excl">너무 무거움</span>
+                  </div>
+                  <div class="rec-meta">
+                    <span class="rec-rating">Goodreads 4.12 (44K)</span>
+                    <span class="rec-lang">한국어 (훅) / 영어</span>
+                  </div>
+                  <div class="rec-note">본인이 '엄청 고민하는 거까지는 아님' 의도와 안 맞음</div>
+                </div>
+            </div>
+    </div>
+  </div>
+    </section>
+
+    <div class="footer">Generated by book-analysis · 2026-05-30 21:02</div>
+  </main>
+
+<script>
+  // 탭 전환
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(t => t.addEventListener('click', () => {
+    tabs.forEach(x => x.classList.remove('active'));
+    panels.forEach(p => p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'instant'});
+  }));
+
+  // 테마 토글 (transition 끄고 전환 → 카드 밀림 방지)
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeBtn');
+  const saved = localStorage.getItem('reading-theme');
+  if (saved) root.setAttribute('data-theme', saved);
+  themeBtn.addEventListener('click', () => {
+    root.classList.add('theme-switching');
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('reading-theme', next);
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('theme-switching')));
+  });
+</script>
+</body>
+</html>

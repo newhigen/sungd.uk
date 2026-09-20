@@ -1,0 +1,17 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import SiteLinks from '../components/layout/SiteLinks.astro';
+---
+
+<PageLayout title="About" description="조성덕 소개">
+  <p style="font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.8; margin: 0 0 2rem;">
+    직접 쓸 도구를 만들면서 일합니다. 개인 데이터를 모아 보는 대시보드, 결정을 돕는 분석,
+    Claude·Agent 를 다루는 작업 도구를 주로 만듭니다. 이력서는 이 사이트 첫 쪽에,
+    만든 것은 Projects 에 모아뒀고, 읽고 생각한 것은 글로 따로 남깁니다.
+  </p>
+
+  <h2 style="font-size: 0.8125rem; font-weight: 500; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 1rem;">
+    Elsewhere
+  </h2>
+  <SiteLinks current="resume" />
+</PageLayout>

@@ -1,0 +1,435 @@
+---
+// sungd.uk Main Landing Page
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8" />
+  <meta name="description" content="조성덕 — ML Engineer @ VUNO. 직접 쓸 도구를 만들면서 일합니다." />
+  <title>조성덕 | Sungduk Cho</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NM2EX11WS1"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    (function(){
+      try {
+        var m = new URLSearchParams(location.search).get('me');
+        if (m === '1') document.cookie = 'sd_owner=1; domain=.sungd.uk; path=/; max-age=63072000; samesite=lax; secure';
+        if (m === '0') document.cookie = 'sd_owner=; domain=.sungd.uk; path=/; max-age=0; samesite=lax; secure';
+      } catch (e) {}
+      window.__sdOwner = /(?:^|;\s*)sd_owner=1(?:;|$)/.test(document.cookie);
+    })();
+    gtag('set', 'user_properties', { visitor_type: window.__sdOwner ? 'owner' : 'visitor' });
+    gtag('config', 'G-NM2EX11WS1');
+    gtag('config', 'GT-KT4BFVVJ');
+  </script>
+
+  <style>
+    :root {
+      --bg: #fafafa;
+      --text-primary: #18181b;
+      --text-secondary: #52525b;
+      --text-tertiary: #a1a1aa;
+      --line: rgba(0, 0, 0, 0.07);
+      --hover-bg: rgba(0, 0, 0, 0.035);
+      --accent: #2563eb;
+      
+      --font-sans: "Inter Tight", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      --font-mono: "JetBrains Mono", Menlo, monospace;
+      color-scheme: light dark;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #090a0c;
+        --text-primary: #f4f4f5;
+        --text-secondary: #a1a1aa;
+        --text-tertiary: #71717a;
+        --line: rgba(255, 255, 255, 0.08);
+        --hover-bg: rgba(255, 255, 255, 0.05);
+        --accent: #60a5fa;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Container: 단일 수직 축 */
+    .page-wrap {
+      width: 100%;
+      max-width: 490px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 104px 24px 96px;
+    }
+
+    /* Profile Header */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: var(--hover-bg);
+      flex-shrink: 0;
+    }
+    .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .name-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .name-ko {
+      font-size: 1.375rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+    .name-en {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--text-tertiary);
+    }
+    .role-line {
+      font-size: 0.84375rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.01em;
+    }
+    .dot-sep {
+      color: var(--text-tertiary);
+      font-size: 0.6875rem;
+    }
+    .loc {
+      color: var(--text-tertiary);
+      font-size: 0.8125rem;
+      font-family: var(--font-mono);
+    }
+
+    /* Signature Tagline */
+    .signature-tagline {
+      font-size: 1.1875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 30px;
+      letter-spacing: -0.02em;
+      line-height: 1.45;
+    }
+
+    /* Bio Section */
+    .bio-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .bio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .bio-marker {
+      font-size: 0.6875rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+    }
+    .bio-p {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.82;
+      letter-spacing: -0.022em;
+      word-break: keep-all;
+    }
+
+    /* Narrative Links (문단형 공간 연결) */
+    .narrative-block {
+      margin-top: 28px;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.82;
+      letter-spacing: -0.02em;
+      word-break: keep-all;
+    }
+    .narrative-block a {
+      color: var(--text-primary);
+      text-decoration: underline;
+      text-decoration-color: var(--line);
+      text-underline-offset: 3.5px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    .narrative-block a:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+
+    /* Divider */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--line);
+      margin: 36px 0;
+    }
+
+    /* Section Title */
+    .sec-heading {
+      font-size: 0.6875rem;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-tertiary);
+      margin-bottom: 18px;
+    }
+
+    /* Timeline */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .timeline-entry {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .tl-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+    .tl-role-org {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      letter-spacing: -0.015em;
+      color: var(--text-primary);
+    }
+    .tl-role-org .org {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .tl-date {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+    }
+
+    /* VUNO Teams Tree */
+    .vuno-teams {
+      list-style: none;
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      border-left: 1.5px solid var(--line);
+      padding-left: 14px;
+      margin-left: 3px;
+    }
+    .vuno-team-item {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      letter-spacing: -0.01em;
+    }
+    .vuno-team-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vuno-team-product {
+      color: var(--text-tertiary);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 44px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .social-links {
+      display: flex;
+      gap: 16px;
+    }
+    .social-links a {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      transition: color 0.15s;
+      letter-spacing: -0.01em;
+    }
+    .social-links a:hover {
+      color: var(--text-primary);
+    }
+    .footer-domain {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      font-family: var(--font-mono);
+    }
+
+    @media (max-width: 480px) {
+      .page-wrap { padding: 90px 20px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-wrap">
+    
+    <!-- Profile Header -->
+    <header class="profile-header">
+      <img class="avatar" src="https://github.com/newhigen.png" alt="조성덕" onerror="this.onerror=null; this.src='https://github.com/sungdukcho.png';" />
+      <div class="meta">
+        <div class="name-row">
+          <h1 class="name-ko">조성덕</h1>
+          <span class="name-en">Sungduk Cho</span>
+        </div>
+        <div class="role-line">
+          <span>ML Engineer @ VUNO</span>
+          <span class="dot-sep">·</span>
+          <span class="loc">Seoul, Korea</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 시그니처 앵커 -->
+    <div class="signature-tagline">"직접 쓸 도구를 만들면서 일합니다."</div>
+
+    <!-- 마커형 Bio 3문단 -->
+    <main>
+      <div class="bio-flow">
+        <div class="bio-group">
+          <span class="bio-marker">01 / WORK</span>
+          <p class="bio-p">
+            의료영상 AI를 연구하고 제품으로 만듭니다. 
+            뷰노에서 4년간 흉부 X-ray와 폐 CT 소견 모델을 개발하며, 여러 연구가 재사용하는 DB 기반 파이프라인과 자동 평가 체계를 세웠습니다. 
+            단지 지표 몇 개를 높이는 것보다, 제품 관점에서 실제로 배포·최적화되고 팀이 반복 없이 안정적으로 실험할 수 있는 엔지니어링 기반을 다질 때 가장 큰 희열을 느낍니다.
+          </p>
+        </div>
+
+        <div class="bio-group">
+          <span class="bio-marker">02 / TOOLING</span>
+          <p class="bio-p">
+            내 생각과 인지 방식에 딱 맞춘 도구를 직접 깎아 씁니다. 
+            일상의 마찰을 줄이고 작업 속도를 증강(augment)하기 위해, 터미널 세션 모니터부터 개발 콘솔, AI 에이전트 작업 공간까지 삶과 일에 필요한 시스템을 직접 지어 씁니다. 
+            시각적인 미학과 단정함이 인식을 가속한다고 믿습니다.
+          </p>
+        </div>
+
+        <div class="bio-group">
+          <span class="bio-marker">03 / PHILOSOPHY</span>
+          <p class="bio-p">
+            일하지 않을 때는 책을 읽고 사유하며 글을 남깁니다. 
+            인생을 어떻게 살고 일을 어떻게 해야 하는가에 대한 고민은 결국 엔지니어링과 맞닿아 있습니다. 
+            함께 의미 있는 일을 즐겁게 해나갈 수 있는 동료로 기억되고 싶습니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 내러티브 도메인 공간 링크 -->
+      <section class="narrative-block">
+        <p>
+          직접 만든 사이드 프로젝트와 엔지니어링 노트는 <a href="https://dev.sungd.uk">dev.sungd.uk</a>에, 
+          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk">writing.sungd.uk</a>에 기록합니다. 
+          매일 써보는 최신 AI 도구 큐레이션은 <a href="https://ai.sungd.uk">ai.sungd.uk</a>에 모으고 있으며, 
+          업무 세부 내역과 전체 경력은 <a href="/cv/">이력서(/cv) ↗</a>에서 확인하실 수 있습니다.
+        </p>
+      </section>
+
+      <hr class="section-divider" />
+
+      <!-- Experience & Education -->
+      <section>
+        <h2 class="sec-heading">Experience & Education</h2>
+        <div class="timeline">
+          
+          <div class="timeline-entry">
+            <div class="tl-main">
+              <span class="tl-role-org">ML Engineer <span class="org">· 뷰노 (VUNO)</span></span>
+              <span class="tl-date">2022 – 현재</span>
+            </div>
+            <ul class="vuno-teams">
+              <li class="vuno-team-item">
+                <span class="vuno-team-name">PXI (Chest) Team</span>
+                <span class="vuno-team-product">· 흉부 X-ray 진단 AI</span>
+              </li>
+              <li class="vuno-team-item">
+                <span class="vuno-team-name">BLU3 (Lung) Team</span>
+                <span class="vuno-team-product">· 폐 CT 진단 AI</span>
+              </li>
+              <li class="vuno-team-item">
+                <span class="vuno-team-name">Digital Oncology Team</span>
+                <span class="vuno-team-product">· 디지털 병리 R&D</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="timeline-entry">
+            <div class="tl-main">
+              <span class="tl-role-org">컴퓨터과학 석사 <span class="org">· 고려대학교</span></span>
+              <span class="tl-date">2020 – 2022</span>
+            </div>
+          </div>
+
+          <div class="timeline-entry">
+            <div class="tl-main">
+              <span class="tl-role-org">컴퓨터공학 학사 <span class="org">· 울산과학기술원 (UNIST)</span></span>
+              <span class="tl-date">2015 – 2020</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="social-links">
+        <a href="https://github.com/newhigen">GitHub</a>
+        <a href="https://linkedin.com/in/sungdukcho">LinkedIn</a>
+        <a href="mailto:newhigen@gmail.com">newhigen@gmail.com</a>
+      </div>
+      <span class="footer-domain">sungd.uk</span>
+    </footer>
+
+  </div>
+
+</body>
+</html>

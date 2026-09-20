@@ -1,0 +1,2635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>출퇴근 패턴 분석</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<script id="daysData" type="application/json">[{"d":"2023-01-02","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-01-03","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-01-04","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-01-05","s":8.75,"e":18.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-01-06","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2023-01-09","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-01-10","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-01-11","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-01-12","s":9.25,"e":18.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-01-13","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-01-16","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-01-17","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-01-18","s":7.5,"e":16.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-01-19","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-01-20","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-01-23","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-01-24","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-01-25","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2023-01-26","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-01-27","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-01-30","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2023-01-31","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-02-01","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-02-02","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-02-03","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-02-06","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-02-07","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-02-08","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-02-09","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-02-10","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-02-13","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-02-14","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2023-02-15","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-02-16","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-02-17","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-02-20","s":9.0,"e":17.25,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-02-21","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-02-22","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-02-23","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-02-24","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-02-27","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-02-28","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-03-01","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-03-02","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-03-03","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-03-06","s":9.0,"e":17.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-03-07","s":7.5,"e":18.0,"ef":9.5,"ot":null,"cat":"normal"},{"d":"2023-03-08","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-03-09","s":7.5,"e":18.0,"ef":9.5,"ot":null,"cat":"normal"},{"d":"2023-03-10","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2023-03-13","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-03-14","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-03-15","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-03-16","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-03-17","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-03-20","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-03-21","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-03-22","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-03-23","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2023-03-24","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-03-27","s":9.25,"e":16.75,"ef":6.5,"ot":null,"cat":"normal"},{"d":"2023-03-28","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-03-29","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2023-03-30","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-03-31","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-04-03","s":7.5,"e":21.0,"ef":12.5,"ot":3,"cat":"normal"},{"d":"2023-04-04","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-04-05","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-04-06","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-04-07","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-04-10","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-04-11","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-04-12","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-04-13","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-04-14","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-04-17","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2023-04-18","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-04-19","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-04-20","s":9.0,"e":17.25,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-04-21","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-04-24","s":9.25,"e":17.5,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-04-25","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-04-26","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-04-27","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-04-28","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-05-01","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-05-02","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-05-03","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-05-04","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-05-05","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-05-08","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-05-09","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-05-10","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-05-11","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-05-12","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-05-15","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-05-16","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-05-17","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-05-18","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-05-19","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-05-22","s":7.5,"e":17.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-05-23","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-05-24","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-05-25","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-05-26","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-05-29","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2023-05-30","s":7.5,"e":16.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-05-31","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-06-01","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-02","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-06-05","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-06-06","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-06-07","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-06-08","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-09","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-06-12","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-13","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-06-14","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-06-15","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-16","s":8.75,"e":18.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-19","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-20","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-21","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-06-22","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-23","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-06-26","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-06-27","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-06-28","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-06-29","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-06-30","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2023-07-03","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2023-07-04","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-07-05","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-07-06","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-07-07","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-07-10","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-07-11","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-07-12","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-07-13","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-07-14","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-07-17","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-07-18","s":7.5,"e":16.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-07-19","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-07-20","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2023-07-21","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-07-24","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-07-25","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-07-26","s":9.0,"e":16.75,"ef":6.75,"ot":null,"cat":"normal"},{"d":"2023-07-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-07-28","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2023-07-31","s":7.5,"e":17.75,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-08-01","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-08-02","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-08-03","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-08-04","s":7.5,"e":16.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-08-07","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-08-08","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-08-09","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2023-08-10","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-08-11","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-08-14","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-08-15","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-08-16","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-08-17","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-08-18","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-08-21","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-08-22","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-08-23","s":7.5,"e":17.25,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-08-24","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-08-25","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-08-28","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-08-29","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-08-30","s":7.5,"e":17.25,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-08-31","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-09-01","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-09-04","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-09-05","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2023-09-06","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-09-07","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-09-08","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-09-11","s":8.5,"e":18.19,"ef":8.69,"ot":null,"cat":"domestic"},{"d":"2023-09-12","s":9.0,"e":18.94,"ef":8.94,"ot":null,"cat":"domestic"},{"d":"2023-09-13","s":8.5,"e":18.95,"ef":9.45,"ot":null,"cat":"domestic"},{"d":"2023-09-14","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-09-15","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-09-18","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-09-19","s":9.25,"e":17.75,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-09-20","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-09-21","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2023-09-22","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-09-25","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-09-26","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-09-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-09-28","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-09-29","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-10-02","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-10-03","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2023-10-04","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-10-05","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-10-06","s":7.5,"e":17.75,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-10-09","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-10-10","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2023-10-11","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-10-12","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-10-13","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-10-16","s":9.25,"e":18.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-10-17","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-10-18","s":9.0,"e":17.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-10-19","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-10-20","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-10-23","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2023-10-24","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-10-25","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-10-26","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-10-27","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-10-30","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-10-31","s":7.5,"e":17.25,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-11-01","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-11-02","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2023-11-03","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-06","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2023-11-07","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-08","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-09","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-11-10","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-11-13","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-14","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-11-15","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2023-11-16","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-11-17","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2023-11-20","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-21","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-22","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-23","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-11-24","s":9.25,"e":18.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-11-27","s":9.0,"e":17.18,"ef":7.18,"ot":null,"cat":"abroad"},{"d":"2023-11-28","s":9.0,"e":17.86,"ef":7.86,"ot":null,"cat":"abroad"},{"d":"2023-11-29","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"abroad"},{"d":"2023-11-30","s":8.5,"e":17.67,"ef":8.17,"ot":null,"cat":"abroad"},{"d":"2023-12-01","s":8.5,"e":17.69,"ef":8.19,"ot":null,"cat":"abroad"},{"d":"2023-12-04","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-12-05","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-12-06","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-12-07","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-12-08","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-12-11","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-12-12","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2023-12-13","s":9.25,"e":18.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2023-12-14","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-12-15","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-12-18","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2023-12-19","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-12-20","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-12-21","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2023-12-22","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2023-12-25","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2023-12-26","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2023-12-27","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-12-28","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2023-12-29","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-01-01","s":8.0,"e":13.0,"ef":5.0,"ot":null,"cat":"normal","pl":1},{"d":"2024-01-02","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-01-03","s":8.0,"e":21.0,"ef":12.0,"ot":3,"cat":"normal"},{"d":"2024-01-04","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-01-05","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-01-08","s":9.25,"e":17.0,"ef":6.75,"ot":null,"cat":"normal"},{"d":"2024-01-09","s":8.75,"e":18.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-01-10","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-01-11","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-01-12","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-01-15","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-01-16","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-01-17","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-01-18","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-01-19","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-01-22","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-01-23","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-01-24","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-01-25","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-01-26","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2024-01-29","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-01-30","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-01-31","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-02-01","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-02-02","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-02-05","s":8.25,"e":16.75,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-02-06","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2024-02-07","s":7.5,"e":17.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-02-08","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-02-09","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-02-12","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-02-13","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-02-14","s":7.5,"e":17.75,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-02-15","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-02-16","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-02-19","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-02-20","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-02-21","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-02-22","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-02-23","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-02-26","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-02-27","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-02-28","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-02-29","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-03-01","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-03-04","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-05","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-06","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-07","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-08","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-11","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-12","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-13","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-14","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-15","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-18","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-19","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-20","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-21","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-22","s":null,"e":null,"ef":null,"ot":null,"cat":"military"},{"d":"2024-03-25","s":8.5,"e":19.5,"ef":10.0,"ot":2,"cat":"normal"},{"d":"2024-03-26","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-03-27","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-03-28","s":8.75,"e":13.0,"ef":4.25,"ot":null,"cat":"normal","pl":1},{"d":"2024-03-29","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-04-01","s":8.0,"e":18.5,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2024-04-02","s":9.0,"e":17.25,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-04-03","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-04-04","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2024-04-05","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-04-08","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-04-09","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-04-10","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-04-11","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-04-12","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-04-15","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-04-16","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-04-17","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-04-18","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-04-19","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-04-22","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-04-23","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-04-24","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-04-25","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-04-26","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-04-29","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-04-30","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-05-01","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-05-02","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-05-03","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-05-06","s":7.5,"e":18.0,"ef":9.5,"ot":null,"cat":"normal"},{"d":"2024-05-07","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-05-08","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-05-09","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-05-10","s":9.25,"e":17.0,"ef":6.75,"ot":null,"cat":"normal"},{"d":"2024-05-13","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-05-14","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-05-15","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-05-16","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-05-17","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-05-20","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-05-21","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-05-22","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-05-23","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-05-24","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-05-27","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-05-28","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-05-29","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-05-30","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2024-05-31","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-06-03","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-06-04","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-06-05","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-06-06","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-06-07","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-06-10","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-06-11","s":9.25,"e":17.5,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-06-12","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-06-13","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-06-14","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-06-17","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-06-18","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-06-19","s":7.5,"e":18.5,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2024-06-20","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-06-21","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-06-24","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-06-25","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-06-26","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-06-27","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-06-28","s":7.5,"e":18.0,"ef":9.5,"ot":null,"cat":"normal"},{"d":"2024-07-01","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-07-02","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-07-03","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-07-04","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-07-05","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-07-08","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-07-09","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-07-10","s":7.75,"e":13.0,"ef":5.25,"ot":null,"cat":"normal","pl":1},{"d":"2024-07-11","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-07-12","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-07-15","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-07-16","s":9.25,"e":17.25,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-07-17","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-07-18","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-07-19","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-07-22","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-07-23","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-07-24","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-07-25","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-07-26","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-07-29","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-07-30","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-07-31","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-08-01","s":9.0,"e":16.75,"ef":6.75,"ot":null,"cat":"normal"},{"d":"2024-08-02","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-08-05","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-08-06","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-08-07","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-08-08","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-08-09","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-08-12","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-08-13","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-08-14","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-08-15","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-08-16","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-08-19","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2024-08-20","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-08-21","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-08-22","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-08-23","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-08-26","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-08-27","s":7.75,"e":20.5,"ef":11.75,"ot":2,"cat":"normal"},{"d":"2024-08-28","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-08-29","s":7.75,"e":13.0,"ef":5.25,"ot":null,"cat":"normal","pl":1},{"d":"2024-08-30","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-09-02","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-09-03","s":9.25,"e":17.25,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-09-04","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-09-05","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2024-09-06","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-09-09","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-09-10","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-09-11","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-09-12","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-09-13","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-09-16","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"domestic"},{"d":"2024-09-17","s":8.5,"e":17.64,"ef":8.14,"ot":null,"cat":"domestic"},{"d":"2024-09-18","s":9.0,"e":18.7,"ef":8.7,"ot":null,"cat":"domestic"},{"d":"2024-09-19","s":7.5,"e":18.0,"ef":9.5,"ot":null,"cat":"normal"},{"d":"2024-09-20","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-09-23","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-09-24","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2024-09-25","s":9.0,"e":17.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-09-26","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-09-27","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-09-30","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2024-10-01","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-10-02","s":9.25,"e":17.0,"ef":6.75,"ot":null,"cat":"normal"},{"d":"2024-10-03","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-10-04","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-10-07","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-10-08","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-10-09","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-10-10","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-10-11","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-10-14","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2024-10-15","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-10-16","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-10-17","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-10-18","s":7.5,"e":16.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-10-21","s":9.25,"e":17.25,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-10-22","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-10-23","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-10-24","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2024-10-25","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-10-28","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-10-29","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-10-30","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-10-31","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2024-11-01","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-11-04","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-11-05","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-11-06","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-11-07","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-11-08","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-11-11","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-11-12","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-11-13","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-11-14","s":7.75,"e":21.0,"ef":12.25,"ot":3,"cat":"normal"},{"d":"2024-11-15","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-11-18","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-11-19","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-11-20","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-11-21","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-11-22","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-11-25","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-11-26","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-11-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-11-28","s":7.5,"e":17.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-11-29","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-12-02","s":7.5,"e":17.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-12-03","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2024-12-04","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-12-05","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-12-06","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-12-09","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-12-10","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-12-11","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2024-12-12","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-12-13","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-12-16","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2024-12-17","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2024-12-18","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2024-12-19","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2024-12-20","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-12-23","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2024-12-24","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2024-12-25","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2024-12-26","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2024-12-27","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2024-12-30","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2024-12-31","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-01-01","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-01-02","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-01-03","s":8.0,"e":18.5,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2025-01-06","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-01-07","s":7.75,"e":13.0,"ef":5.25,"ot":null,"cat":"normal","pl":1},{"d":"2025-01-08","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-01-09","s":8.75,"e":19.0,"ef":9.25,"ot":1,"cat":"normal"},{"d":"2025-01-10","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-01-13","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-01-14","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-01-15","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2025-01-16","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-01-17","s":7.5,"e":17.75,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2025-01-20","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2025-01-21","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-01-22","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2025-01-23","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2025-01-24","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-01-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-01-28","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-01-29","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-01-30","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2025-01-31","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-02-03","s":7.75,"e":20.0,"ef":11.25,"ot":2,"cat":"normal"},{"d":"2025-02-04","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-02-05","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2025-02-06","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-02-07","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-02-10","s":9.0,"e":17.66,"ef":7.66,"ot":null,"cat":"abroad"},{"d":"2025-02-11","s":9.0,"e":18.07,"ef":8.07,"ot":null,"cat":"abroad"},{"d":"2025-02-12","s":9.0,"e":17.0,"ef":7.0,"ot":null,"cat":"abroad"},{"d":"2025-02-13","s":9.0,"e":18.08,"ef":8.08,"ot":null,"cat":"abroad"},{"d":"2025-02-14","s":9.0,"e":17.09,"ef":7.09,"ot":null,"cat":"abroad"},{"d":"2025-02-17","s":8.25,"e":16.75,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-02-18","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-02-19","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-02-20","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-02-21","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-02-24","s":7.5,"e":19.5,"ef":11.0,"ot":2,"cat":"normal"},{"d":"2025-02-25","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-02-26","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-02-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-02-28","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-03-03","s":9.25,"e":17.5,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-03-04","s":8.75,"e":21.0,"ef":11.25,"ot":3,"cat":"normal"},{"d":"2025-03-05","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-03-06","s":8.75,"e":18.5,"ef":8.75,"ot":1,"cat":"normal"},{"d":"2025-03-07","s":7.75,"e":19.5,"ef":10.75,"ot":2,"cat":"normal"},{"d":"2025-03-10","s":7.75,"e":19.0,"ef":10.25,"ot":1,"cat":"normal"},{"d":"2025-03-11","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-03-12","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-03-13","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-03-14","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-03-17","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-03-18","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-03-19","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-03-20","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-03-21","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-03-24","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-03-25","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-03-26","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-03-27","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2025-03-28","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-03-31","s":8.25,"e":21.0,"ef":11.75,"ot":3,"cat":"normal"},{"d":"2025-04-01","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-04-02","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-04-03","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2025-04-04","s":7.75,"e":21.0,"ef":12.25,"ot":3,"cat":"normal"},{"d":"2025-04-07","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-04-08","s":8.0,"e":18.5,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2025-04-09","s":8.5,"e":19.0,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2025-04-10","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2025-04-11","s":9.0,"e":19.0,"ef":9.0,"ot":1,"cat":"normal"},{"d":"2025-04-14","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-04-15","s":7.5,"e":17.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-04-16","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-04-17","s":9.0,"e":17.25,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-04-18","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-04-21","s":9.0,"e":19.5,"ef":9.5,"ot":2,"cat":"normal"},{"d":"2025-04-22","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-04-23","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-04-24","s":8.5,"e":18.5,"ef":9.0,"ot":1,"cat":"normal"},{"d":"2025-04-25","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-04-28","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2025-04-29","s":9.0,"e":20.0,"ef":10.0,"ot":2,"cat":"normal"},{"d":"2025-04-30","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-05-01","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-05-02","s":7.75,"e":20.0,"ef":11.25,"ot":2,"cat":"normal"},{"d":"2025-05-05","s":8.5,"e":21.0,"ef":11.5,"ot":3,"cat":"normal"},{"d":"2025-05-06","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-05-07","s":8.5,"e":18.5,"ef":9.0,"ot":1,"cat":"normal"},{"d":"2025-05-08","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2025-05-09","s":8.75,"e":21.0,"ef":11.25,"ot":3,"cat":"normal"},{"d":"2025-05-12","s":8.0,"e":20.0,"ef":11.0,"ot":2,"cat":"normal"},{"d":"2025-05-13","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-05-14","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2025-05-15","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2025-05-16","s":8.0,"e":18.5,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2025-05-19","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2025-05-20","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2025-05-21","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-05-22","s":8.5,"e":19.0,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2025-05-23","s":8.75,"e":16.75,"ef":7.0,"ot":null,"cat":"normal"},{"d":"2025-05-26","s":7.75,"e":21.0,"ef":12.25,"ot":3,"cat":"normal"},{"d":"2025-05-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-05-28","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-05-29","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-05-30","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-06-02","s":8.0,"e":17.78,"ef":8.78,"ot":null,"cat":"field"},{"d":"2025-06-03","s":8.5,"e":17.51,"ef":8.01,"ot":null,"cat":"field"},{"d":"2025-06-04","s":8.0,"e":17.43,"ef":8.43,"ot":null,"cat":"field"},{"d":"2025-06-05","s":8.5,"e":17.48,"ef":7.98,"ot":null,"cat":"field"},{"d":"2025-06-06","s":8.0,"e":17.1,"ef":8.1,"ot":null,"cat":"field"},{"d":"2025-06-09","s":8.5,"e":17.27,"ef":7.77,"ot":null,"cat":"field"},{"d":"2025-06-10","s":8.5,"e":17.83,"ef":8.33,"ot":null,"cat":"field"},{"d":"2025-06-11","s":8.75,"e":19.0,"ef":9.25,"ot":1,"cat":"normal"},{"d":"2025-06-12","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-06-13","s":9.25,"e":20.0,"ef":9.75,"ot":2,"cat":"normal"},{"d":"2025-06-16","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-06-17","s":8.5,"e":20.0,"ef":10.5,"ot":2,"cat":"normal"},{"d":"2025-06-18","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-06-19","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-06-20","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-06-23","s":8.25,"e":18.5,"ef":9.25,"ot":1,"cat":"normal"},{"d":"2025-06-24","s":8.25,"e":21.0,"ef":11.75,"ot":3,"cat":"normal"},{"d":"2025-06-25","s":8.0,"e":21.0,"ef":12.0,"ot":3,"cat":"normal"},{"d":"2025-06-26","s":9.25,"e":17.5,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-06-27","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2025-06-30","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-07-01","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-07-02","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-07-03","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2025-07-04","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-07-07","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-07-08","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-07-09","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-07-10","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-07-11","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-07-14","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-07-15","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-07-16","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-07-17","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-07-18","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-07-21","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-07-22","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-07-23","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-07-24","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-07-25","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2025-07-28","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-07-29","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-07-30","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-07-31","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-08-01","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-08-04","s":7.5,"e":13.0,"ef":5.5,"ot":null,"cat":"normal","pl":1},{"d":"2025-08-05","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-08-06","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2025-08-07","s":8.25,"e":19.0,"ef":9.75,"ot":1,"cat":"normal"},{"d":"2025-08-08","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-08-11","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-08-12","s":7.5,"e":17.25,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-08-13","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-08-14","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-08-15","s":8.25,"e":19.5,"ef":10.25,"ot":2,"cat":"normal"},{"d":"2025-08-18","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-08-19","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-08-20","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-08-21","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-08-22","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-08-25","s":9.0,"e":17.5,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-08-26","s":9.25,"e":17.5,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-08-27","s":7.75,"e":20.5,"ef":11.75,"ot":2,"cat":"normal"},{"d":"2025-08-28","s":8.75,"e":18.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-08-29","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-09-01","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-09-02","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-09-03","s":8.25,"e":16.75,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-09-04","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-09-05","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-09-08","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2025-09-09","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-09-10","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-09-11","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-09-12","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-09-15","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-09-16","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-09-17","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-09-18","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-09-19","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-09-22","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-09-23","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-09-24","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-09-25","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-09-26","s":7.5,"e":17.25,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-09-29","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-09-30","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2025-10-01","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-10-02","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-10-03","s":7.75,"e":19.0,"ef":10.25,"ot":1,"cat":"normal"},{"d":"2025-10-06","s":8.0,"e":13.0,"ef":5.0,"ot":null,"cat":"normal","pl":1},{"d":"2025-10-07","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-10-08","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2025-10-09","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-10-10","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-10-13","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2025-10-14","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-10-15","s":7.5,"e":17.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-10-16","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-10-17","s":7.5,"e":17.75,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2025-10-20","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-10-21","s":9.25,"e":16.75,"ef":6.5,"ot":null,"cat":"normal"},{"d":"2025-10-22","s":8.75,"e":17.0,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-10-23","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-10-24","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-10-27","s":7.75,"e":20.0,"ef":11.25,"ot":2,"cat":"normal"},{"d":"2025-10-28","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-10-29","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2025-10-30","s":8.5,"e":17.75,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-10-31","s":7.75,"e":18.5,"ef":9.75,"ot":1,"cat":"normal"},{"d":"2025-11-03","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-11-04","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-11-05","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-11-06","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-11-07","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-11-10","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-11-11","s":7.75,"e":19.0,"ef":10.25,"ot":1,"cat":"normal"},{"d":"2025-11-12","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2025-11-13","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2025-11-14","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-11-17","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-11-18","s":7.75,"e":20.5,"ef":11.75,"ot":2,"cat":"normal"},{"d":"2025-11-19","s":7.75,"e":19.0,"ef":10.25,"ot":1,"cat":"normal"},{"d":"2025-11-20","s":9.0,"e":19.5,"ef":9.5,"ot":2,"cat":"normal"},{"d":"2025-11-21","s":8.0,"e":21.0,"ef":12.0,"ot":3,"cat":"normal"},{"d":"2025-11-24","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-11-25","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-11-26","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2025-11-27","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-11-28","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2025-12-01","s":7.75,"e":16.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-12-02","s":8.25,"e":19.5,"ef":10.25,"ot":2,"cat":"normal"},{"d":"2025-12-03","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-12-04","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-12-05","s":9.0,"e":18.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-12-08","s":8.75,"e":20.0,"ef":10.25,"ot":2,"cat":"normal"},{"d":"2025-12-09","s":7.75,"e":18.5,"ef":9.75,"ot":1,"cat":"normal"},{"d":"2025-12-10","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-12-11","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-12-12","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-12-15","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-12-16","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2025-12-17","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-12-18","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-12-19","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2025-12-22","s":8.5,"e":20.5,"ef":11.0,"ot":2,"cat":"normal"},{"d":"2025-12-23","s":9.0,"e":17.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-12-24","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2025-12-25","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2025-12-26","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2025-12-29","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2025-12-30","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2025-12-31","s":7.75,"e":20.0,"ef":11.25,"ot":2,"cat":"normal"},{"d":"2026-01-01","s":8.0,"e":20.0,"ef":11.0,"ot":2,"cat":"normal"},{"d":"2026-01-02","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-01-05","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2026-01-06","s":9.25,"e":17.0,"ef":6.75,"ot":null,"cat":"normal"},{"d":"2026-01-07","s":8.25,"e":17.25,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-01-08","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-01-09","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-01-12","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-01-13","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-01-14","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-01-15","s":9.25,"e":19.0,"ef":8.75,"ot":1,"cat":"normal"},{"d":"2026-01-16","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2026-01-19","s":8.75,"e":17.5,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-01-20","s":8.5,"e":17.25,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-01-21","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-01-22","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-01-23","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-01-26","s":8.75,"e":18.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-01-27","s":7.75,"e":19.5,"ef":10.75,"ot":2,"cat":"normal"},{"d":"2026-01-28","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-01-29","s":8.25,"e":17.75,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-01-30","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-02-02","s":8.75,"e":17.75,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-02-03","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-02-04","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-02-05","s":7.75,"e":20.5,"ef":11.75,"ot":2,"cat":"normal"},{"d":"2026-02-06","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2026-02-09","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-02-10","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-02-11","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-02-12","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2026-02-13","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2026-02-16","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-02-17","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-02-18","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-02-19","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-02-20","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-02-23","s":7.75,"e":19.0,"ef":10.25,"ot":1,"cat":"normal"},{"d":"2026-02-24","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-02-25","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2026-02-26","s":7.5,"e":17.5,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-02-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-03-02","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2026-03-03","s":7.75,"e":21.0,"ef":12.25,"ot":3,"cat":"normal"},{"d":"2026-03-04","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-03-05","s":8.0,"e":19.5,"ef":10.5,"ot":2,"cat":"normal"},{"d":"2026-03-06","s":7.75,"e":19.5,"ef":10.75,"ot":2,"cat":"normal"},{"d":"2026-03-09","s":8.5,"e":16.75,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2026-03-10","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-03-11","s":7.5,"e":18.0,"ef":9.5,"ot":null,"cat":"normal"},{"d":"2026-03-12","s":8.25,"e":19.0,"ef":9.75,"ot":1,"cat":"normal"},{"d":"2026-03-13","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-03-16","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-03-17","s":9.0,"e":17.25,"ef":7.25,"ot":null,"cat":"normal"},{"d":"2026-03-18","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-03-19","s":7.75,"e":20.5,"ef":11.75,"ot":2,"cat":"normal"},{"d":"2026-03-20","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2026-03-23","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-03-24","s":8.0,"e":19.5,"ef":10.5,"ot":2,"cat":"normal"},{"d":"2026-03-25","s":8.75,"e":18.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-03-26","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-03-27","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-03-30","s":8.5,"e":19.5,"ef":10.0,"ot":2,"cat":"normal"},{"d":"2026-03-31","s":7.75,"e":19.0,"ef":10.25,"ot":1,"cat":"normal"},{"d":"2026-04-01","s":8.25,"e":17.5,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-04-02","s":8.0,"e":17.5,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-04-03","s":7.75,"e":17.25,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-04-06","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-04-07","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-04-08","s":8.75,"e":20.0,"ef":10.25,"ot":2,"cat":"normal"},{"d":"2026-04-09","s":8.0,"e":17.75,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-04-10","s":7.75,"e":18.0,"ef":9.25,"ot":null,"cat":"normal"},{"d":"2026-04-13","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_subst"},{"d":"2026-04-14","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-04-15","s":8.5,"e":17.5,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-04-16","s":null,"e":null,"ef":null,"ot":null,"cat":"event"},{"d":"2026-04-17","s":8.5,"e":17.0,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2026-04-20","s":7.5,"e":17.25,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-04-21","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-04-22","s":7.75,"e":17.75,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-04-23","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2026-04-24","s":8.75,"e":21.0,"ef":11.25,"ot":3,"cat":"normal"},{"d":"2026-04-27","s":7.75,"e":17.5,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-04-28","s":8.0,"e":18.5,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2026-04-29","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2026-04-30","s":8.0,"e":18.5,"ef":9.5,"ot":1,"cat":"normal"},{"d":"2026-05-01","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-05-04","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_annual"},{"d":"2026-05-05","s":8.5,"e":18.0,"ef":8.5,"ot":null,"cat":"normal"},{"d":"2026-05-06","s":8.25,"e":18.0,"ef":8.75,"ot":null,"cat":"normal"},{"d":"2026-05-07","s":7.5,"e":19.0,"ef":10.5,"ot":1,"cat":"normal"},{"d":"2026-05-08","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-05-11","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-05-12","s":8.0,"e":17.0,"ef":8.0,"ot":null,"cat":"normal"},{"d":"2026-05-13","s":8.0,"e":19.0,"ef":10.0,"ot":1,"cat":"normal"},{"d":"2026-05-14","s":8.0,"e":16.75,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-05-15","s":8.25,"e":17.0,"ef":7.75,"ot":null,"cat":"normal"},{"d":"2026-05-18","s":8.0,"e":17.25,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-05-19","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_health"},{"d":"2026-05-20","s":7.75,"e":17.0,"ef":8.25,"ot":null,"cat":"normal"},{"d":"2026-05-21","s":8.75,"e":17.25,"ef":7.5,"ot":null,"cat":"normal"},{"d":"2026-05-22","s":8.0,"e":18.0,"ef":9.0,"ot":null,"cat":"normal"},{"d":"2026-05-25","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_special"},{"d":"2026-05-26","s":null,"e":null,"ef":null,"ot":null,"cat":"leave_refresh"},{"d":"2026-05-27","s":9.0,"e":20.5,"ef":10.5,"ot":2,"cat":"normal"},{"d":"2026-05-28","s":7.5,"e":19.5,"ef":11.0,"ot":2,"cat":"normal"},{"d":"2026-05-29","s":9.0,"e":18.5,"ef":8.5,"ot":1,"cat":"normal"}]</script>
+<style>
+  /* ── Toss-inspired Design Tokens ── */
+  /* Light mode (default) */
+  :root {
+    --bg:          #fbfbfa;
+    --bg-card:     #ffffff;
+    --bg-elevated: #f6f6f5;
+    --bg-overlay:  #f0edff;
+    --border:      #ececeb;
+    --border-card: #ececeb;
+    --line-strong: #e0e0de;
+
+    --text:    #1a1a18;
+    --text2:   #6b6b66;
+    --text3:   #9a9a94;
+
+    /* 단일 액센트 — 보라 */
+    --pick:    #6b4cff;
+    --pick-bg: #f0edff;
+    --pick-line: #d9d0ff;
+
+    /* 데이터 시각화 색 (차트 전용, 면적 칠 허용) */
+    --blue:    #3182F6;
+    --blue-lt: #5B9BF8;
+    --green:   #2BC45F;
+    --red:     #F04452;
+    --orange:  #F5A623;
+    --purple:  #9F7AEA;
+    --teal:    #00B8A9;
+
+    --shadow: 0 1px 2px rgba(20,20,18,.04), 0 1px 3px rgba(20,20,18,.05);
+    --shadow-md: 0 2px 8px rgba(20,20,18,.05), 0 8px 24px rgba(20,20,18,.06);
+
+    /* legacy aliases */
+    --accent:  #6b4cff;
+    --accent2: #F5A623;
+    --bg2:     #ffffff;
+    --bg3:     #f6f6f5;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"] {
+    --bg:          #0f0f0e;
+    --bg-card:     #191917;
+    --bg-elevated: #222220;
+    --bg-overlay:  #241f3d;
+    --border:      #2a2a27;
+    --border-card: #2a2a27;
+    --line-strong: #373734;
+
+    --text:    #ededeb;
+    --text2:   #a0a09b;
+    --text3:   #6e6e69;
+
+    --pick:    #9d86ff;
+    --pick-bg: #241f3d;
+    --pick-line: #4a3f1a;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.2);
+    --shadow-md: 0 2px 8px rgba(0,0,0,.24), 0 8px 24px rgba(0,0,0,.3);
+
+    --bg2: #191917;
+    --bg3: #222220;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    max-width: 1360px;
+    margin: 0 auto;
+    box-shadow: 0 0 0 1px var(--border);
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 36px 40px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+  .header p { color: var(--text2); font-size: 13px; line-height: 1.5; }
+
+  /* ── KPI Row ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow);
+  }
+
+  /* ── Theme Toggle ── */
+  .theme-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 200;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    box-shadow: var(--shadow), 0 4px 12px rgba(0,0,0,0.15);
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s;
+  }
+  .theme-toggle:hover { transform: scale(1.1); }
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+  .kpi-value { font-size: 30px; font-weight: 700; color: var(--text); line-height: 1; letter-spacing: -0.5px; }
+  .kpi-sub { font-size: 11px; color: var(--text2); margin-top: 8px; line-height: 1.4; }
+
+  /* ── Section ── */
+  .section { padding: 36px 40px; border-bottom: 1px solid var(--border); }
+  .section-title {
+    font-size: 17px;
+    font-weight: 750;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title span {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text2);
+    letter-spacing: 0;
+  }
+
+  /* ── Layout ── */
+  .charts-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .charts-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* ── Card ── */
+  .chart-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    transition: border-color .18s ease, box-shadow .18s ease;
+  }
+  .chart-card:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--text2);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .chart-wrap { position: relative; }
+
+  /* ── Insight Bar ── */
+  .insight-bar {
+    background: var(--bg-elevated);
+    border-left: 3px solid var(--pick);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+  .insight-bar strong { color: var(--text); font-weight: 600; }
+
+  /* ── Special Events — compact row list ── */
+  .special-grid {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+  }
+  .special-group-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 7px 14px 4px;
+    border-top: 1px solid var(--border);
+  }
+  .special-group-label:first-child { border-top: none; }
+  .special-group-cells {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+  .special-group-cells:last-child { border-bottom: none; }
+  .special-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-right: 1px solid var(--border);
+    transition: background .1s;
+  }
+  .special-cell:nth-child(even) { border-right: none; }
+  .special-cell:hover { background: var(--bg-elevated); }
+  .special-cell-full {
+    grid-column: 1 / -1;
+    border-right: none;
+  }
+  .special-accent {
+    width: 3px;
+    height: 20px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .special-count {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.3px;
+    min-width: 22px;
+    text-align: right;
+  }
+  .special-unit { font-size: 10px; font-weight: 400; color: var(--text2); }
+  .special-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .special-sub {
+    font-size: 10px;
+    color: var(--text2);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* ── TOC / Nav ── */
+  .toc-bar {
+    position: sticky;
+    top: 48px;
+    z-index: 100;
+    display: flex;
+    gap: 2px;
+    padding: 8px 40px;
+    background: rgba(245,245,247,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  [data-theme="dark"] .toc-bar { background: rgba(17,17,19,0.92); }
+  .toc-bar::-webkit-scrollbar { display: none; }
+  .toc-item {
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text2);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all .15s;
+  }
+  .toc-item:hover { color: var(--text); background: var(--bg-elevated); }
+  .toc-item.active { color: #fff; background: var(--bg-elevated); }
+
+  /* ── Heatmap ── */
+  .heatmap-wrap { overflow-x: auto; padding-bottom: 8px; }
+  #heatmapContainer {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    justify-content: space-between;
+    gap: 16px 12px;
+  }
+  @media (max-width: 1100px) {
+    #heatmapContainer { grid-template-columns: 1fr; justify-content: start; }
+  }
+  .heatmap-year { margin-bottom: 0; }
+  .heatmap-year-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 10px;
+    letter-spacing: -0.1px;
+  }
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(53, 10px);
+    grid-template-rows: repeat(7, 10px);
+    gap: 1px;
+    width: fit-content;
+  }
+  .hm-cell {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: opacity .1s;
+    position: relative;
+  }
+  .hm-cell:hover { opacity: 0.75; }
+  .hm-month-labels {
+    display: grid;
+    grid-template-columns: repeat(53, 10px);
+    gap: 1px;
+    width: fit-content;
+    margin-bottom: 4px;
+  }
+  .hm-month-label {
+    font-size: 10px;
+    color: var(--text2);
+    grid-column: span 1;
+  }
+  .hm-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .hm-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text2);
+  }
+  .hm-legend-cell {
+    width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0;
+  }
+  .hm-legend-sep {
+    width: 1px; height: 14px;
+    background: var(--border);
+    margin: 0 6px;
+  }
+  .hm-legend-group-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+    margin-right: 2px;
+  }
+
+  /* ── Tooltip ── */
+  #hmTooltip {
+    position: fixed;
+    background: var(--bg-overlay);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text);
+    pointer-events: none;
+    z-index: 1000;
+    display: none;
+    line-height: 1.6;
+    min-width: 160px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  #hmTooltip .tt-date { font-weight: 600; margin-bottom: 4px; font-size: 13px; }
+  #hmTooltip .tt-row { color: var(--text2); }
+  #hmTooltip .tt-row span { color: var(--text); }
+
+  @media (max-width: 900px) {
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+    .charts-2, .charts-3 { grid-template-columns: 1fr; }
+    .section, .header, .kpi-row, .toc-bar { padding-left: 20px; padding-right: 20px; }
+  }
+
+  @media (max-width: 900px) {
+    .toc-bar { padding: 8px 16px; }
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+    .charts-2, .charts-3 { grid-template-columns: 1fr; }
+    .section { padding: 24px 20px; }
+    .kpi-row { padding: 20px; }
+    .header { padding: 24px 20px 16px; }
+  }
+
+
+  /* ── Main Tabs ── */
+  .main-tabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 110;
+  }
+  .tab-btn {
+    padding: 14px 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: var(--text2);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+    letter-spacing: -0.2px;
+    font-family: inherit;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--pick);
+    border-bottom-color: var(--pick);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* Insights 탭 전용 */
+  .insights-intro {
+    padding: 32px 40px 8px;
+    max-width: 900px;
+    color: var(--text2);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .rec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 16px;
+  }
+  .rec-card {
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .rec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    justify-content: space-between;
+  }
+  .rec-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .rec-badge {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--pick-bg);
+    color: var(--pick);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .rec-badge.big { background: rgba(239,68,68,0.1); color: #ef4444; }
+  .rec-badge.mid { background: rgba(251,191,36,0.15); color: #d97706; }
+  .rec-desc { font-size: 13px; color: var(--text2); line-height: 1.55; }
+  .rec-mock {
+    background: var(--selection, rgba(0,0,0,0.04));
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Google Sans Code', ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: var(--text);
+    overflow-x: auto;
+    white-space: pre;
+  }
+  [data-theme="dark"] .rec-mock { background: rgba(255,255,255,0.04); }
+  .rec-why {
+    font-size: 12px;
+    color: var(--text2);
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+    margin-top: 2px;
+  }
+  .rec-why strong { color: var(--text); }
+
+  .rec-summary {
+    background: var(--pick-bg);
+    border: 1px solid var(--pick-line);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-top: 24px;
+  }
+  [data-theme="dark"] .rec-summary { background: var(--pick-bg); }
+  .rec-summary h3 { margin: 0 0 12px; font-size: 14px; font-weight: 700; }
+  .rec-summary table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .rec-summary td, .rec-summary th {
+    padding: 6px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .rec-summary th { color: var(--text2); font-weight: 600; }
+  .rec-summary td:first-child { font-weight: 600; }
+
+
+  /* ── Profile Sidebar Layout ── */
+  .profile-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .profile-layout { grid-template-columns: 1fr; }
+  }
+  .profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+  }
+  .profile-sidebar::-webkit-scrollbar { width: 4px; }
+  .profile-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .profile-card {
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+  }
+  .profile-card:hover { border-color: var(--text2); }
+  .profile-card.active {
+    border-color: var(--pick);
+    background: var(--pick-bg);
+  }
+  [data-theme="dark"] .profile-card.active { background: var(--pick-bg); }
+  .profile-card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.2px;
+  }
+  .profile-card-evidence {
+    font-size: 11.5px;
+    color: var(--text2);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  .profile-content {
+    position: relative;
+    min-height: 460px;
+  }
+  .chart-panel {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s;
+  }
+  .chart-panel.active {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+
+
+  /* ── Weekday Pattern Card ── */
+  .wd-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .wd-table th, .wd-table td { padding: 9px 6px; text-align: center; }
+  .wd-table thead th { font-size: 14px; font-weight: 700; color: var(--text); }
+  .wd-table thead th:first-child, .wd-table td:first-child { text-align: left; color: var(--text2); font-weight: 500; font-size: 12px; width: 64px; }
+  .wd-table tbody tr { border-top: 1px solid var(--border); }
+  .wd-table tbody td { font-variant-numeric: tabular-nums; color: var(--text); }
+  .wd-table td.peak { color: var(--pick); font-weight: 700; }
+  .wd-otrow { display: flex; gap: 10px; margin-top: 18px; }
+  .wd-ot { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .wd-ot-track { width: 100%; height: 54px; background: var(--selection, rgba(0,0,0,0.05)); border-radius: 6px; display: flex; align-items: flex-end; overflow: hidden; }
+  [data-theme="dark"] .wd-ot-track { background: rgba(255,255,255,0.06); }
+  .wd-ot-fill { width: 100%; background: linear-gradient(180deg, #f59e0b, #fbbf24); border-radius: 0; min-height: 2px; }
+  .wd-ot-val { font-size: 12px; font-weight: 600; color: var(--text); }
+  .wd-ot-day { font-size: 11px; color: var(--text2); }
+
+  /* ── Lab Tab ── */
+  .lab-moments {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .lab-moment {
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .lab-moment-icon { font-size: 22px; }
+  .lab-moment-label { font-size: 12px; color: var(--text2); margin-top: 6px; }
+  .lab-moment-value { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; margin-top: 2px; }
+  .lab-moment-date { font-size: 11px; color: var(--text2); margin-top: 2px; }
+
+  .lab-inflection { display: flex; flex-direction: column; gap: 10px; }
+  .lab-inflect-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 14px;
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    align-items: center;
+  }
+  .lab-inflect-month { font-size: 14px; font-weight: 700; color: var(--text); }
+  .lab-inflect-detail { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .lab-inflect-detail strong { color: var(--text); }
+  .lab-inflect-row.event { border-left: 3px solid #8b5cf6; }
+  .lab-inflect-up .lab-inflect-delta { color: #ef4444; font-weight: 600; }
+  .lab-inflect-down .lab-inflect-delta { color: var(--pick); font-weight: 600; }
+
+  .lab-wrapped {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .lab-year-card {
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+  }
+  .lab-year-num { font-size: 26px; font-weight: 800; letter-spacing: -1px; color: var(--text); }
+  .lab-year-stats { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .lab-year-stat { display: flex; justify-content: space-between; font-size: 13px; }
+  .lab-year-stat .k { color: var(--text2); }
+  .lab-year-stat .v { font-weight: 600; color: var(--text); }
+
+  .lab-sandwich { display: flex; flex-direction: column; gap: 10px; }
+  .lab-sand-row {
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 130px 1fr 80px;
+    gap: 14px;
+    align-items: center;
+  }
+  .lab-sand-period { font-size: 13px; font-weight: 700; color: var(--text); }
+  .lab-sand-detail { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .lab-sand-roi { font-size: 13px; font-weight: 700; color: var(--pick); text-align: right; }
+  .lab-sand-summary {
+    background: var(--pick-bg);
+    border: 1px solid var(--pick-line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  /* ── References Section ── */
+  .ref-intro { color: var(--text2); font-size: 14px; line-height: 1.7; margin-bottom: 28px; max-width: 760px; }
+  .ref-category { margin-bottom: 36px; }
+  .ref-category h3 {
+    font-size: 15px; font-weight: 700; color: var(--text);
+    margin: 0 0 4px; letter-spacing: -0.2px;
+  }
+  .ref-category .ref-sub {
+    font-size: 12px; color: var(--text2); margin-bottom: 14px;
+  }
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .ref-card {
+    background: var(--bg-card, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    transition: border-color 0.15s, transform 0.15s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ref-card:hover { border-color: var(--text2); transform: translateY(-1px); }
+  .ref-card-title { font-size: 13.5px; font-weight: 600; color: var(--text); letter-spacing: -0.2px; }
+  .ref-card-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .ref-card-meta { font-size: 10.5px; color: var(--text2); opacity: 0.7; font-family: 'Google Sans Code', ui-monospace, monospace; margin-top: 2px; }
+  .ref-niche {
+    background: var(--pick-bg);
+    border-left: 3px solid var(--pick);
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin-top: 20px;
+  }
+  [data-theme="dark"] .ref-niche { background: var(--pick-bg); }
+  .ref-niche h4 { margin: 0 0 8px; font-size: 13px; font-weight: 700; color: var(--text); }
+  .ref-niche ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--text); line-height: 1.7; }
+  .ref-niche li::marker { color: var(--pick); }
+</style>
+<style id="anon-banner-css">.anon-banner{position:sticky;top:0;z-index:99999;background:#fef3c7;color:#92400e;font-size:13px;font-weight:600;text-align:center;padding:9px 16px;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:-0.01em;border-bottom:1px solid #fde68a;}[data-theme="dark"] .anon-banner{background:#241f0e;color:#d4af5a;border-bottom-color:#3a2f12}</style></head>
+<body><div class="anon-banner">ⓘ 가공된 예시 데이터 · 실제 개인정보 아님</div>
+
+<div class="header">
+  <h1>출퇴근 패턴 분석</h1>
+  <p>기간: 2023-01-02 ~ 2026-05-29 · 약 850일</p>
+  <p style="margin-top:4px;font-size:11px;color:#555e75;">2023년부터의 기록 (이전 기간 제외)</p>
+</div>
+
+<nav class="main-tabs">
+  <button class="tab-btn active" data-tab="analysis">출퇴근 패턴 분석</button>
+  <button class="tab-btn" data-tab="lab">추가 분석 (실험)</button>
+  <button class="tab-btn" data-tab="insights">인사이트 · 추천 · 레퍼런스</button>
+</nav>
+
+<div class="tab-content active" id="tab-analysis">
+
+<nav class="toc-bar" id="tocBar">
+  <a href="#sec-heatmap" class="toc-item">히트맵</a>
+  <a href="#sec-profile" class="toc-item">성향 프로필</a>
+</nav>
+
+<!-- KPI -->
+<div class="kpi-row">
+  <div class="kpi">
+    <div class="kpi-label">재직 기간</div>
+    <div class="kpi-value" style="font-size:20px;letter-spacing:-.5px">4년 2개월 1일</div>
+    <div class="kpi-sub">2023.01 ~ 2026.05 · 약 850일</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">평균 출근</div>
+    <div class="kpi-value">8:30</div>
+    <div class="kpi-sub">최빈값 8:00</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">평균 퇴근</div>
+    <div class="kpi-value">17:31</div>
+    <div class="kpi-sub">최빈값 17:00</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">평균 실근무</div>
+    <div class="kpi-value">7:33</div>
+    <div class="kpi-sub">점심 1시간 제외</div>
+  </div>
+  <div class="kpi">
+    <div class="kpi-label">야근일 (20시+)</div>
+    <div class="kpi-value">52</div>
+    <div class="kpi-sub">7.3% · 증가 추세</div>
+  </div>
+</div>
+
+<!-- 섹션 0: 연간 히트맵 -->
+<div class="section" id="sec-heatmap" style="padding-left:24px;padding-right:24px;">
+  <div class="section-title">연간 근무 히트맵 <span>일별 근무 강도 · 2023–2026</span></div>
+  <div class="chart-card">
+    <div id="heatmapContainer"></div>
+    <div class="hm-legend" id="hmLegend"></div>
+  </div>
+</div>
+<div id="hmTooltip"></div>
+<button class="theme-toggle" id="themeToggle" title="라이트/다크 모드 전환">🌙</button>
+
+<!-- 섹션 1+2: 출퇴근 분포 + 특이일정 -->
+<!-- 섹션: 성향 프로필 (좌측 카드 → 우측 차트) -->
+<div class="section" id="sec-profile">
+  <div class="section-title">성향 프로필 <span>왼쪽 카드를 클릭하면 근거 차트가 표시됩니다</span></div>
+  <div class="profile-layout">
+    <div class="profile-sidebar">
+      <div class="profile-card active" data-panel="p-start">
+        <div class="profile-card-title">🌅 아침형 인간</div>
+        <div class="profile-card-evidence">8:00 출근이 27% · 7시대 출근이 전체의 32%</div>
+      </div>
+      <div class="profile-card" data-panel="p-end">
+        <div class="profile-card-title">🕔 정시 퇴근 선호</div>
+        <div class="profile-card-evidence">17:30 23%, 17:00 20% — 17시대 전체의 68%</div>
+      </div>
+      <div class="profile-card" data-panel="p-monthly">
+        <div class="profile-card-title">🌸 봄에 늘어지는 패턴</div>
+        <div class="profile-card-evidence">2025 Q2 출근·퇴근 1-2h 늦음 — 유연근무 피크</div>
+      </div>
+      <div class="profile-card" data-panel="p-ot">
+        <div class="profile-card-title">🔥 야근 시즌성</div>
+        <div class="profile-card-evidence">2023 1% → 2025·2026 봄 20%대 증가</div>
+      </div>
+      <div class="profile-card" data-panel="p-timeline">
+        <div class="profile-card-title">📈 큰 변곡점</div>
+        <div class="profile-card-evidence">2024 봄 교육 기간 전후 출근 리듬 변동</div>
+      </div>
+      <div class="profile-card" data-panel="p-typeyear">
+        <div class="profile-card-title">🔄 유연근무 비중 증가</div>
+        <div class="profile-card-evidence">2023 평평 → 2025-26 유연·야근 증가</div>
+      </div>
+      <div class="profile-card" data-panel="p-hours">
+        <div class="profile-card-title">📊 변동성 큰 분기</div>
+        <div class="profile-card-evidence">2025 하반기 변동성 최대 · 2023 봄 가장 규칙적</div>
+      </div>
+      <div class="profile-card" data-panel="p-special">
+        <div class="profile-card-title">✈️ 외부 일정</div>
+        <div class="profile-card-evidence">출장·외부 일정·휴가 분포</div>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <div class="chart-panel active" id="p-start">
+        <div class="chart-card">
+          <div class="chart-title">출근 시간 분포</div>
+          <div class="chart-wrap" style="height:280px"><canvas id="startDist"></canvas></div>
+          <div class="insight-bar"><strong>8:00</strong>이 214일(27%)로 가장 많음 — 7시대 출근이 전체의 <strong>32%</strong></div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-end">
+        <div class="chart-card">
+          <div class="chart-title">퇴근 시간 분포</div>
+          <div class="chart-wrap" style="height:280px"><canvas id="endDist"></canvas></div>
+          <div class="insight-bar"><strong>17:30</strong> 185일(23%), <strong>17:00</strong> 158일(20%) — 17시대가 전체의 <strong>68%</strong></div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-monthly">
+        <div class="chart-card">
+          <div class="chart-title">월별 평균 출근·퇴근 시간 (연도별)</div>
+          <div class="chart-wrap" style="height:320px"><canvas id="monthlyAvg"></canvas></div>
+          <div class="insight-bar">
+            <strong>2025년 봄(3~6월)</strong>이 다른 해 같은 월보다 출근·퇴근 모두 1~2시간 늦음 — 유연근무 피크.
+            <strong>2023년</strong>은 일년 내내 평평한 라인 — 가장 규칙적인 해.
+          </div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-ot">
+        <div class="chart-card">
+          <div class="chart-title">월별 야근율 (%) (연도별)</div>
+          <div class="chart-wrap" style="height:320px"><canvas id="monthlyOT"></canvas></div>
+          <div class="insight-bar">
+            <strong>2023년 1%</strong>로 거의 없음. <strong>2025·2026년 봄</strong>이 20%대로 증가.
+            같은 계절도 해마다 다른 패턴.
+          </div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-timeline">
+        <div class="chart-card">
+          <div class="chart-title">월별 평균 출근·퇴근 시간 (밴드 차트)</div>
+          <div class="chart-wrap" style="height:340px"><canvas id="monthlyTimeline"></canvas></div>
+          <div class="insight-bar">
+            <strong>2025년 봄(3-6월)</strong>: 출근·퇴근 모두 가장 늦음 — 유연근무 피크.
+            <strong>2026년 4-5월</strong>: 이른 출근으로 돌아왔지만 퇴근이 다시 늦어지는 중 (야근 증가).
+          </div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-typeyear">
+        <div class="chart-card">
+          <div class="chart-title">연도별 출근 패턴 비중</div>
+          <div class="chart-wrap" style="height:340px"><canvas id="typeByYear"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-hours">
+        <div class="chart-card">
+          <div class="chart-title">월별 일일 실근무 변동 범위</div>
+          <div class="chart-wrap" style="height:340px"><canvas id="otHoursChart"></canvas></div>
+          <div class="insight-bar">
+            막대 = min~max · 진한 막대 = Q1~Q3 (IQR) · 선 = 평균 · 빨간 점선 = 표준 7.5h.
+            <strong>2025년 하반기</strong> 변동성이 가장 큼 — <strong>2023년 봄</strong>은 가장 규칙적.
+          </div>
+        </div>
+      </div>
+      <div class="chart-panel" id="p-special">
+        <div class="chart-card">
+          <div class="chart-title">특이 일정 (출장·학회·교육·휴가)</div>
+          <div class="special-grid" id="specialGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div> <!-- end #tab-analysis -->
+
+<script>
+// ══════════════════════════════════════════
+// 연간 히트맵
+// ══════════════════════════════════════════
+(() => {
+  const days = JSON.parse(document.getElementById('daysData').textContent);
+  // 야근 재계산: 실근무(ef) 기준 9h 초과 시 야근
+  days.forEach(d => {
+    if (d.ef == null || d.cat !== 'normal') { d.ot = null; return; }
+    if (d.ef > 11)      d.ot = 3;  // 장야근
+    else if (d.ef > 10) d.ot = 2;  // 일반야근
+    else if (d.ef > 9)  d.ot = 1;  // 유연야근
+    else                d.ot = null;
+  });
+  const dayMap = Object.fromEntries(days.map(d => [d.d, d]));
+  // 사용자가 준 정보의 최신 일자 (구분선 기준)
+  const dataLastDate = days.reduce((m, d) => d.d > m ? d.d : m, '');
+
+  // 대한민국 공휴일 2023~2026
+  window.KR_HOLIDAYS = window.KR_HOLIDAYS || {};
+  const KR_HOLIDAYS = {"2023-01-01":"신정","2023-01-21":"설날 연휴","2023-01-22":"설날","2023-01-23":"설날 연휴","2023-01-24":"설날 대체","2023-03-01":"삼일절","2023-05-01":"근로자의 날","2023-05-05":"어린이날","2023-05-27":"부처님오신날","2023-05-29":"부처님오신날 대체","2023-06-06":"현충일","2023-08-15":"광복절","2023-09-28":"추석 연휴","2023-09-29":"추석","2023-09-30":"추석 연휴","2023-10-02":"임시공휴일","2023-10-03":"개천절","2023-10-09":"한글날","2023-12-25":"크리스마스","2024-01-01":"신정","2024-02-09":"설날 연휴","2024-02-10":"설날","2024-02-11":"설날 연휴","2024-02-12":"설날 대체","2024-03-01":"삼일절","2024-04-10":"국회의원선거","2024-05-01":"근로자의 날","2024-05-05":"어린이날","2024-05-06":"어린이날 대체","2024-05-15":"부처님오신날","2024-06-06":"현충일","2024-08-15":"광복절","2024-09-16":"추석 연휴","2024-09-17":"추석","2024-09-18":"추석 연휴","2024-10-01":"국군의 날","2024-10-03":"개천절","2024-10-09":"한글날","2024-12-25":"크리스마스","2025-01-01":"신정","2025-01-27":"임시공휴일","2025-01-28":"설날 연휴","2025-01-29":"설날","2025-01-30":"설날 연휴","2025-03-01":"삼일절","2025-03-03":"삼일절 대체","2025-05-01":"근로자의 날","2025-05-05":"어린이날·부처님오신날","2025-05-06":"대체공휴일","2025-06-03":"대통령선거","2025-06-06":"현충일","2025-08-15":"광복절","2025-10-03":"개천절","2025-10-05":"추석 연휴","2025-10-06":"추석","2025-10-07":"추석 연휴","2025-10-08":"추석 대체","2025-10-09":"한글날","2025-12-25":"크리스마스","2026-01-01":"신정","2026-02-16":"설날 연휴","2026-02-17":"설날","2026-02-18":"설날 연휴","2026-03-01":"삼일절","2026-03-02":"삼일절 대체","2026-05-01":"근로자의 날","2026-05-05":"어린이날","2026-05-24":"부처님오신날","2026-05-25":"부처님오신날 대체","2026-06-03":"지방선거","2026-06-06":"현충일","2026-07-17":"제헌절","2026-08-15":"광복절","2026-08-17":"광복절 대체","2026-09-24":"추석 연휴","2026-09-25":"추석","2026-09-26":"추석 연휴","2026-10-03":"개천절","2026-10-05":"개천절 대체","2026-10-09":"한글날","2026-12-25":"크리스마스"};
+  window.KR_HOLIDAYS = KR_HOLIDAYS;
+
+  function getDarkMode() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+  function getColors() {
+    const dark = getDarkMode();
+    return {
+      // ── 비근무 / 비기록 — 최대한 조용하게 ──
+      weekend:  dark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.04)',   // 주말 — 거의 투명
+      military: dark ? '#2A2A2C' : '#CECECE',   // 교육 — 주말보다 살짝 진한 회색
+      holiday:  dark ? '#10402F' : '#BCEFD0',   // 공휴일 — 연한 초록 (연차 계열)
+      vacation: dark ? '#052E1A' : '#D1FAE5',   // 연차 추정 — 아주 연한 초록 (불확실)
+      other:    dark ? '#1C1820' : '#F0ECF8',   // 기타 미상
+
+      // 확인된 휴가 — 초록 계열 (출장과 구분, 휴식 느낌)
+      leave_annual:  dark ? '#064E3B' : '#6EE7B7',  // 연차 (반차 포함) — 중간 에메랄드
+      leave_comp:    dark ? '#064E3B' : '#6EE7B7',  // 보상휴가 — 중간 초록
+      leave_subst:   dark ? '#064E3B' : '#6EE7B7',  // 휴일대체 = 보상과 동일
+      leave_health:  dark ? '#0D3D3A' : '#99F6E4',  // 건강검진 — 민트 (청록 계열)
+      leave_special: dark ? '#134E4A' : '#5EEAD4',  // 경조사 — 진한 민트
+      leave_refresh: dark ? '#0D3D3A' : '#99F6E4',  // 리프레시 = 건강과 동일
+      leave_event:   dark ? '#1A1822' : '#E9D5FF',  // 창립 — 연한 보라
+      event:    dark ? '#3A2E12' : '#FDE68A',   // 회사 행사 — 앰버
+      leave_other:   dark ? '#160E18' : '#FDF4FF',  // 기타 — 거의 배경
+
+      // ── 파란 연속 스펙트럼 — 일반 근무 강도 ──
+      // 7-8.5h(가장 많음)를 중간값으로, 이탈할수록 눈에 띔
+      short:    dark ? '#16335F' : '#A9CEF6',   // 7h 미만 — 또렷한 연파랑 (공휴일 초록과 분리)
+      normal:   dark ? '#174698' : '#8BBDF8',   // 7-8.5h — 중간 파랑 (배경, 가장 흔함)
+      good:     dark ? '#1B62E6' : '#3182F6',   // 8.5h+ — 진한 파랑 (길게 일한 날)
+
+      // ── 인디고 계열 — 야근 강도 (파랑과 같은 계열, 🔥로 구분) ──
+      flex_ot:  dark ? '#7F1D1D' : '#FCA5A5',   // 유연야근 — 연한 빨강
+      ot:       dark ? '#B91C1C' : '#F87171',   // 일반야근 — 중간 빨강
+      heavy_ot: dark ? '#DC2626' : '#EF4444',   // 장야근 — 진한 빨강
+
+      // ── 분홍 계열 — 출장 (같은 색조, 강도 차이) ──
+      abroad:   dark ? '#0C3F5E' : '#38BDF8',   // 해외출장 — 하늘파랑 (진함)
+      domestic: dark ? '#0A3A55' : '#7DD3FC',   // 국내출장 — 또렷한 하늘색
+    };
+  }
+
+  // 요일 → 월요일 기준 0~6 (월=0, 화=1, ..., 일=6)
+  function monDow(date) {
+    const d = date.getDay(); // 0=일
+    return d === 0 ? 6 : d - 1;
+  }
+
+  function buildHeatmap() {
+    const COLORS = getColors();
+    const container = document.getElementById('heatmapContainer');
+    const tooltip = document.getElementById('hmTooltip');
+    const legend = document.getElementById('hmLegend');
+    container.innerHTML = '';
+    legend.innerHTML = '';
+
+    // 로컬 시간 기준 날짜 문자열 (toISOString은 UTC라 한국 시간에서 하루 밀림)
+    function localDateStr(d) {
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function cellColor(dateStr, data) {
+      const dObj = new Date(dateStr + 'T12:00:00');
+      const isWeekend = dObj.getDay() === 0 || dObj.getDay() === 6;
+      const isHoliday = !!KR_HOLIDAYS[dateStr];
+      if (!data) {
+        if (isHoliday) return isWeekend ? COLORS.weekend : COLORS.holiday;
+        if (isWeekend) return COLORS.weekend;
+        return COLORS.normal; // 평일 + 기록 없음 = 미래 셀처럼 연한 파랑
+      }
+      // 확인된 휴가 카테고리
+      if (data.cat && data.cat.startsWith('leave_')) {
+        return COLORS[data.cat] || COLORS.leave_other;
+      }
+      if (data.cat === 'abroad')   return COLORS.abroad;
+      if (data.cat === 'domestic') return COLORS.domestic;
+      if (data.cat === 'military') return COLORS.military;
+      if (data.cat === 'event')    return COLORS.event;
+      if (data.ot === 1) return COLORS.flex_ot;
+      if (data.ot === 2) return COLORS.ot;
+      if (data.ot === 3) return COLORS.heavy_ot;
+      if (!data.ef) return COLORS.other;
+      if (data.ef < 7)   return COLORS.short;
+      if (data.ef < 8.5) return COLORS.normal;
+      return COLORS.good;
+    }
+
+    const monthNames = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+    const dowLabels = ['월','화','수','목','금','토','일']; // 월요일 시작
+
+    for (const year of [2025, 2026, 2023, 2024]) {
+      const div = document.createElement('div');
+      div.className = 'heatmap-year';
+
+      const jan1 = new Date(year, 0, 1);
+      const startOffset = monDow(jan1); // 0=월, 1=화, ..., 6=일
+
+      // 월 레이블
+      const mlGrid = document.createElement('div');
+      mlGrid.style.cssText = `display:flex;gap:0;width:${54*11}px;position:relative;height:14px;margin-left:18px;margin-bottom:2px;`;
+      for (let m = 0; m < 12; m++) {
+        const firstDay = new Date(year, m, 1);
+        const dayOfYear = Math.floor((firstDay - jan1) / 86400000);
+        const col = Math.floor((dayOfYear + startOffset) / 7);
+        const span = document.createElement('span');
+        span.textContent = monthNames[m];
+        span.style.cssText = `position:absolute;left:${col*11}px;font-size:9px;color:var(--text2);`;
+        mlGrid.appendChild(span);
+      }
+
+      // 요일 레이블
+      const rowWrap = document.createElement('div');
+      rowWrap.style.cssText = 'display:flex;gap:4px;align-items:flex-start;';
+      const dowDiv = document.createElement('div');
+      dowDiv.style.cssText = 'display:flex;flex-direction:column;gap:1px;';
+      dowLabels.forEach((label, i) => {
+        const s = document.createElement('span');
+        s.textContent = i % 2 === 0 ? label : ''; // 짝수(월,수,금,일)만 표시
+        s.style.cssText = 'font-size:8px;color:var(--text2);height:10px;line-height:10px;width:14px;text-align:right;';
+        dowDiv.appendChild(s);
+      });
+
+      // 그리드
+      const grid = document.createElement('div');
+      grid.className = 'heatmap-grid';
+
+      // 앞 빈칸
+      for (let i = 0; i < startOffset; i++) {
+        const cell = document.createElement('div');
+        cell.style.cssText = `width:10px;height:10px;grid-column:1;grid-row:${i+1};`;
+        grid.appendChild(cell);
+      }
+
+      const todayDate = new Date(); todayDate.setHours(0,0,0,0);
+      const todayStr = localDateStr(todayDate);
+      const today = new Date(); today.setHours(23,59,59,999);
+      let cur = new Date(jan1);
+      let col = 1, row = startOffset + 1;
+      let dataLastCol = null, dataLastRow = null;
+      while (cur.getFullYear() === year) {
+        const isFuture = cur > today;
+        const dateStr = localDateStr(cur);
+        const data = dayMap[dateStr];
+        const isWknd = cur.getDay() === 0 || cur.getDay() === 6;
+        const isHol  = !!KR_HOLIDAYS[dateStr];
+        const isUnrecorded = !data && !isWknd && !isHol; // 평일인데 기록 없음 (오늘 포함)
+        // 미래거나 기록 없는 평일은 동일하게 흐리게 처리
+        if (isFuture || isUnrecorded) {
+          const bg = isWknd ? COLORS.weekend : (isHol ? COLORS.holiday : COLORS.normal);
+          const cell = document.createElement('div');
+          cell.className = 'hm-cell';
+          cell.style.cssText = `width:10px;height:10px;background:${bg};grid-column:${col};grid-row:${row};opacity:0.3;`;
+          grid.appendChild(cell);
+          row++; if (row > 7) { row = 1; col++; }
+          cur.setDate(cur.getDate() + 1);
+          continue;
+        }
+        // 데이터 최신 일자 추적
+        if (dateStr === dataLastDate) {
+          dataLastCol = col; dataLastRow = row;
+        }
+        const bg = cellColor(dateStr, data);
+        const cell = document.createElement('div');
+        cell.className = 'hm-cell';
+        cell.style.cssText = `background:${bg};grid-column:${col};grid-row:${row};`;
+        // 오늘 셀 — 노란 테두리 + 글로우 그라데이션
+        if (dateStr === todayStr) {
+          cell.style.boxShadow = '0 0 0 1.5px #FACC15, 0 0 4px 1px rgba(250,204,21,0.7), 0 0 8px 3px rgba(250,204,21,0.35)';
+          cell.style.zIndex = '3';
+          cell.style.position = 'relative';
+        }
+        // 야근 테두리 링
+        // 공휴일에 실제 출근한 경우 — 좌상단 초록 점
+        if (KR_HOLIDAYS[dateStr] && data && data.cat === 'normal') {
+          const dot = document.createElement('span');
+          dot.style.cssText = 'position:absolute;top:1px;left:1px;width:4px;height:4px;border-radius:50%;background:#4ADE80;pointer-events:none;';
+          cell.appendChild(dot);
+        }
+        // 부분휴가(반차/시차/분차) — 대각 절반 분할 (우하단 초록)
+        if (data && data.pl) {
+          const ov = document.createElement('span');
+          const pc = getDarkMode() ? '#34D399' : '#10B981';
+          ov.style.cssText = `position:absolute;inset:0;border-radius:3px;background:linear-gradient(135deg, transparent 50%, ${pc} 50%);pointer-events:none;`;
+          cell.appendChild(ov);
+        }
+
+        // Tooltip — 클로저 값 캡처
+        const _dateStr = dateStr, _data = data, _dow = monDow(cur);
+        cell.addEventListener('mouseenter', () => {
+          const dayName = dowLabels[_dow];
+          let html = `<div class="tt-date">${_dateStr} (${dayName})</div>`;
+          const holiday = KR_HOLIDAYS[_dateStr];
+          if (holiday) html += `<div class="tt-row">공휴일: <span>${holiday}</span></div>`;
+          if (!_data) {
+            const dObj2 = new Date(_dateStr + 'T12:00:00');
+            const isWknd = dObj2.getDay()===0||dObj2.getDay()===6;
+            html += `<div class="tt-row">${holiday ? '공휴일' : isWknd ? '주말' : '기록 없음'}</div>`;
+          } else {
+            const catNames = {
+              normal:'일반',abroad:'국외 출장',domestic:'국내출장',military:'교육',
+              field:'외부 일정',event:'외부행사',
+              leave_annual:'연차',leave_comp:'보상휴가',
+              leave_subst:'휴일대체',leave_health:'건강검진',leave_special:'경조사',
+              leave_refresh:'리프레시',leave_event:'창립기념일',leave_other:'기타휴가'
+            };
+            html += `<div class="tt-row">유형: <span>${catNames[_data.cat]||_data.cat}</span></div>`;
+            if (_data.pl) html += `<div class="tt-row">부분휴가: <span>${_data.pl}</span></div>`;
+            if (_data.s) html += `<div class="tt-row">출근 <span>${hm(_data.s)}</span> → 퇴근 <span>${hm(_data.e)}</span></div>`;
+            if (_data.ef) html += `<div class="tt-row">실근무: <span>${hm(_data.ef)}</span></div>`;
+            if (_data.ot) {
+              const otNames={1:'유연야근',2:'일반야근',3:'장야근'};
+              // 야근 시간: ef - 9h (ef는 이미 점심 1시간 공제된 실근무)
+              const otH = Math.max(0, _data.ef - 9);
+              const otHH = Math.floor(otH);
+              const otMM = Math.round((otH - otHH) * 60);
+              const otStr = otHH > 0 ? `${otHH}시간 ${otMM}분` : `${otMM}분`;
+              html += `<div class="tt-row">야근: <span>${otNames[_data.ot]} +${otStr}</span></div>`;
+            }
+          }
+          tooltip.innerHTML = html;
+          tooltip.style.display = 'block';
+        });
+        cell.addEventListener('mousemove', e => {
+          tooltip.style.left = (e.clientX + 14) + 'px';
+          tooltip.style.top  = (e.clientY - 12) + 'px';
+        });
+        cell.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+        grid.appendChild(cell);
+        row++;
+        if (row > 7) { row = 1; col++; }
+        cur.setDate(cur.getDate() + 1);
+      }
+
+      rowWrap.appendChild(dowDiv);
+      rowWrap.appendChild(grid);
+
+      // 데이터 최신 일자 구분선 (점선 ㄷ자)
+      if (dataLastCol !== null) {
+        const LW = 11;
+        const DW = 18; // dowDiv(14) + rowWrap gap(4)
+        const clr = '1px dashed rgba(239,68,68,0.85)';
+        const rX = DW + (dataLastCol - 1) * LW + 11;
+        const lX = DW + (dataLastCol - 1) * LW - 1;
+        const bY = (dataLastRow - 1) * LW + 11;
+        rowWrap.style.position = 'relative';
+        function seg(css) {
+          const d = document.createElement('div');
+          d.style.cssText = css + ';pointer-events:none;z-index:2;position:absolute;';
+          rowWrap.appendChild(d);
+        }
+        seg(`left:${rX}px;top:0;height:${bY}px;width:0;border-left:${clr}`);
+        seg(`top:${bY}px;left:${lX}px;width:${rX - lX}px;height:0;border-top:${clr}`);
+        seg(`left:${lX}px;top:${bY}px;bottom:0;width:0;border-left:${clr}`);
+      }
+
+      // 팀 전환 구분선 (보라 점선) — 해당 날짜가 속한 주의 왼쪽 경계에 세로선
+      const teamChanges = [
+        { date: '2024-09-01', label: '부서 이동' },
+      ];
+      rowWrap.style.position = 'relative';
+      teamChanges.forEach(tc => {
+        const tcDate = new Date(tc.date + 'T12:00:00');
+        if (tcDate.getFullYear() !== year) return;
+        const jan1Local = new Date(year, 0, 1);
+        const daysFromJan1 = Math.floor((tcDate - jan1Local) / 86400000);
+        const startOffsetLocal = monDow(jan1Local);
+        const absPos = startOffsetLocal + daysFromJan1;
+        const tcCol = Math.floor(absPos / 7) + 1; // 해당 날짜의 col
+        const tcDow = absPos % 7; // 0=월, ..., 5=토, 6=일
+        // 평일이면 그 주 col, 토·일이면 다음 주 col (다음 주 월요일부터 새 팀)
+        const drawCol = tcDow >= 5 ? tcCol + 1 : tcCol;
+        const LW = 11, DW = 18;
+        const clrTeam = '1.5px dashed rgba(139,92,246,0.9)';
+        // 해당 주의 왼쪽 boundary
+        const xL = DW + (drawCol - 1) * LW - 1;
+        const gridHeight = 7 * LW;
+        function segT(css) {
+          const d = document.createElement('div');
+          d.style.cssText = css + ';pointer-events:none;z-index:2;position:absolute;';
+          rowWrap.appendChild(d);
+        }
+        segT(`left:${xL}px;top:0;height:${gridHeight}px;width:0;border-left:${clrTeam}`);
+        const lbl = document.createElement('div');
+        lbl.textContent = '→ ' + tc.label;
+        lbl.style.cssText = `position:absolute;left:${xL + 4}px;top:-14px;font-size:10px;color:rgba(139,92,246,1);pointer-events:none;z-index:3;font-weight:600;letter-spacing:-0.2px;white-space:nowrap;`;
+        rowWrap.appendChild(lbl);
+      });
+
+      const yearLabel = document.createElement('div');
+      yearLabel.className = 'heatmap-year-label';
+      yearLabel.textContent = year + '년';
+      div.appendChild(yearLabel);
+      div.appendChild(mlGrid);
+      div.appendChild(rowWrap);
+      container.appendChild(div);
+    }
+
+    // 범례
+    const legendGroups = [
+      {
+        label: '비근무',
+        items: [
+          { color: COLORS.weekend,  label: '주말' },
+          { color: COLORS.holiday,  label: '공휴일' },
+        ]
+      },
+      {
+        label: '확인 휴가',
+        items: [
+          { color: COLORS.leave_annual,  label: '연차' },
+          { color: COLORS.leave_comp,    label: '보상·대체' },
+          { color: COLORS.leave_health,  label: '건강·리프레시' },
+          { color: COLORS.leave_special, label: '경조사' },
+        ]
+      },
+      {
+        label: '근무 강도',
+        items: [
+          { color: COLORS.short,  label: '7h 미만' },
+          { color: COLORS.normal, label: '7–8.5h' },
+          { color: COLORS.good,   label: '8.5h+' },
+        ]
+      },
+      {
+        label: '야근',
+        items: [
+          { color: COLORS.flex_ot,  label: '유연' },
+          { color: COLORS.ot,       label: '일반' },
+          { color: COLORS.heavy_ot, label: '장야근' },
+        ]
+      },
+      {
+        label: '출장·훈련·행사',
+        items: [
+          { color: COLORS.abroad,   label: '국외 출장' },
+          { color: COLORS.domestic, label: '국내 출장' },
+          { color: COLORS.military, label: '교육' },
+          { color: COLORS.event,    label: '회사 행사' },
+        ]
+      },
+      {
+        label: '마커',
+        items: [
+          { color: COLORS.normal, label: '공휴일 출근', dot: true, dotColor: '#4ADE80', dotPos: 'left' },
+          { color: COLORS.normal, label: '부분휴가', split: '#10B981' },
+        ]
+      },
+    ];
+
+    legendGroups.forEach((group, gi) => {
+      if (gi > 0) {
+        const sep = document.createElement('div');
+        sep.className = 'hm-legend-sep';
+        legend.appendChild(sep);
+      }
+      const lbl = document.createElement('span');
+      lbl.className = 'hm-legend-group-label';
+      lbl.textContent = group.label;
+      legend.appendChild(lbl);
+      group.items.forEach(item => {
+        const wrap = document.createElement('div');
+        wrap.className = 'hm-legend-item';
+        const dot = item.dot ? `<span style="position:absolute;top:1px;${item.dotPos==='right'?'right:1px':'left:1px'};width:4px;height:4px;border-radius:50%;background:${item.dotColor||'#4ADE80'};"></span>` : '';
+        const split = item.split ? `<span style="position:absolute;inset:0;border-radius:3px;background:linear-gradient(135deg,transparent 50%,${item.split} 50%);"></span>` : '';
+        const cellStyle = [
+          `background:${item.color}`,
+          'position:relative',
+          item.ring ? `outline:${item.ring};outline-offset:-1px` : ''
+        ].filter(Boolean).join(';');
+        wrap.innerHTML = `<div class="hm-legend-cell" style="${cellStyle}">${dot}${split}</div><span>${item.label}</span>`;
+        legend.appendChild(wrap);
+      });
+    });
+  }
+
+  buildHeatmap();
+
+  // 테마 변경 시 히트맵 재빌드
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    setTimeout(buildHeatmap, 50); // theme 변경 후 약간 딜레이
+  });
+})();
+
+// ══════════════════════════════════════════
+// Chart.js 설정
+// ══════════════════════════════════════════
+// ── Theme toggle ──
+const themeToggle = document.getElementById('themeToggle');
+let isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  themeToggle.textContent = isDark ? '☀️' : '🌙';
+  const textColor  = isDark ? '#8E8E93' : '#6C6C70';
+  const gridColor  = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+  const ttBg       = isDark ? '#2C2C2E' : '#FFFFFF';
+  const ttTitle    = isDark ? '#F2F2F7' : '#1C1C1E';
+  const ttBody     = isDark ? '#8E8E93' : '#6C6C70';
+  const ttBorder   = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+  Chart.defaults.color = textColor;
+  Chart.defaults.borderColor = gridColor;
+  Chart.defaults.plugins.tooltip.backgroundColor = ttBg;
+  Chart.defaults.plugins.tooltip.titleColor = ttTitle;
+  Chart.defaults.plugins.tooltip.bodyColor = ttBody;
+  Chart.defaults.plugins.tooltip.borderColor = ttBorder;
+}
+applyTheme();
+themeToggle.addEventListener('click', () => { isDark = !isDark; applyTheme(); });
+
+const C = Chart;
+const accent  = '#3182F6';
+const accent2 = '#F5A623';
+const green   = '#2BC45F';
+const red     = '#F04452';
+const purple  = '#9F7AEA';
+const teal    = '#00B8A9';
+const text2   = '#6C6C70';
+const border  = 'rgba(0,0,0,0.06)';
+
+Chart.defaults.color = '#6C6C70';
+Chart.defaults.borderColor = 'rgba(0,0,0,0.06)';
+Chart.defaults.font.family = "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.tooltip.backgroundColor = '#FFFFFF';
+Chart.defaults.plugins.tooltip.titleColor = '#1C1C1E';
+Chart.defaults.plugins.tooltip.bodyColor = '#6C6C70';
+Chart.defaults.plugins.tooltip.borderColor = 'rgba(0,0,0,0.08)';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.cornerRadius = 10;
+Chart.defaults.plugins.tooltip.padding = 10;
+Chart.defaults.plugins.tooltip.boxShadow = '0 4px 12px rgba(0,0,0,0.12)';
+
+function hm(h) {
+  const hh = Math.floor(h);
+  const mm = Math.round((h - hh) * 60);
+  return `${hh}:${mm.toString().padStart(2,'0')}`;
+}
+
+// ── 데이터 ──────────────────────────────────────
+const __ddRaw = JSON.parse(document.getElementById('daysData').textContent);
+const __ddNormal = __ddRaw.filter(d => d.cat === 'normal');
+function __mkDist(field){
+  const b = {};
+  __ddNormal.forEach(d => { const v = d[field]; if (v == null) return; const t = Math.round(v*60/15)*15; const hh = Math.floor(t/60), mm = t%60; const k = hh+':'+String(mm).padStart(2,'0'); b[k] = (b[k]||0)+1; });
+  return Object.entries(b).map(([x,y]) => ({x,y})).sort((a,b) => { const [ah,am]=a.x.split(':').map(Number), [bh,bm]=b.x.split(':').map(Number); return (ah*60+am)-(bh*60+bm); });
+}
+const startDist = __mkDist('s');
+
+const endDist = __mkDist('e');
+
+
+const monthlyData = [{"month":1,"n":78,"avg_start":8.145,"avg_end":17.046,"avg_eff":7.35,"ot_rate":5.1},{"month":2,"n":65,"avg_start":8.41,"avg_end":17.387,"avg_eff":7.477,"ot_rate":4.6},{"month":3,"n":75,"avg_start":8.651,"avg_end":17.668,"avg_eff":7.468,"ot_rate":8.0},{"month":4,"n":81,"avg_start":8.833,"avg_end":18.061,"avg_eff":7.576,"ot_rate":14.8},{"month":5,"n":54,"avg_start":8.442,"avg_end":17.66,"avg_eff":7.635,"ot_rate":11.1},{"month":6,"n":56,"avg_start":8.845,"avg_end":17.993,"avg_eff":7.536,"ot_rate":10.7},{"month":7,"n":63,"avg_start":8.553,"avg_end":17.673,"avg_eff":7.588,"ot_rate":3.2},{"month":8,"n":55,"avg_start":8.138,"avg_end":17.193,"avg_eff":7.518,"ot_rate":3.6},{"month":9,"n":56,"avg_start":8.088,"avg_end":17.069,"avg_eff":7.454,"ot_rate":5.4},{"month":10,"n":54,"avg_start":8.22,"avg_end":17.489,"avg_eff":7.712,"ot_rate":5.6},{"month":11,"n":61,"avg_start":8.44,"avg_end":17.623,"avg_eff":7.646,"ot_rate":3.3},{"month":12,"n":56,"avg_start":8.264,"avg_end":17.46,"avg_eff":7.642,"ot_rate":5.4}];
+
+
+const typeByYear = [{"year":2023,"early":45,"normal":150,"flex":11,"late":2,"total":208,"early_pct":21.6,"normal_pct":72.1,"flex_pct":5.3,"late_pct":1.0},{"year":2024,"early":151,"normal":39,"flex":3,"late":18,"total":211,"early_pct":71.6,"normal_pct":18.5,"flex_pct":1.4,"late_pct":8.5},{"year":2025,"early":78,"normal":44,"flex":30,"late":60,"total":212,"early_pct":36.8,"normal_pct":20.8,"flex_pct":14.2,"late_pct":28.3},{"year":2026,"early":58,"normal":12,"flex":2,"late":13,"total":85,"early_pct":68.2,"normal_pct":14.1,"flex_pct":2.4,"late_pct":15.3}];
+
+// monthly_ot: flex=유연야근(eff<8.5h), normal=일반야근(8.5~10h), heavy=장야근(10h+)
+const monthlyDetail = [{"label":"2023-01","yr":2023,"mo":1,"n":19,"avg_start":8.28,"avg_end":16.627,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-02","yr":2023,"mo":2,"n":12,"avg_start":8.751,"avg_end":17.575,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-03","yr":2023,"mo":3,"n":15,"avg_start":8.861,"avg_end":17.397,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-04","yr":2023,"mo":4,"n":19,"avg_start":8.481,"avg_end":17.52,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-05","yr":2023,"mo":5,"n":22,"avg_start":8.42,"avg_end":17.545,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-06","yr":2023,"mo":6,"n":19,"avg_start":8.43,"avg_end":17.562,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-07","yr":2023,"mo":7,"n":17,"avg_start":8.467,"avg_end":17.578,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-08","yr":2023,"mo":8,"n":22,"avg_start":8.542,"avg_end":17.514,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-09","yr":2023,"mo":9,"n":18,"avg_start":8.113,"avg_end":17.392,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-10","yr":2023,"mo":10,"n":18,"avg_start":7.812,"avg_end":17.147,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-11","yr":2023,"mo":11,"n":23,"avg_start":8.244,"avg_end":17.211,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2023-12","yr":2023,"mo":12,"n":16,"avg_start":7.912,"avg_end":16.933,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-01","yr":2024,"mo":1,"n":21,"avg_start":8.394,"avg_end":17.556,"flex":0,"normal":2,"heavy":0,"flex_pct":0.0,"normal_pct":9.5,"heavy_pct":0.0},{"label":"2024-02","yr":2024,"mo":2,"n":17,"avg_start":8.295,"avg_end":17.763,"flex":1,"normal":0,"heavy":2,"flex_pct":5.9,"normal_pct":0.0,"heavy_pct":11.8},{"label":"2024-03","yr":2024,"mo":3,"n":18,"avg_start":7.872,"avg_end":17.055,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-04","yr":2024,"mo":4,"n":20,"avg_start":7.86,"avg_end":16.981,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-05","yr":2024,"mo":5,"n":19,"avg_start":8.335,"avg_end":17.03,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-06","yr":2024,"mo":6,"n":18,"avg_start":8.279,"avg_end":17.469,"flex":1,"normal":0,"heavy":0,"flex_pct":5.6,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-07","yr":2024,"mo":7,"n":23,"avg_start":8.349,"avg_end":17.517,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-08","yr":2024,"mo":8,"n":17,"avg_start":8.047,"avg_end":17.25,"flex":1,"normal":0,"heavy":0,"flex_pct":5.9,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-09","yr":2024,"mo":9,"n":18,"avg_start":8.224,"avg_end":17.512,"flex":1,"normal":0,"heavy":1,"flex_pct":5.6,"normal_pct":0.0,"heavy_pct":5.6},{"label":"2024-10","yr":2024,"mo":10,"n":20,"avg_start":8.288,"avg_end":17.552,"flex":1,"normal":0,"heavy":0,"flex_pct":5.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-11","yr":2024,"mo":11,"n":18,"avg_start":8.293,"avg_end":17.556,"flex":2,"normal":0,"heavy":0,"flex_pct":11.1,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2024-12","yr":2024,"mo":12,"n":17,"avg_start":8.127,"avg_end":17.279,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2025-01","yr":2025,"mo":1,"n":17,"avg_start":8.15,"avg_end":17.265,"flex":1,"normal":0,"heavy":0,"flex_pct":5.9,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2025-02","yr":2025,"mo":2,"n":20,"avg_start":8.081,"avg_end":17.064,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2025-03","yr":2025,"mo":3,"n":18,"avg_start":9.607,"avg_end":18.926,"flex":5,"normal":0,"heavy":0,"flex_pct":27.8,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2025-04","yr":2025,"mo":4,"n":22,"avg_start":10.487,"avg_end":19.239,"flex":4,"normal":3,"heavy":0,"flex_pct":18.2,"normal_pct":13.6,"heavy_pct":0.0},{"label":"2025-06","yr":2025,"mo":6,"n":19,"avg_start":9.754,"avg_end":18.875,"flex":4,"normal":0,"heavy":1,"flex_pct":21.1,"normal_pct":0.0,"heavy_pct":5.3},{"label":"2025-07","yr":2025,"mo":7,"n":23,"avg_start":8.821,"avg_end":17.898,"flex":1,"normal":1,"heavy":0,"flex_pct":4.3,"normal_pct":4.3,"heavy_pct":0.0},{"label":"2025-08","yr":2025,"mo":8,"n":16,"avg_start":7.73,"avg_end":16.732,"flex":0,"normal":0,"heavy":1,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":6.2},{"label":"2025-09","yr":2025,"mo":9,"n":20,"avg_start":7.944,"avg_end":16.397,"flex":0,"normal":1,"heavy":0,"flex_pct":0.0,"normal_pct":5.0,"heavy_pct":0.0},{"label":"2025-10","yr":2025,"mo":10,"n":16,"avg_start":8.57,"avg_end":17.775,"flex":0,"normal":0,"heavy":2,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":12.5},{"label":"2025-11","yr":2025,"mo":11,"n":20,"avg_start":8.783,"avg_end":18.103,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2025-12","yr":2025,"mo":12,"n":23,"avg_start":8.593,"avg_end":17.938,"flex":0,"normal":1,"heavy":2,"flex_pct":0.0,"normal_pct":4.3,"heavy_pct":8.7},{"label":"2026-01","yr":2026,"mo":1,"n":21,"avg_start":7.77,"avg_end":16.739,"flex":0,"normal":0,"heavy":1,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":4.8},{"label":"2026-02","yr":2026,"mo":2,"n":16,"avg_start":8.686,"avg_end":17.25,"flex":0,"normal":0,"heavy":0,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":0.0},{"label":"2026-03","yr":2026,"mo":3,"n":24,"avg_start":8.157,"avg_end":17.119,"flex":0,"normal":0,"heavy":1,"flex_pct":0.0,"normal_pct":0.0,"heavy_pct":4.2},{"label":"2026-04","yr":2026,"mo":4,"n":20,"avg_start":7.69,"avg_end":17.657,"flex":1,"normal":0,"heavy":4,"flex_pct":5.0,"normal_pct":0.0,"heavy_pct":20.0},{"label":"2026-05","yr":2026,"mo":5,"n":13,"avg_start":8.65,"avg_end":18.867,"flex":3,"normal":2,"heavy":1,"flex_pct":23.1,"normal_pct":15.4,"heavy_pct":7.7}];
+
+
+// ── Chart helpers ──
+const baseOpts = {
+  responsive: true, maintainAspectRatio: false,
+  plugins: { legend: { display: false }, tooltip: { callbacks: {} } },
+  scales: {}
+};
+
+// 시간 기준선/구간 어노테이션 헬퍼
+function timeRefAnnotations(minH, maxH, extra = {}) {
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const a = {};
+  const refLineColor  = dark ? 'rgba(0,184,169,0.2)'    : 'rgba(0,120,110,0.25)';
+  const refLabelColor = dark ? 'rgba(0,184,169,0.45)'   : 'rgba(0,100,90,0.6)';
+  const otLineColor   = dark ? 'rgba(240,68,82,0.32)'   : 'rgba(200,40,50,0.35)';
+  const otLabelColor  = dark ? 'rgba(240,68,82,0.55)'   : 'rgba(180,30,40,0.7)';
+  const lunchFill     = dark ? 'rgba(245,166,35,0.05)'  : 'rgba(245,166,35,0.06)';
+  const lunchBorder   = dark ? 'rgba(245,166,35,0.12)'  : 'rgba(200,130,0,0.2)';
+  const lunchLabel    = dark ? 'rgba(245,166,35,0.4)'   : 'rgba(160,100,0,0.6)';
+  const dinnerFill    = dark ? 'rgba(240,68,82,0.05)'   : 'rgba(240,68,82,0.05)';
+  const dinnerBorder  = dark ? 'rgba(240,68,82,0.12)'   : 'rgba(180,40,50,0.2)';
+  const dinnerLabel   = dark ? 'rgba(240,68,82,0.4)'    : 'rgba(160,30,40,0.6)';
+  const labelOpts = (text, color) => ({
+    content: text, display: true, position: 'end',
+    color, font: { size: 9 }, padding: { x: 3, y: 1 },
+    backgroundColor: 'transparent',
+  });
+  if (7 >= minH && 7 <= maxH)
+    a.ref7 = { type:'line', yMin:7, yMax:7, borderColor:refLineColor, borderWidth:1, borderDash:[3,5], drawTime:'beforeDatasetsDraw', label: labelOpts('7:00', refLabelColor) };
+  if (16 >= minH && 16 <= maxH)
+    a.ref16 = { type:'line', yMin:16, yMax:16, borderColor:refLineColor, borderWidth:1, borderDash:[3,5], drawTime:'beforeDatasetsDraw', label: labelOpts('16:00', refLabelColor) };
+  if (20 >= minH && 20 <= maxH)
+    a.ref20 = { type:'line', yMin:20, yMax:20, borderColor:otLineColor, borderWidth:1.5, borderDash:[4,3], drawTime:'beforeDatasetsDraw', label: labelOpts('20:00', otLabelColor) };
+  if (12 >= minH && 13 <= maxH)
+    a.lunch = { type:'box', yMin:12, yMax:13, backgroundColor:lunchFill, borderColor:lunchBorder, borderWidth:1, drawTime:'beforeDatasetsDraw', label: { content:'점심', display:true, position:{x:'start',y:'center'}, color:lunchLabel, font:{size:9}, backgroundColor:'transparent', padding:2 } };
+  if (18 >= minH && 19 <= maxH)
+    a.dinner = { type:'box', yMin:18, yMax:19, backgroundColor:dinnerFill, borderColor:dinnerBorder, borderWidth:1, drawTime:'beforeDatasetsDraw', label: { content:'저녁', display:true, position:{x:'start',y:'center'}, color:dinnerLabel, font:{size:9}, backgroundColor:'transparent', padding:2 } };
+  return { ...a, ...extra };
+}
+
+function timeYAxis(min, max, reverse = false) {
+  return {
+    min, max,
+    reverse,
+    ticks: {
+      stepSize: 0.5,
+      callback: v => hm(v)
+    }
+  };
+}
+
+// ── 1. 출근 분포 ──
+// ── 1. 출근 분포 (가로 바, 시간=Y축) ──
+new Chart(document.getElementById('startDist'), {
+  type: 'bar',
+  data: {
+    labels: startDist.map(d => d.x),
+    datasets: [{
+      data: startDist.map(d => d.y),
+      backgroundColor: startDist.map(d => {
+        const h = parseInt(d.x);
+        if (h < 8) return 'rgba(0,184,169,0.75)';
+        if (h < 9) return 'rgba(49,130,246,0.75)';
+        if (h < 10) return 'rgba(245,166,35,0.65)';
+        return 'rgba(240,68,82,0.65)';
+      }),
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    ...baseOpts,
+    indexAxis: 'y',
+    plugins: {
+      ...baseOpts.plugins,
+      tooltip: { callbacks: { label: ctx => `${ctx.raw}일` } }
+    },
+    scales: {
+      y: { reverse: false, ticks: { font: { size: 10 } } },
+      x: { ticks: { callback: v => v + '일' } }
+    }
+  }
+});
+
+// ── 2. 퇴근 분포 (가로 바, 시간=Y축) ──
+new Chart(document.getElementById('endDist'), {
+  type: 'bar',
+  data: {
+    labels: endDist.map(d => d.x),
+    datasets: [{
+      data: endDist.map(d => d.y),
+      backgroundColor: endDist.map(d => {
+        const [h] = d.x.split(':').map(Number);
+        if (h <= 16) return 'rgba(0,184,169,0.7)';
+        if (h === 17) return 'rgba(49,130,246,0.8)';
+        if (h <= 19) return 'rgba(245,166,35,0.7)';
+        return 'rgba(240,68,82,0.8)';
+      }),
+      borderRadius: 3,
+    }]
+  },
+  options: {
+    ...baseOpts,
+    indexAxis: 'y',
+    plugins: {
+      ...baseOpts.plugins,
+      tooltip: { callbacks: { label: ctx => `${ctx.raw}일` } }
+    },
+    scales: {
+      y: { reverse: false, ticks: { font: { size: 10 } } },
+      x: { ticks: { callback: v => v + '일' } }
+    }
+  }
+});
+
+// ── 5-6. 월별 연도 오버레이 (계절 비교) ──
+const moLabels = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const yearColorsLine = {
+  2023: { line: 'rgba(147,197,253,0.9)', bg: 'rgba(147,197,253,0.05)' },
+  2024: { line: 'rgba(96,165,250,0.9)',  bg: 'rgba(96,165,250,0.05)' },
+  2025: { line: 'rgba(59,130,246,0.9)',  bg: 'rgba(59,130,246,0.05)' },
+  2026: { line: 'rgba(29,78,216,0.9)',   bg: 'rgba(29,78,216,0.05)' },
+};
+
+// 연도별 월별 데이터 빌드
+function byYearMonth(year, key) {
+  return moLabels.map((_, i) => {
+    const mo = i + 1;
+    const row = monthlyDetail.find(d => d.yr === year && d.mo === mo);
+    return row ? row[key] : null;
+  });
+}
+
+// 1) 월별 출퇴근 시간 — 연도별 오버레이 (출근=실선, 퇴근=점선)
+const startEndDatasets = [];
+[2023,2024,2025,2026].forEach(yr => {
+  const c = yearColorsLine[yr];
+  startEndDatasets.push({
+    label: `${yr} 출근`,
+    data: byYearMonth(yr, 'avg_start'),
+    borderColor: c.line, backgroundColor: c.bg,
+    borderWidth: 2, pointRadius: 3, tension: 0.3,
+    spanGaps: true,
+  });
+  startEndDatasets.push({
+    label: `${yr} 퇴근`,
+    data: byYearMonth(yr, 'avg_end'),
+    borderColor: c.line, backgroundColor: c.bg,
+    borderWidth: 2, pointRadius: 3, tension: 0.3,
+    borderDash: [4,4],
+    spanGaps: true,
+  });
+});
+
+new Chart(document.getElementById('monthlyAvg'), {
+  type: 'line',
+  data: { labels: moLabels, datasets: startEndDatasets },
+  options: {
+    ...baseOpts,
+    plugins: {
+      ...baseOpts.plugins,
+      annotation: { annotations: timeRefAnnotations(7, 20) },
+      legend: {
+        display: true, position: 'top',
+        labels: { boxWidth: 10, font: { size: 10 }, filter: item => item.text.includes('출근') }
+      },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${hm(ctx.raw)}` } }
+    },
+    scales: { y: timeYAxis(7, 20, true) }
+  }
+});
+
+// 2) 월별 야근율 — 연도별 오버레이 (라인)
+const otRateDatasets = [2023,2024,2025,2026].map(yr => {
+  const c = yearColorsLine[yr];
+  return {
+    label: `${yr}`,
+    data: byYearMonth(yr, 'ot') ? moLabels.map((_,i) => {
+      const row = monthlyDetail.find(d => d.yr === yr && d.mo === i+1);
+      if (!row) return null;
+      return +(((row.flex + row.normal + row.heavy) / row.n * 100).toFixed(1));
+    }) : [],
+    borderColor: c.line, backgroundColor: c.bg,
+    borderWidth: 2, pointRadius: 3, tension: 0.3,
+    spanGaps: true,
+    fill: false,
+  };
+});
+
+new Chart(document.getElementById('monthlyOT'), {
+  type: 'line',
+  data: { labels: moLabels, datasets: otRateDatasets },
+  options: {
+    ...baseOpts,
+    plugins: {
+      ...baseOpts.plugins,
+      legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}%` } }
+    },
+    scales: { y: { min: 0, ticks: { callback: v => v + '%' } } }
+  }
+});
+
+
+// ══════════════════════════════════════════
+// 특이일정 카드 렌더링 (days.json에서 동적 계산)
+// ══════════════════════════════════════════
+(() => {
+  const days = JSON.parse(document.getElementById('daysData').textContent);
+  days.forEach(d => {
+    if (d.ef == null || d.cat !== 'normal') { d.ot = null; return; }
+    if (d.ef > 11)      d.ot = 3;
+    else if (d.ef > 10) d.ot = 2;
+    else if (d.ef > 9)  d.ot = 1;
+    else                d.ot = null;
+  });
+  const grid = document.getElementById('specialGrid');
+  if (!grid) return;
+
+  // 카테고리별 카운트
+  const cnt = (predicate) => days.filter(predicate).length;
+  const byCat = (cat) => days.filter(d => d.cat === cat);
+
+  const abroad   = byCat('abroad');
+  const domestic = byCat('domestic');
+  const event    = byCat('event');
+  const military = byCat('military');
+  const field    = byCat('field');
+
+  // 토/일 근무 (출장/교육 제외)
+  const weekendWork = days.filter(d => {
+    const dObj = new Date(d.d + 'T12:00:00');
+    const dow = dObj.getDay();
+    return (dow === 0 || dow === 6) && d.s !== null && !['abroad','domestic','military'].includes(d.cat);
+  });
+
+  // 휴가 타입별
+  const leaveTypes = {
+    annual:  byCat('leave_annual'),
+    comp:    byCat('leave_comp').concat(byCat('leave_subst')),
+    special: byCat('leave_special').concat(byCat('leave_refresh')).concat(byCat('leave_event')),
+  };
+  const totalLeave = Object.values(leaveTypes).reduce((s,a) => s+a.length, 0);
+
+  // 연차 추정 계산
+  const KR_HOLIDAYS_LIST = ["2023-01-01","2023-01-21","2023-01-22","2023-01-23","2023-01-24","2023-03-01","2023-05-01","2023-05-05","2023-05-27","2023-05-29","2023-06-06","2023-08-15","2023-09-28","2023-09-29","2023-09-30","2023-10-02","2023-10-03","2023-10-09","2023-12-25","2024-01-01","2024-02-09","2024-02-10","2024-02-11","2024-02-12","2024-03-01","2024-04-10","2024-05-01","2024-05-05","2024-05-06","2024-05-15","2024-06-06","2024-08-15","2024-09-16","2024-09-17","2024-09-18","2024-10-01","2024-10-03","2024-10-09","2024-12-25","2025-01-01","2025-01-27","2025-01-28","2025-01-29","2025-01-30","2025-03-01","2025-03-03","2025-05-01","2025-05-05","2025-05-06","2025-06-03","2025-06-06","2025-08-15","2025-10-03","2025-10-05","2025-10-06","2025-10-07","2025-10-08","2025-10-09","2025-12-25","2026-01-01","2026-02-16","2026-02-17","2026-02-18","2026-03-01","2026-03-02","2026-05-01","2026-05-05","2026-05-24","2026-05-25"];
+  const holidaySet = new Set(KR_HOLIDAYS_LIST);
+  const dataDateSet = new Set(days.map(d => d.d));
+  function pad(n){return String(n).padStart(2,'0');}
+  let est = 0;
+  for (let t = new Date('2023-01-02T12:00:00'); t <= new Date('2026-05-22T12:00:00'); t.setDate(t.getDate()+1)) {
+    const ds = `${t.getFullYear()}-${pad(t.getMonth()+1)}-${pad(t.getDate())}`;
+    const dow = t.getDay();
+    if (dow >= 1 && dow <= 5 && !holidaySet.has(ds) && !dataDateSet.has(ds)) est++;
+  }
+
+  const leaveBreakdown = [
+    leaveTypes.annual.length  ? `연차 ${leaveTypes.annual.length}일`  : null,
+    leaveTypes.comp.length    ? `보상·대체 ${leaveTypes.comp.length}일`  : null,
+    leaveTypes.special.length ? `경조·리프레시 ${leaveTypes.special.length}일` : null,
+  ].filter(Boolean);
+
+  const specialGroups = [
+    {
+      label: '출장',
+      cells: [
+        { color: '#38BDF8', count: abroad.length,   unit: '일', name: '국외 출장', sub: '국제 학회 A·B' },
+        { color: '#BAE6FD', count: domestic.length, unit: '일', name: '국내 출장', sub: '국내 학회·워크샵' },
+        { color: '#BAE6FD', count: domestic.length,  unit: '일', name: '국내 출장', sub: '국내 학회·워크샵 외' },
+      ]
+    },
+    {
+      label: '외부 활동',
+      cells: [
+        { color: '#F5A623', count: field.length, unit: '일', name: '외부 일정', sub: '외부 미팅' },
+      ]
+    },
+    {
+      label: '특수',
+      cells: [
+        { color: '#4ADE80', count: weekendWork.length, unit: '일', name: '토요일 출근', sub: '' },
+        { color: '#8E8E93', count: military.length,    unit: '일', name: '교육',   sub: '2024.03~04' },
+      ]
+    },
+    {
+      label: '확인된 휴가',
+      cells: [
+        { color: '#34D399', count: totalLeave, unit: '일', name: '전체 휴가',
+          sub: leaveBreakdown.join(' · '), full: true },
+      ]
+    },
+  ];
+
+  specialGroups.forEach(group => {
+    const visibleCells = group.cells.filter(cell => cell.full || cell.count > 0);
+    if (visibleCells.length === 0) { return; }
+
+    const labelEl = document.createElement('div');
+    labelEl.className = 'special-group-label';
+    labelEl.textContent = group.label;
+    grid.appendChild(labelEl);
+
+    const cellsEl = document.createElement('div');
+    cellsEl.className = 'special-group-cells';
+    visibleCells.forEach(cell => {
+      const cellDiv = document.createElement('div');
+      cellDiv.className = 'special-cell' + (cell.full ? ' special-cell-full' : '');
+      if (cell.full && cell.sub) {
+        cellDiv.innerHTML = `
+          <div class="special-accent" style="background:${cell.color}"></div>
+          <div class="special-count">${cell.count}<span class="special-unit"> ${cell.unit}</span></div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;">
+            <div class="special-label">${cell.name}</div>
+            <div class="special-sub" style="margin-left:0;white-space:normal;line-height:1.4;">${cell.sub}</div>
+          </div>
+        `;
+      } else {
+        cellDiv.innerHTML = `
+          <div class="special-accent" style="background:${cell.color}"></div>
+          <div class="special-count">${cell.count}<span class="special-unit"> ${cell.unit}</span></div>
+          <div class="special-label">${cell.name}</div>
+          ${cell.sub ? `<div class="special-sub">${cell.sub}</div>` : ''}
+        `;
+      }
+      cellsEl.appendChild(cellDiv);
+    });
+    grid.appendChild(cellsEl);
+  });
+})();
+
+// TOC 스크롤 활성화
+const tocSections = ['sec-heatmap','sec-profile'];
+const tocLinks = document.querySelectorAll('.toc-item');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      tocLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+tocSections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+
+// 연도 범례
+const yearColors = {'2023':'rgba(147,197,253,0.85)','2024':'rgba(96,165,250,0.85)','2025':'rgba(59,130,246,0.85)','2026':'rgba(29,78,216,0.9)'};
+
+// ── 8. 출근 유형 스택 바 ──
+new Chart(document.getElementById('typeByYear'), {
+  type: 'bar',
+  data: {
+    labels: typeByYear.map(d => d.year + '년'),
+    datasets: [
+      { label: '~8시 (이른)', data: typeByYear.map(d => d.early_pct), backgroundColor: 'rgba(45,212,191,0.85)', borderRadius: 0 },
+      { label: '8~9시 (보통)', data: typeByYear.map(d => d.normal_pct), backgroundColor: 'rgba(108,142,245,0.85)' },
+      { label: '9~10시 (유연)', data: typeByYear.map(d => d.flex_pct), backgroundColor: 'rgba(245,166,35,0.8)' },
+      { label: '10시~ (늦은)', data: typeByYear.map(d => d.late_pct), backgroundColor: 'rgba(248,113,113,0.85)' },
+    ]
+  },
+  options: {
+    ...baseOpts,
+    plugins: {
+      ...baseOpts.plugins,
+      legend: { display: true, position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.raw}%` } }
+    },
+    scales: {
+      x: { stacked: true },
+      y: { stacked: true, ticks: { callback: v => v + '%' }, max: 100 }
+    }
+  }
+});
+
+
+// ── 11. 월별 상세 타임라인 (변곡점 어노테이션 포함) ──
+const tlLabels = monthlyDetail.map(d => d.label);
+// 변곡점: 전월 대비 출근시간 ±30분 이상 변화
+const changePoints = [
+  { label: '2024-09', text: '부서\n이동', color: 'rgba(108,142,245,0.85)' },
+  { label: '2025-03', text: '유연근무\n증가', color: 'rgba(248,113,113,0.9)' },
+  { label: '2025-08', text: '정상화\n−65분', color: 'rgba(45,212,191,0.9)' },
+  { label: '2026-04', text: '장야근\n집중', color: 'rgba(192,132,252,0.9)' },
+];
+const tlAnnotations = {};
+changePoints.forEach((cp, i) => {
+  tlAnnotations['line'+i] = {
+    type: 'line',
+    xMin: cp.label, xMax: cp.label,
+    borderColor: cp.color,
+    borderWidth: 2,
+    borderDash: [4, 3],
+    label: {
+      content: cp.text.split('\n'),
+      display: true,
+      position: 'start',
+      backgroundColor: 'rgba(15,17,23,0.85)',
+      color: cp.color,
+      font: { size: 10, weight: 'bold' },
+      padding: 4,
+      yAdjust: 6,
+    }
+  };
+});
+new Chart(document.getElementById('monthlyTimeline'), {
+  type: 'line',
+  data: {
+    labels: tlLabels,
+    datasets: [
+      {
+        label: '퇴근',
+        data: monthlyDetail.map(d => d.avg_end),
+        borderColor: accent,
+        backgroundColor: 'rgba(108,142,245,0.12)',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 3,
+        borderWidth: 2,
+      },
+      {
+        label: '출근',
+        data: monthlyDetail.map(d => d.avg_start),
+        borderColor: teal,
+        backgroundColor: 'rgba(45,212,191,0.12)',
+        fill: false,
+        tension: 0.3,
+        pointRadius: 3,
+        borderWidth: 2,
+      },
+    ]
+  },
+  options: {
+    ...baseOpts,
+    plugins: {
+      ...baseOpts.plugins,
+      annotation: { annotations: timeRefAnnotations(7, 20, tlAnnotations) },
+      legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 11 } } },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.dataset.label}: ${hm(ctx.raw)}`,
+          afterBody: items => {
+            const idx = items[0].dataIndex;
+            const d = monthlyDetail[idx];
+            const ot = d.flex + d.normal + d.heavy;
+            const total_pct = (d.flex_pct + d.normal_pct + d.heavy_pct).toFixed(1);
+            return [`야근: ${ot}일 (${total_pct}%)`, `근무일: ${d.n}일`];
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 20 } },
+      y: timeYAxis(7, 20, true)
+    }
+  }
+});
+
+// ── 12. 월별 근무 시간 변동성 ──
+const varData = [{"label":"2023-01","yr":2023,"mo":1,"n":19,"avg":6.85,"min":3.8,"max":8.23,"std":1.23,"total_ot":1.13,"q1":6.5,"q3":7.5},{"label":"2023-02","yr":2023,"mo":2,"n":12,"avg":7.32,"min":6.45,"max":7.78,"std":0.51,"total_ot":1.08,"q1":7.35,"q3":7.72},{"label":"2023-03","yr":2023,"mo":3,"n":15,"avg":7.13,"min":2.45,"max":7.7,"std":1.32,"total_ot":0.72,"q1":7.37,"q3":7.58},{"label":"2023-04","yr":2023,"mo":4,"n":19,"avg":7.54,"min":6.98,"max":8.18,"std":0.24,"total_ot":1.75,"q1":7.53,"q3":7.6},{"label":"2023-05","yr":2023,"mo":5,"n":22,"avg":7.62,"min":7.5,"max":8.15,"std":0.12,"total_ot":2.75,"q1":7.58,"q3":7.62},{"label":"2023-06","yr":2023,"mo":6,"n":17,"avg":7.78,"min":7.48,"max":9.0,"std":0.45,"total_ot":5.25,"q1":7.58,"q3":7.67},{"label":"2023-07","yr":2023,"mo":7,"n":17,"avg":7.61,"min":7.23,"max":8.15,"std":0.21,"total_ot":2.45,"q1":7.57,"q3":7.62},{"label":"2023-08","yr":2023,"mo":8,"n":22,"avg":7.61,"min":7.13,"max":9.0,"std":0.47,"total_ot":3.83,"q1":7.4,"q3":7.62},{"label":"2023-09","yr":2023,"mo":9,"n":18,"avg":7.85,"min":7.38,"max":9.0,"std":0.39,"total_ot":6.37,"q1":7.6,"q3":8.03},{"label":"2023-10","yr":2023,"mo":10,"n":17,"avg":7.84,"min":7.28,"max":8.6,"std":0.33,"total_ot":5.92,"q1":7.68,"q3":7.88},{"label":"2023-11","yr":2023,"mo":11,"n":23,"avg":7.8,"min":5.43,"max":10.45,"std":1.03,"total_ot":11.28,"q1":7.28,"q3":9.0},{"label":"2023-12","yr":2023,"mo":12,"n":16,"avg":7.61,"min":5.5,"max":9.0,"std":0.66,"total_ot":3.82,"q1":7.6,"q3":7.77},{"label":"2024-01","yr":2024,"mo":1,"n":21,"avg":7.57,"min":4.12,"max":9.78,"std":1.41,"total_ot":9.8,"q1":7.62,"q3":7.78},{"label":"2024-02","yr":2024,"mo":2,"n":17,"avg":7.79,"min":4.0,"max":10.78,"std":1.42,"total_ot":8.48,"q1":7.6,"q3":7.73},{"label":"2024-03","yr":2024,"mo":3,"n":18,"avg":7.83,"min":7.58,"max":9.0,"std":0.43,"total_ot":5.93,"q1":7.63,"q3":7.73},{"label":"2024-04","yr":2024,"mo":4,"n":20,"avg":8.52,"min":7.25,"max":9.0,"std":0.68,"total_ot":20.6,"q1":7.68,"q3":9.0},{"label":"2024-05","yr":2024,"mo":5,"n":19,"avg":7.28,"min":4.02,"max":7.8,"std":1.15,"total_ot":2.75,"q1":7.58,"q3":7.7},{"label":"2024-06","yr":2024,"mo":6,"n":18,"avg":7.63,"min":6.08,"max":8.73,"std":0.48,"total_ot":3.83,"q1":7.58,"q3":7.72},{"label":"2024-07","yr":2024,"mo":7,"n":23,"avg":7.67,"min":5.22,"max":10.08,"std":0.87,"total_ot":8.42,"q1":7.2,"q3":7.9},{"label":"2024-08","yr":2024,"mo":8,"n":17,"avg":7.64,"min":6.55,"max":8.0,"std":0.31,"total_ot":3.4,"q1":7.63,"q3":7.73},{"label":"2024-09","yr":2024,"mo":9,"n":18,"avg":7.68,"min":4.83,"max":10.25,"std":1.22,"total_ot":8.28,"q1":7.63,"q3":7.82},{"label":"2024-10","yr":2024,"mo":10,"n":20,"avg":7.71,"min":7.5,"max":8.35,"std":0.22,"total_ot":4.27,"q1":7.62,"q3":7.73},{"label":"2024-11","yr":2024,"mo":11,"n":18,"avg":7.65,"min":6.67,"max":8.58,"std":0.48,"total_ot":5.1,"q1":7.47,"q3":7.98},{"label":"2024-12","yr":2024,"mo":12,"n":17,"avg":7.65,"min":4.45,"max":10.0,"std":1.01,"total_ot":5.75,"q1":7.53,"q3":7.83},{"label":"2025-01","yr":2025,"mo":1,"n":17,"avg":7.56,"min":6.55,"max":7.92,"std":0.28,"total_ot":1.9,"q1":7.57,"q3":7.65},{"label":"2025-02","yr":2025,"mo":2,"n":20,"avg":7.48,"min":7.03,"max":7.77,"std":0.18,"total_ot":1.13,"q1":7.47,"q3":7.6},{"label":"2025-03","yr":2025,"mo":3,"n":18,"avg":7.54,"min":5.4,"max":8.93,"std":0.73,"total_ot":4.18,"q1":7.47,"q3":7.92},{"label":"2025-04","yr":2025,"mo":4,"n":22,"avg":7.01,"min":4.33,"max":9.0,"std":1.35,"total_ot":6.17,"q1":5.83,"q3":8.02},{"label":"2025-06","yr":2025,"mo":6,"n":19,"avg":7.36,"min":4.65,"max":11.48,"std":1.54,"total_ot":9.35,"q1":6.65,"q3":8.02},{"label":"2025-07","yr":2025,"mo":7,"n":23,"avg":7.49,"min":3.67,"max":9.83,"std":1.36,"total_ot":10.83,"q1":6.65,"q3":8.12},{"label":"2025-08","yr":2025,"mo":8,"n":16,"avg":7.44,"min":4.28,"max":10.48,"std":1.31,"total_ot":6.13,"q1":7.0,"q3":8.08},{"label":"2025-09","yr":2025,"mo":9,"n":20,"avg":6.98,"min":0,"max":11.05,"std":2.88,"total_ot":11.67,"q1":6.72,"q3":8.65},{"label":"2025-10","yr":2025,"mo":10,"n":16,"avg":7.58,"min":3.95,"max":10.9,"std":1.71,"total_ot":9.85,"q1":6.98,"q3":8.23},{"label":"2025-11","yr":2025,"mo":11,"n":20,"avg":7.94,"min":3.6,"max":10.35,"std":1.93,"total_ot":20.53,"q1":7.47,"q3":9.42},{"label":"2025-12","yr":2025,"mo":12,"n":23,"avg":7.71,"min":3.6,"max":11.0,"std":2.69,"total_ot":29.72,"q1":4.37,"q3":10.08},{"label":"2026-01","yr":2026,"mo":1,"n":21,"avg":7.42,"min":3.55,"max":10.65,"std":1.51,"total_ot":9.38,"q1":6.87,"q3":7.65},{"label":"2026-02","yr":2026,"mo":2,"n":16,"avg":7.25,"min":3.72,"max":10.63,"std":1.5,"total_ot":6.12,"q1":6.68,"q3":7.78},{"label":"2026-03","yr":2026,"mo":3,"n":24,"avg":7.99,"min":4.13,"max":11.6,"std":1.76,"total_ot":23.63,"q1":7.33,"q3":9.0},{"label":"2026-04","yr":2026,"mo":4,"n":20,"avg":8.22,"min":4.15,"max":11.52,"std":1.92,"total_ot":21.43,"q1":7.53,"q3":10.23},{"label":"2026-05","yr":2026,"mo":5,"n":13,"avg":8.28,"min":4.8,"max":10.87,"std":1.73,"total_ot":15.15,"q1":7.68,"q3":9.42}];
+
+// 변동성 차트: min~max 범위 + IQR 박스 + 평균선
+new Chart(document.getElementById('otHoursChart'), {
+  type: 'bar',
+  data: {
+    labels: varData.map(d => d.label),
+    datasets: [
+      // min~max 전체 범위 (연한 배경)
+      {
+        label: 'Min–Max 범위',
+        data: varData.map(d => [Math.max(0,d.min), d.max]),
+        backgroundColor: 'rgba(49,130,246,0.12)',
+        borderColor: 'rgba(49,130,246,0.2)',
+        borderWidth: 1,
+        borderRadius: 2,
+        barPercentage: 0.85,
+      },
+      // Q1~Q3 IQR 박스 (진한 배경)
+      {
+        label: 'IQR (Q1–Q3)',
+        data: varData.map(d => [d.q1, d.q3]),
+        backgroundColor: 'rgba(49,130,246,0.45)',
+        borderColor: 'rgba(49,130,246,0.7)',
+        borderWidth: 1,
+        borderRadius: 2,
+        barPercentage: 0.85,
+      },
+      // 평균 라인
+      {
+        type: 'line',
+        label: '평균',
+        data: varData.map(d => d.avg),
+        borderColor: teal,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        pointRadius: 3,
+        pointBackgroundColor: teal,
+        tension: 0.3,
+        order: 0,
+      }
+    ]
+  },
+  options: {
+    ...baseOpts,
+    plugins: {
+      ...baseOpts.plugins,
+      legend: { display: true, position: 'top', labels: { boxWidth: 10, font: { size: 11 } } },
+      annotation: {
+        annotations: {
+          standard: { type:'line', yMin:7.5, yMax:7.5, borderColor:'rgba(240,68,82,0.3)', borderWidth:1.5, borderDash:[4,3],
+            label:{ content:'표준 7.5h', display:true, position:'end', color:'rgba(240,68,82,0.6)', font:{size:9}, backgroundColor:'transparent' } }
+        }
+      },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const d = varData[ctx.dataIndex];
+            if (ctx.datasetIndex === 0) return `범위: ${d.min}h ~ ${d.max}h`;
+            if (ctx.datasetIndex === 1) return `IQR: ${d.q1}h ~ ${d.q3}h`;
+            return `평균: ${d.avg}h`;
+          },
+          afterBody: items => {
+            const d = varData[items[0].dataIndex];
+            return [`σ: ${d.std}h`, `월 누계 추가근무: +${d.total_ot}h`, `근무일: ${d.n}일`];
+          }
+        }
+      }
+    },
+    scales: {
+      x: { ticks: { maxRotation: 45, autoSkip: true, maxTicksLimit: 20 } },
+      y: { min: 0, max: 12, ticks: { callback: v => v+'h' } }
+    }
+  }
+});
+
+
+</script>
+
+<div class="tab-content" id="tab-lab">
+
+<p class="insights-intro">
+  "추가 가능한 분석" 8개를 실제 근태 데이터로 구현한 실험 페이지. 괜찮은 것은 본 분석 탭으로 이동 예정.
+</p>
+
+<!-- 1. 요일별 패턴 -->
+<div class="section">
+  <div class="section-title">1. 요일별 패턴 <span>월~금 평균 (정상 근무일 기준)</span></div>
+  <div class="chart-card" id="weekdayCard" style="margin-bottom:16px;"></div>
+  <div class="charts-2">
+    <div class="chart-card">
+      <div class="chart-title">요일별 평균 출근·퇴근 시간</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="labWeekday"></canvas></div>
+      <div class="insight-bar" id="labWeekdayInsight"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">요일별 야근율 · 평균 실근무</div>
+      <div class="chart-wrap" style="height:280px"><canvas id="labWeekdayOT"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. Top Moments -->
+<div class="section">
+  <div class="section-title">2. Top Moments <span>전체 기간 기록</span></div>
+  <div class="lab-moments" id="labMoments"></div>
+</div>
+
+<!-- 3. 변곡점 -->
+<div class="section">
+  <div class="section-title">3. 변곡점 인사이트 <span>전월 대비 출근 시간 ±30분 자동 감지</span></div>
+  <div class="lab-inflection" id="labInflection"></div>
+</div>
+
+<!-- 4. 시간대별 출근 분포 -->
+<div class="section">
+  <div class="section-title">4. 시간대별 출근 분포 <span>출근 시각 시간대 버킷</span></div>
+  <div class="chart-card">
+    <div class="chart-wrap" style="height:300px"><canvas id="labHourDist"></canvas></div>
+    <div class="insight-bar" id="labHourInsight"></div>
+  </div>
+</div>
+
+<!-- 5. 휴가 캘린더 -->
+<div class="section">
+  <div class="section-title">5. 휴가 사용 분포 <span>연도×월별 휴가 일수</span></div>
+  <div class="chart-card">
+    <div class="chart-wrap" style="height:300px"><canvas id="labLeave"></canvas></div>
+    <div class="insight-bar" id="labLeaveInsight"></div>
+  </div>
+</div>
+
+<!-- 6. 회복 패턴 -->
+<div class="section">
+  <div class="section-title">6. 야근 회복 패턴 <span>전일 퇴근 시간대 → 다음날 출근 시간</span></div>
+  <div class="chart-card">
+    <div class="chart-wrap" style="height:280px"><canvas id="labRecovery"></canvas></div>
+    <div class="insight-bar" id="labRecoveryInsight"></div>
+  </div>
+</div>
+
+<!-- 7. Year Wrapped -->
+<div class="section">
+  <div class="section-title">7. Year Wrapped <span>연도별 요약</span></div>
+  <div class="lab-wrapped" id="labWrapped"></div>
+</div>
+
+<!-- 8. 샌드위치 휴가 -->
+<div class="section">
+  <div class="section-title">8. 샌드위치 휴가 <span>공휴일·주말 인접 연차로 만든 연휴</span></div>
+  <div class="lab-sandwich" id="labSandwich"></div>
+</div>
+
+</div> <!-- end #tab-lab -->
+
+<div class="tab-content" id="tab-insights">
+
+<p class="insights-intro">
+  외부 사례 조사(2026.05)와 현재 데이터로 추가 가능한 분석을 정리한 페이지. 카드별로 어떤 시각화·인사이트가 가능한지 ASCII mockup으로 미리 보고, 어떤 항목을 본 페이지에 구현할지 결정.
+</p>
+
+<!-- 섹션: 추가 추천 분석 -->
+<div class="section" id="sec-recommendations">
+  <div class="section-title">추가 가능한 분석 <span>현재 근태 데이터로 즉시 구현 가능 · ASCII mockup</span></div>
+
+  <div class="rec-grid">
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">1. 요일별 패턴 카드</div>
+        <span class="rec-badge big">우선순위 高</span>
+      </div>
+      <div class="rec-desc">월~금 평균 출근·퇴근·실근무 비교. HR 도구·HabitBoard에 흔한 view. 패턴의 "리듬"이 한눈에 보임.</div>
+      <pre class="rec-mock">        월     화     수     목     금
+출근   8:31   8:24   8:22   8:18   8:30
+퇴근  17:48  17:35  17:22  17:25  17:24
+실근무  7:42  7:38   7:31   7:34   7:28
+
+▓▓▓▓▓ ▓▓▓▓▒ ▓▓▓▓░ ▓▓▓▓░ ▓▓▓▓░  ← 야근율
+  12%    9%    8%    8%    6%
+
+💡 월요일 가장 늦게 퇴근 · 금요일 가장 일찍 퇴근</pre>
+      <div class="rec-why"><strong>왜:</strong> 금요일 효과·월요병 가시화. KPI row 옆에 두기 좋음.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">2. Top Moments / 기록</div>
+        <span class="rec-badge big">우선순위 高</span>
+      </div>
+      <div class="rec-desc">Spotify Wrapped의 "Top Track" 같은 감성. 가장 일찍/늦은 극단값과 연속 기록.</div>
+      <pre class="rec-mock">🌅 가장 일찍 출근   6:42  2025-04-15 (화)
+🌙 가장 늦게 퇴근  23:18  2025-12-09 (화)
+🔥 가장 긴 실근무  11:47  2025-12-09 (화)
+📈 가장 긴 연속 출근  23일  2024-08-12 ~ 09-13
+🏖  가장 긴 연속 휴무   9일  2025-05-19 ~ 27</pre>
+      <div class="rec-why"><strong>왜:</strong> 평균보다 "그 날" 기억과 연결. 회고 가치 높음.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">3. 변곡점 인사이트 카드</div>
+        <span class="rec-badge big">우선순위 高</span>
+      </div>
+      <div class="rec-desc">이미 docs/analysis-notes에 있는 분석을 시각 카드로. HiBob의 "attrition indicator" 패턴.</div>
+      <pre class="rec-mock">2024 하반기  부서 이동
+         ─────────────────────────
+         · 출근 시간 변화 미미
+         · 야근일 소폭 증가
+
+2025 봄  근무 형태 변화
+         ─────────────────────────
+         · 출근 시간 늦어짐
+         · 유연근무율 증가
+         → 이후 점진적 회복
+
+2026 봄  업무 강도 증가
+         ─────────────────────────
+         · 장야근 빈도 상승</pre>
+      <div class="rec-why"><strong>왜:</strong> 그래프 점이 "왜 거기"인지 narrative 제공. numbers → story.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">4. 시간대별 출근 분포</div>
+        <span class="rec-badge mid">우선순위 中</span>
+      </div>
+      <div class="rec-desc">평균 8:30보다 풍부함. 분포 모양으로 패턴 유형(early bird vs flex) 드러남.</div>
+      <pre class="rec-mock">출근 시간 빈도          (n = 678일)
+6시  ▌                4
+7시  ▓▓▓▓▓▓▓        47
+8시  ▓▓▓▓▓▓▓▓▓▓▓▓▓ 312  ← 최빈값 (46%)
+9시  ▓▓▓▓▓▓▓▓▓▓▓   285
+10시 ▓▓▓▓▓          98
+11시 ▌                8
+
+↑ 7-9시 집중. 10시+ 13%는 유연·시차 영향</pre>
+      <div class="rec-why"><strong>왜:</strong> 분포 형태가 사람 성격·제도 영향을 가장 잘 드러냄.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">5. 휴가 캘린더 뷰 (스파크라인)</div>
+        <span class="rec-badge mid">우선순위 中</span>
+      </div>
+      <div class="rec-desc">연간 히트맵과 별개로 휴가만 추출한 작은 캘린더. 분포·몰아쓰기·샌드위치 가시화.</div>
+      <pre class="rec-mock">2024 휴가 (총 19일)
+1월 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  연차 1
+2월 ░░░░░░░░▓▓░░░░░░░░░░░░░░▓▓░░░░  설+연차
+3월 ░░░░░░░░░░░░░░░░░░░░░░░░░▓▓░░    연차 2
+4월 ░░░░░░░░░░░░░░░░░░▓▓░░░░░░░░░    연차 1
+8월 ▓▓▓▓░░░░░░░░░░░▓▓░░░░░░░░░░░░    여름 4+1
+12월 ░░░░░░░░░░░░░░░░░░░░░░░░░▓▓▓░   연말 3</pre>
+      <div class="rec-why"><strong>왜:</strong> 휴가 사용 "전략"이 보임 — 분산형 vs 몰아쓰기, 샌드위치 활용.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">6. 야근 회복 패턴</div>
+        <span class="rec-badge mid">우선순위 中</span>
+      </div>
+      <div class="rec-desc">야근 다음 날 출근 시간 변화. "회복력" 정량화. 야근의 진짜 비용.</div>
+      <pre class="rec-mock">전일 퇴근 시간 → 다음날 출근 시간
+
+20시  ▓▓▓▓▓░  평균 8:42 (정상 -17분)
+21시  ▓▓▓▓░░  평균 9:08 (정상 +9분)
+22시  ▓▓▒░░░  평균 9:34 (정상 +35분)
+23시+ ▓░░░░░  평균 10:12 (정상 +73분)
+
+💡 22시 이후 야근 = 다음날 0.5h 손실</pre>
+      <div class="rec-why"><strong>왜:</strong> 야근의 "진짜 비용" 보임. 의사결정 데이터.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">7. Year Wrapped 모달</div>
+        <span class="rec-badge">우선순위 低</span>
+      </div>
+      <div class="rec-desc">Spotify Wrapped 스타일. 연말에 한 번 보는 큰 회고. SNS 공유 가능.</div>
+      <pre class="rec-mock">┌─ 2025 in Numbers ────┐
+│                      │
+│    240일 출근         │
+│   ━━━━━━━━━━━━       │
+│                      │
+│  평균 출근  8:30     │
+│  평균 퇴근 17:50     │
+│                      │
+│  🏖  18일 휴가        │
+│  ✈️  3회 출장         │
+│  🔥  25일 야근        │
+│                      │
+│  의미있는 변화:      │
+│  "봄철 유연근무로    │
+│   출근이 늦어졌다   │
+│   하반기 회복"        │
+│                      │
+│   [공유]  [다음 →]   │
+└──────────────────────┘</pre>
+      <div class="rec-why"><strong>왜:</strong> 연 단위 회고 + SNS 공유. 만드는 재미·보는 재미. 작업량 큼.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-head">
+        <div class="rec-title">8. 샌드위치 휴가 효율</div>
+        <span class="rec-badge">우선순위 低</span>
+      </div>
+      <div class="rec-desc">공휴일 + 연차 조합 패턴. 1일 연차로 만든 평균 연휴 길이.</div>
+      <pre class="rec-mock">공휴일 + 연차 조합
+
+2024-02-09(금) 설 → 2-12(월) 대체
+        ▲연차    ▲연차    5일 연휴
+
+2024-09-16~18 추석
+        ▲ 9-13(금) 반차
+        → 6일 연휴 (반차 0.5일로)
+
+효율 지표:
+1일 연차로 만든 평균 연휴 = 4.2일</pre>
+      <div class="rec-why"><strong>왜:</strong> "연차 ROI" 재밌는 지표. 연휴 설계 전략 노출.</div>
+    </div>
+
+  </div>
+
+  <div class="rec-summary">
+    <h3>우선순위 정리</h3>
+    <table>
+      <thead><tr><th>#</th><th>항목</th><th>데이터</th><th>작업량</th><th>임팩트</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>요일별 패턴 카드</td><td>✅ 현재</td><td>작음</td><td>높음</td></tr>
+        <tr><td>2</td><td>Top Moments</td><td>✅ 현재</td><td>작음</td><td>높음</td></tr>
+        <tr><td>3</td><td>변곡점 카드</td><td>✅ docs에 있음</td><td>작음</td><td>높음</td></tr>
+        <tr><td>4</td><td>시간대 분포</td><td>✅ 현재</td><td>작음</td><td>중간</td></tr>
+        <tr><td>5</td><td>휴가 캘린더 뷰</td><td>✅ 현재</td><td>중간</td><td>중간</td></tr>
+        <tr><td>6</td><td>회복 패턴</td><td>✅ 현재</td><td>중간</td><td>중간</td></tr>
+        <tr><td>7</td><td>Year Wrapped</td><td>✅ 현재</td><td>큼</td><td>높음</td></tr>
+        <tr><td>8</td><td>샌드위치 휴가</td><td>✅ 현재</td><td>중간</td><td>낮음</td></tr>
+      </tbody>
+    </table>
+    <p style="margin: 14px 0 0; font-size: 12.5px; color: var(--text2); line-height: 1.6;">
+      <strong style="color:var(--text);">즉시 추가 추천:</strong> 1 + 2 + 3 (작업량 작고 임팩트 높음). KPI row 아래에 카드 그리드로 배치.<br>
+      <strong style="color:var(--text);">중기:</strong> Year Wrapped 별도 모드. <strong style="color:var(--text);">장기:</strong> Google Calendar 연동.
+    </p>
+  </div>
+</div>
+
+<!-- 섹션 7: 레퍼런스 -->
+<div class="section" id="sec-refs">
+  <div class="section-title">레퍼런스 <span>유사 프로젝트·서비스 조사 · 2026.05</span></div>
+
+  <p class="ref-intro">
+    worklog 같은 개인 근무 패턴 분석·시각화 작업에서 참고할 외부 사례. 직접 시도하지 않은 항목 포함. UI·기능·접근 방식 비교용.
+  </p>
+
+  <div class="ref-category">
+    <h3>1. 개인 Quantified Self (오픈소스)</h3>
+    <div class="ref-sub">self-tracking 데이터 aggregator·시각화. worklog와 가장 가까운 위치.</div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://github.com/markwk/qs_ledger" target="_blank" rel="noopener">
+        <span class="ref-card-title">QS Ledger</span>
+        <span class="ref-card-desc">Python + Jupyter 기반 개인 데이터 aggregator. 피트빗·구글·트위터 API 연동 → 정제 → 대시보드 파이프라인.</span>
+        <span class="ref-card-meta">github.com/markwk/qs_ledger</span>
+      </a>
+      <a class="ref-card" href="https://github.com/mcwaage1/qs" target="_blank" rel="noopener">
+        <span class="ref-card-title">mcwaage1/qs</span>
+        <span class="ref-card-desc">프로그래밍 시간을 GitHub-style heatmap + timeline으로 시각화. worklog 히트맵 흐름과 일치.</span>
+        <span class="ref-card-meta">github.com/mcwaage1/qs</span>
+      </a>
+      <a class="ref-card" href="https://github.com/pritampanda15/HabitBoard" target="_blank" rel="noopener">
+        <span class="ref-card-title">HabitBoard</span>
+        <span class="ref-card-desc">활성 윈도우 백그라운드 트래킹 → Flask + Plotly. 카테고리 분류 접근이 worklog cat 시스템과 비슷.</span>
+        <span class="ref-card-meta">Flask · Plotly</span>
+      </a>
+      <a class="ref-card" href="https://github.com/woop/awesome-quantified-self" target="_blank" rel="noopener">
+        <span class="ref-card-title">awesome-quantified-self</span>
+        <span class="ref-card-desc">self-tracking 도구·웨어러블·플랫폼 카탈로그. 확장 시 참고할 데이터 소스 목록.</span>
+        <span class="ref-card-meta">awesome list</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ref-category">
+    <h3>2. 시간 트래킹 SaaS (개인용)</h3>
+    <div class="ref-sub">자동/수동 시간 트래킹 + 분석. worklog는 출퇴근 기록 기반이라 결이 다름.</div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://www.rescuetime.com/" target="_blank" rel="noopener">
+        <span class="ref-card-title">RescueTime</span>
+        <span class="ref-card-desc">자동 시간 트래킹(앱·웹사이트). weekly summary, focus session, goal tracking. $12/월.</span>
+        <span class="ref-card-meta">auto · $12/월</span>
+      </a>
+      <a class="ref-card" href="https://toggl.com/" target="_blank" rel="noopener">
+        <span class="ref-card-title">Toggl Track</span>
+        <span class="ref-card-desc">수동 timer + 프로젝트 단위 시간 기록. 프리랜서·에이전시 청구서 연계에 강함.</span>
+        <span class="ref-card-meta">manual · invoice</span>
+      </a>
+      <a class="ref-card" href="https://wakatime.com/quantified-self-for-git" target="_blank" rel="noopener">
+        <span class="ref-card-title">WakaTime</span>
+        <span class="ref-card-desc">코딩 시간 자동 트래킹 (IDE 플러그인). private leaderboard, GitHub 연동.</span>
+        <span class="ref-card-meta">IDE · git 연동</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ref-category">
+    <h3>3. HR People Analytics (조직용)</h3>
+    <div class="ref-sub">조직 단위. worklog는 개인용이지만 어떤 메트릭이 의미 있는지 참고.</div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://www.workday.com/en-us/products/analytics-reporting/augmented-analytics.html" target="_blank" rel="noopener">
+        <span class="ref-card-title">Workday People Analytics</span>
+        <span class="ref-card-desc">인사 데이터 → AI 자동 분석 + 자연어 narrative. 채용·잔존율·다양성·성과 통합 view.</span>
+        <span class="ref-card-meta">AI assistant 내장</span>
+      </a>
+      <a class="ref-card" href="https://www.hibob.com/" target="_blank" rel="noopener">
+        <span class="ref-card-title">HiBob</span>
+        <span class="ref-card-desc">ready-to-use 대시보드(인원·잔존율·결근·이직). 패턴 조기 감지 — worklog 변곡점 감지와 유사.</span>
+        <span class="ref-card-meta">attrition indicator</span>
+      </a>
+      <a class="ref-card" href="https://www.workhuman.com/blog/people-analytics-software/" target="_blank" rel="noopener">
+        <span class="ref-card-title">People Analytics 13선 (2026)</span>
+        <span class="ref-card-desc">시장 개요 + Tableau·Visier 등 도구 카탈로그. 2026 트렌드: AI 자연어 질의.</span>
+        <span class="ref-card-meta">workhuman.com</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ref-category">
+    <h3>4. 연말 리포트 (Spotify Wrapped 모델)</h3>
+    <div class="ref-sub">연 단위 데이터 → 스토리텔링. worklog의 연간 히트맵·KPI를 narrative slide로 발전시킬 때.</div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://newsroom.spotify.com/2025-12-05/wrapped-methodology-explained/" target="_blank" rel="noopener">
+        <span class="ref-card-title">Spotify Wrapped 2025</span>
+        <span class="ref-card-desc">1~11월 데이터 → 카드 슬라이드 UX. 단일 메트릭 X, narrative arc 핵심.</span>
+        <span class="ref-card-meta">스토리 카드형</span>
+      </a>
+      <a class="ref-card" href="https://hightouch.com/blog/2025-campaigns-like-spotify-wrapped" target="_blank" rel="noopener">
+        <span class="ref-card-title">유사 캠페인 모음</span>
+        <span class="ref-card-desc">Calendly Year in Review, Grammarly, monday Rewind — 업무 영역의 Wrapped 변형.</span>
+        <span class="ref-card-meta">Hightouch · 사례 모음</span>
+      </a>
+      <a class="ref-card" href="https://proton.me/blog/spotify-wrapped-alternatives" target="_blank" rel="noopener">
+        <span class="ref-card-title">Wrapped 비판 — Proton</span>
+        <span class="ref-card-desc">"Don't copy Wrapped" — 트래킹 자랑은 프라이버시 백래시 가능. 개인용 OK, 조직 단위는 신중.</span>
+        <span class="ref-card-meta">주의점</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ref-category">
+    <h3>5. 히트맵 라이브러리 (GitHub-style)</h3>
+    <div class="ref-sub">worklog 히트맵 직접 구현. 라이브러리 후보.</div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://cal-heatmap.com/" target="_blank" rel="noopener">
+        <span class="ref-card-title">cal-heatmap</span>
+        <span class="ref-card-desc">JS(npm). GitHub-style, 인터랙티브, 다양한 뷰. 가장 많이 쓰임.</span>
+        <span class="ref-card-meta">JS · npm</span>
+      </a>
+      <a class="ref-card" href="https://github.com/martijnvermaat/calmap" target="_blank" rel="noopener">
+        <span class="ref-card-title">calmap</span>
+        <span class="ref-card-desc">Python 한 줄 코드로 GitHub 스타일 캘린더 히트맵. 시계열 데이터 시각화.</span>
+        <span class="ref-card-meta">Python</span>
+      </a>
+      <a class="ref-card" href="https://github.com/VIkill33/SwiftUI-ContributionChart" target="_blank" rel="noopener">
+        <span class="ref-card-title">SwiftUI ContributionChart</span>
+        <span class="ref-card-desc">iOS/macOS/watchOS native. SwiftUI 패키지로 GitHub-style chart.</span>
+        <span class="ref-card-meta">SwiftUI</span>
+      </a>
+      <a class="ref-card" href="https://forum.obsidian.md/t/contribution-graph-generate-heatmap-charts-to-track-your-activity/73317" target="_blank" rel="noopener">
+        <span class="ref-card-title">Obsidian Contribution Graph</span>
+        <span class="ref-card-desc">Obsidian 플러그인. habit tracking·daily note 데이터로 히트맵 자동 생성.</span>
+        <span class="ref-card-meta">Obsidian 플러그인</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ref-category">
+    <h3>6. 통근(Commute) 패턴 분석</h3>
+    <div class="ref-sub">worklog 확장 시 추가할 만한 영역 — 출퇴근 자체의 시간·경로 분석.</div>
+    <div class="ref-grid">
+      <a class="ref-card" href="https://traveltime.com/blog/commute-time-analysis-tutorial" target="_blank" rel="noopener">
+        <span class="ref-card-title">TravelTime — 사무실 이전 분석</span>
+        <span class="ref-card-desc">직원 주소 → 통근 시간 분포 → 이전 영향 시뮬레이션. API 기반.</span>
+        <span class="ref-card-meta">API · 조직용</span>
+      </a>
+      <a class="ref-card" href="https://www.udacity.com/blog/2014/07/data-visualization-case-study-how-bad.html" target="_blank" rel="noopener">
+        <span class="ref-card-title">IBM Commuter Pain Index</span>
+        <span class="ref-card-desc">20개 도시 "pain index" — 통근시간·지연·정체로 정량화한 출퇴근 스트레스.</span>
+        <span class="ref-card-meta">case study</span>
+      </a>
+      <a class="ref-card" href="https://towardsdatascience.com/330-weeks-of-data-visualizations-my-journey-and-key-takeaways-93f824714dd1/" target="_blank" rel="noopener">
+        <span class="ref-card-title">330주 데이터 시각화 여정</span>
+        <span class="ref-card-desc">개인 단위 트래킹 사례. Apple Watch·소비·재택 영향 등 long-term self-viz.</span>
+        <span class="ref-card-meta">개인 사례</span>
+      </a>
+      <a class="ref-card" href="https://builtin.com/data-science/github-contribution-plot" target="_blank" rel="noopener">
+        <span class="ref-card-title">GitHub Contribution Plot (Built In)</span>
+        <span class="ref-card-desc">시계열 데이터를 GitHub-style heatmap으로 만드는 튜토리얼. 비코드 데이터에도 적용.</span>
+        <span class="ref-card-meta">튜토리얼</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="ref-niche">
+    <h4>worklog의 niche (조사 후 결론)</h4>
+    <ul>
+      <li><strong>출퇴근 기록(외부 시스템) 기반 회고형</strong> — RescueTime/Toggl/WakaTime과 다름</li>
+      <li><strong>카테고리 통합</strong> — 출근·연차·출장·외근·교육 기간 등 하나의 dashboard. HR 도구는 보통 분리</li>
+      <li><strong>변곡점 narrative</strong> — 팀 전환·제도 변화에 따른 패턴 변화 강조. 단순 히트맵보다 한 단계 위</li>
+      <li><strong>개인 소유 데이터</strong> — 클라우드 SaaS 의존 X. HTML 단일 파일로 archive 가능</li>
+    </ul>
+    <h4 style="margin-top:14px;">추후 확장 후보</h4>
+    <ul>
+      <li>Google Calendar 연동 → "왜 그 날 야근이었나" 컨텍스트</li>
+      <li>Spotify Wrapped 스타일 narrative slide UX (현재는 스크롤형)</li>
+      <li>자연어 질의 AI assistant (2026 트렌드)</li>
+      <li>예측 모델 (다음 분기 야근/패턴 forecasting)</li>
+    </ul>
+  </div>
+</div>
+
+</div> <!-- end #tab-insights -->
+
+
+<script>
+// ══════════════════════════════════════════
+// 요일별 패턴 카드 (본 분석 탭)
+// ══════════════════════════════════════════
+(function(){
+  const days = JSON.parse(document.getElementById('daysData').textContent);
+  days.forEach(d=>{ if(d.ef==null||d.cat!=='normal'){d._ot=null;return;} d._ot = d.ef>9?1:null; });
+  const normal = days.filter(d=>d.cat==='normal'&&d.s!=null);
+  const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
+  const fmt = h => { if(h==null)return '-'; const hh=Math.floor(h); const mm=Math.round((h-hh)*60); return hh+':'+String(mm).padStart(2,'0'); };
+  const wd = dstr => { const dt=new Date(dstr+'T12:00:00'); return (dt.getDay()+6)%7; };
+  const names = ['월','화','수','목','금'];
+  const byWd=[[],[],[],[],[]];
+  normal.forEach(d=>{ const w=wd(d.d); if(w<5)byWd[w].push(d); });
+  const S=byWd.map(a=>avg(a.map(d=>d.s))), E=byWd.map(a=>avg(a.map(d=>d.e))), Ef=byWd.map(a=>avg(a.map(d=>d.ef)));
+  const OT=byWd.map(a=>a.length?a.filter(d=>d._ot).length/a.length*100:0);
+  const maxOT=Math.max(...OT);
+  const minS_i=S.indexOf(Math.min(...S)), maxE_i=E.indexOf(Math.max(...E)), minE_i=E.indexOf(Math.min(...E));
+
+  let html = '<table class="wd-table"><thead><tr><th></th>'+names.map(n=>'<th>'+n+'</th>').join('')+'</tr></thead><tbody>';
+  html += '<tr><td>출근</td>'+S.map((v,i)=>'<td class="'+(i===minS_i?'peak':'')+'">'+fmt(v)+'</td>').join('')+'</tr>';
+  html += '<tr><td>퇴근</td>'+E.map((v,i)=>'<td class="'+(i===maxE_i?'peak':'')+'">'+fmt(v)+'</td>').join('')+'</tr>';
+  html += '<tr><td>실근무</td>'+Ef.map(v=>'<td>'+fmt(v)+'</td>').join('')+'</tr>';
+  html += '</tbody></table>';
+  html += '<div class="wd-otrow">'+OT.map((v,i)=>'<div class="wd-ot"><div class="wd-ot-track"><div class="wd-ot-fill" style="height:'+(maxOT?Math.max(4,v/maxOT*100):4)+'%"></div></div><div class="wd-ot-val">'+v.toFixed(0)+'%</div><div class="wd-ot-day">'+names[i]+'</div></div>').join('')+'</div>';
+  html += '<div class="insight-bar" style="margin-top:16px;">💡 가장 일찍 출근 <strong>'+names[minS_i]+'요일</strong> ('+fmt(S[minS_i])+') · 가장 늦게 퇴근 <strong>'+names[maxE_i]+'요일</strong> ('+fmt(E[maxE_i])+') · 가장 일찍 퇴근 <strong>'+names[minE_i]+'요일</strong> ('+fmt(E[minE_i])+')</div>';
+  document.getElementById('weekdayCard').innerHTML = html;
+})();
+</script>
+
+<script>
+// ══════════════════════════════════════════
+// 추가 분석 (Lab) — 실제 daysData 기반
+// ══════════════════════════════════════════
+(function(){
+  const days = JSON.parse(document.getElementById('daysData').textContent);
+  const KR = window.KR_HOLIDAYS || {};
+  window.__labCharts = [];
+  const mk = (id, cfg) => { const el=document.getElementById(id); if(!el)return; const c=new Chart(el, cfg); window.__labCharts.push(c); return c; };
+  const avg = a => a.length ? a.reduce((x,y)=>x+y,0)/a.length : 0;
+  const wd = dstr => { const dt=new Date(dstr+'T12:00:00'); return (dt.getDay()+6)%7; }; // 0=월..6=일
+  const fmt = h => { if(h==null)return '-'; const hh=Math.floor(h); const mm=Math.round((h-hh)*60); return hh+':'+String(mm).padStart(2,'0'); };
+  const addDays = (dstr,n)=>{ const dt=new Date(dstr+'T12:00:00'); dt.setDate(dt.getDate()+n); return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0'); };
+
+  days.forEach(d=>{ if(d.ef==null||d.cat!=='normal'){d._ot=null;return;} d._ot = d.ef>11?3:d.ef>10?2:d.ef>9?1:null; });
+  const dayMap = {}; days.forEach(d=>dayMap[d.d]=d);
+  const normal = days.filter(d=>d.cat==='normal'&&d.s!=null);
+  const allSorted = days.slice().sort((a,b)=>a.d<b.d?-1:1);
+
+  const dark = () => { const t=document.documentElement.getAttribute('data-theme'); return t==='dark' || (!t && matchMedia('(prefers-color-scheme:dark)').matches); };
+  const C = { blue:'#3182f6', light:'#8BBDF8', indigo:'#6366f1', red:'#ef4444', amber:'#f59e0b', green:'#22c55e', teal:'#14b8a6', grid:()=>dark()?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)', txt:()=>dark()?'#a0a0a8':'#6C6C70' };
+  const timeAxis = (min,max)=>({ min, max, ticks:{ callback:v=>fmt(v), color:C.txt() }, grid:{ color:C.grid() } });
+
+  // ── 1. 요일별 패턴 ──
+  const byWd=[[],[],[],[],[]];
+  normal.forEach(d=>{ const w=wd(d.d); if(w<5)byWd[w].push(d); });
+  const wS=byWd.map(a=>avg(a.map(d=>d.s))), wE=byWd.map(a=>avg(a.map(d=>d.e))), wEf=byWd.map(a=>avg(a.map(d=>d.ef)));
+  const wOT=byWd.map(a=>a.length?a.filter(d=>d._ot).length/a.length*100:0);
+  mk('labWeekday',{ type:'bar',
+    data:{ labels:['월','화','수','목','금'], datasets:[
+      { label:'평균 출근', data:wS, backgroundColor:C.light, borderRadius:4 },
+      { label:'평균 퇴근', data:wE, backgroundColor:C.blue, borderRadius:4 } ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ color:C.txt() } }, tooltip:{ callbacks:{ label:c=>c.dataset.label+' '+fmt(c.parsed.y) } } },
+      scales:{ x:{ ticks:{ color:C.txt() }, grid:{ display:false } }, y:timeAxis(7,19) } } });
+  mk('labWeekdayOT',{ type:'bar',
+    data:{ labels:['월','화','수','목','금'], datasets:[
+      { type:'bar', label:'야근율 %', data:wOT, backgroundColor:C.amber, borderRadius:4, yAxisID:'y' },
+      { type:'line', label:'평균 실근무', data:wEf, borderColor:C.indigo, backgroundColor:C.indigo, tension:0.3, yAxisID:'y1' } ]},
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ color:C.txt() } }, tooltip:{ callbacks:{ label:c=>c.dataset.yAxisID==='y1'?'실근무 '+fmt(c.parsed.y):'야근율 '+c.parsed.y.toFixed(1)+'%' } } },
+      scales:{ x:{ ticks:{ color:C.txt() }, grid:{ display:false } },
+        y:{ position:'left', min:0, ticks:{ color:C.txt(), callback:v=>v+'%' }, grid:{ color:C.grid() } },
+        y1:{ position:'right', min:6, max:10, ticks:{ color:C.txt(), callback:v=>fmt(v) }, grid:{ display:false } } } } });
+  const wdMaxOT = wOT.indexOf(Math.max(...wOT)), wdNames=['월','화','수','목','금'];
+  document.getElementById('labWeekdayInsight').innerHTML = '평균 출근 가장 이른 요일 <strong>'+wdNames[wS.indexOf(Math.min(...wS))]+'요일</strong> ('+fmt(Math.min(...wS))+') · 야근율 최고 <strong>'+wdNames[wdMaxOT]+'요일</strong> ('+wOT[wdMaxOT].toFixed(1)+'%)';
+
+  // ── 2. Top Moments ──
+  const minS = normal.reduce((a,b)=>b.s<a.s?b:a);
+  const maxE = normal.reduce((a,b)=>b.e>a.e?b:a);
+  const maxEf = normal.reduce((a,b)=>b.ef>a.ef?b:a);
+  // 연속 출근 streak (영업일 기준: 다음 영업일에 normal 기록)
+  function nextBiz(dstr){ let c=addDays(dstr,1); for(let i=0;i<10;i++){ const dt=new Date(c+'T12:00:00'); const w=dt.getDay(); if(w!==0&&w!==6&&!KR[c]) return c; c=addDays(c,1);} return c; }
+  const normalSet = new Set(normal.map(d=>d.d));
+  let bestWork=0, bestWorkEnd='', curWork=0, curStart='';
+  const normDates = normal.map(d=>d.d).sort();
+  for(let i=0;i<normDates.length;i++){ if(i===0){curWork=1;curStart=normDates[i];} else { if(nextBiz(normDates[i-1])===normDates[i]){curWork++;} else {curWork=1;curStart=normDates[i];} } if(curWork>bestWork){bestWork=curWork;bestWorkEnd=normDates[i];} }
+  // 연속 휴무 streak (leave 연속, 주말/공휴일 끼면 이어붙임)
+  const leaveDates = new Set(days.filter(d=>d.cat.startsWith('leave_')).map(d=>d.d));
+  let bestRest=0, bestRestStart='', bestRestEnd='';
+  if(leaveDates.size){
+    const ls=[...leaveDates].sort();
+    for(const start of ls){
+      // start부터 확장: leave거나 주말/공휴일이면 계속
+      let cur=start, len=0, leaveCnt=0;
+      const prev=addDays(start,-1);
+      // start가 블록 시작인지 (이전날이 쉬는날이 아니면)
+      const isRest=ds=>{ const dt=new Date(ds+'T12:00:00'); const w=dt.getDay(); return w===0||w===6||!!KR[ds]||leaveDates.has(ds); };
+      if(isRest(prev)) continue; // 블록 중간이면 skip
+      while(isRest(cur)){ if(leaveDates.has(cur))leaveCnt++; len++; cur=addDays(cur,1); }
+      if(leaveCnt>0 && len>bestRest){ bestRest=len; bestRestStart=start; bestRestEnd=addDays(cur,-1); }
+    }
+  }
+  const moments=[
+    ['🌅','가장 일찍 출근', fmt(minS.s), minS.d],
+    ['🌙','가장 늦게 퇴근', fmt(maxE.e), maxE.d],
+    ['🔥','가장 긴 실근무', fmt(maxEf.ef), maxEf.d],
+    ['📈','가장 긴 연속 출근', bestWork+'일', bestWorkEnd?('~ '+bestWorkEnd):''],
+    ['🏖','가장 긴 연속 휴무', bestRest+'일', bestRestStart?(bestRestStart+' ~ '+bestRestEnd):''],
+  ];
+  document.getElementById('labMoments').innerHTML = moments.map(m=>
+    '<div class="lab-moment"><div class="lab-moment-icon">'+m[0]+'</div><div class="lab-moment-label">'+m[1]+'</div><div class="lab-moment-value">'+m[2]+'</div><div class="lab-moment-date">'+m[3]+'</div></div>').join('');
+
+  // ── 3. 변곡점 (월별 평균 출근 ±0.5h) ──
+  const byMonth={}; normal.forEach(d=>{ const m=d.d.slice(0,7); (byMonth[m]=byMonth[m]||[]).push(d.s); });
+  const mKeys=Object.keys(byMonth).sort();
+  const events={ '2024-09':'부서 이동', '2024-03':'교육 기간' };
+  const infl=[];
+  for(let i=1;i<mKeys.length;i++){
+    const cur=avg(byMonth[mKeys[i]]), prev=avg(byMonth[mKeys[i-1]]);
+    const delta=cur-prev;
+    const ev=events[mKeys[i]];
+    if(Math.abs(delta)>=0.5 || ev){
+      const dm=Math.round(Math.abs(delta)*60);
+      const dir=delta>0?'늦어짐':'빨라짐';
+      infl.push({ month:mKeys[i], delta, ev, txt:'평균 출근 '+fmt(prev)+' → '+fmt(cur)+' ('+(delta>0?'+':'-')+dm+'분 '+dir+')' });
+    }
+  }
+  document.getElementById('labInflection').innerHTML = infl.map(x=>
+    '<div class="lab-inflect-row '+(x.ev?'event ':'')+(x.delta>0?'lab-inflect-up':'lab-inflect-down')+'">'+
+    '<div class="lab-inflect-month">'+x.month+(x.ev?' ★':'')+'</div>'+
+    '<div class="lab-inflect-detail">'+(x.ev?'<strong>'+x.ev+'</strong> · ':'')+'<span class="lab-inflect-delta">'+x.txt+'</span></div></div>').join('') || '<div class="lab-inflect-detail">감지된 변곡점 없음</div>';
+
+  // ── 4. 시간대별 출근 분포 ──
+  const hb={}; normal.forEach(d=>{ const h=Math.floor(d.s); hb[h]=(hb[h]||0)+1; });
+  const hKeys=Object.keys(hb).map(Number).sort((a,b)=>a-b);
+  const hMax=Math.max(...hKeys.map(h=>hb[h]));
+  mk('labHourDist',{ type:'bar',
+    data:{ labels:hKeys.map(h=>h+'시'), datasets:[{ data:hKeys.map(h=>hb[h]), backgroundColor:hKeys.map(h=>hb[h]===hMax?C.blue:C.light), borderRadius:4 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:c=>c.parsed.y+'일 ('+(c.parsed.y/normal.length*100).toFixed(1)+'%)' } } },
+      scales:{ x:{ ticks:{ color:C.txt() }, grid:{ display:false } }, y:{ ticks:{ color:C.txt() }, grid:{ color:C.grid() } } } } });
+  const peakH=hKeys.find(h=>hb[h]===hMax);
+  document.getElementById('labHourInsight').innerHTML = '<strong>'+peakH+'시대</strong> 출근이 '+hMax+'일('+(hMax/normal.length*100).toFixed(0)+'%)로 최빈 · 10시 이후 출근 '+hKeys.filter(h=>h>=10).reduce((s,h)=>s+hb[h],0)+'일';
+
+  // ── 5. 휴가 사용 분포 (연도×월) ──
+  const leaveCats={ leave_annual:'연차', leave_half:'반차', leave_subst:'보상·대체', leave_special:'경조사', leave_health:'건강', leave_refresh:'리프레시' };
+  const years=[...new Set(days.map(d=>d.d.slice(0,4)))].sort();
+  const leaveByYear={}; years.forEach(y=>leaveByYear[y]=Array(12).fill(0));
+  days.filter(d=>d.cat.startsWith('leave_')).forEach(d=>{ const y=d.d.slice(0,4); const m=parseInt(d.d.slice(5,7))-1; if(leaveByYear[y])leaveByYear[y][m]++; });
+  const yColors={ '2023':C.light, '2024':C.blue, '2025':C.indigo, '2026':C.teal };
+  mk('labLeave',{ type:'bar',
+    data:{ labels:['1','2','3','4','5','6','7','8','9','10','11','12'], datasets:years.map(y=>({ label:y, data:leaveByYear[y], backgroundColor:yColors[y]||C.light, borderRadius:3 })) },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ labels:{ color:C.txt() } }, tooltip:{ callbacks:{ label:c=>c.dataset.label+'년 '+(c.label)+'월: '+c.parsed.y+'일' } } },
+      scales:{ x:{ stacked:false, ticks:{ color:C.txt() }, grid:{ display:false }, title:{ display:true, text:'월', color:C.txt() } }, y:{ ticks:{ color:C.txt(), stepSize:1 }, grid:{ color:C.grid() } } } } });
+  const totalLeave=Object.values(leaveByYear).flat().reduce((a,b)=>a+b,0);
+  const yearTotals=years.map(y=>y+'년 '+leaveByYear[y].reduce((a,b)=>a+b,0)+'일');
+  document.getElementById('labLeaveInsight').innerHTML = '전체 '+totalLeave+'일 · '+yearTotals.join(' · ');
+
+  // ── 6. 야근 회복 패턴 ──
+  const recBuckets={ 20:[], 21:[], 22:[], 23:[] };
+  normal.filter(d=>d._ot).forEach(d=>{
+    const eh=Math.floor(d.e); if(eh<20)return;
+    const bk=eh>=23?23:eh;
+    const nb=nextBiz(d.d); const nd=dayMap[nb];
+    if(nd&&nd.cat==='normal'&&nd.s!=null) recBuckets[bk].push(nd.s);
+  });
+  const recLabels={20:'20시',21:'21시',22:'22시',23:'23시+'};
+  const recKeys=[20,21,22,23].filter(k=>recBuckets[k].length);
+  const baseAvgS=avg(normal.map(d=>d.s));
+  mk('labRecovery',{ type:'bar',
+    data:{ labels:recKeys.map(k=>'전일 '+recLabels[k]+' 퇴근'), datasets:[{ label:'다음날 평균 출근', data:recKeys.map(k=>avg(recBuckets[k])), backgroundColor:recKeys.map(k=>k>=22?C.red:C.amber), borderRadius:4 }] },
+    options:{ responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false }, tooltip:{ callbacks:{ label:c=>'다음날 출근 '+fmt(c.parsed.y)+' (n='+recBuckets[recKeys[c.dataIndex]].length+')' } },
+        annotation:{ annotations:{ base:{ type:'line', yMin:baseAvgS, yMax:baseAvgS, borderColor:C.txt(), borderWidth:1, borderDash:[4,4], label:{ display:true, content:'평소 평균 '+fmt(baseAvgS), position:'end', font:{size:10}, color:C.txt(), backgroundColor:'rgba(0,0,0,0)' } } } } },
+      scales:{ x:{ ticks:{ color:C.txt() }, grid:{ display:false } }, y:timeAxis(8,11) } } });
+  const r23=recBuckets[23].length?avg(recBuckets[23]):null;
+  document.getElementById('labRecoveryInsight').innerHTML = '평소 평균 출근 <strong>'+fmt(baseAvgS)+'</strong>' + (r23!==null?' · 23시+ 야근 다음날 <strong>'+fmt(r23)+'</strong> ('+Math.round((r23-baseAvgS)*60)+'분 늦게)':'') + ' — 늦은 야근일수록 다음날 출근 지연';
+
+  // ── 7. Year Wrapped ──
+  const yw=years.map(y=>{
+    const yd=days.filter(d=>d.d.slice(0,4)===y);
+    const yn=yd.filter(d=>d.cat==='normal'&&d.s!=null);
+    return { y, work:yn.length,
+      s:avg(yn.map(d=>d.s)), e:avg(yn.map(d=>d.e)),
+      leave:yd.filter(d=>d.cat.startsWith('leave_')).length,
+      trip:yd.filter(d=>d.cat==='abroad'||d.cat==='domestic').length,
+      ot:yn.filter(d=>d._ot).length };
+  });
+  document.getElementById('labWrapped').innerHTML = yw.map(x=>
+    '<div class="lab-year-card"><div class="lab-year-num">'+x.y+'</div><div class="lab-year-stats">'+
+    '<div class="lab-year-stat"><span class="k">출근</span><span class="v">'+x.work+'일</span></div>'+
+    '<div class="lab-year-stat"><span class="k">평균 출근</span><span class="v">'+fmt(x.s)+'</span></div>'+
+    '<div class="lab-year-stat"><span class="k">평균 퇴근</span><span class="v">'+fmt(x.e)+'</span></div>'+
+    '<div class="lab-year-stat"><span class="k">🏖 휴가</span><span class="v">'+x.leave+'일</span></div>'+
+    '<div class="lab-year-stat"><span class="k">✈️ 출장</span><span class="v">'+x.trip+'일</span></div>'+
+    '<div class="lab-year-stat"><span class="k">🔥 야근</span><span class="v">'+x.ot+'일</span></div>'+
+    '</div></div>').join('');
+
+  // ── 8. 샌드위치 휴가 ──
+  const isRestDay = ds=>{ const dt=new Date(ds+'T12:00:00'); const w=dt.getDay(); return w===0||w===6||!!KR[ds]||leaveDates.has(ds); };
+  const visited=new Set();
+  const blocks=[];
+  [...leaveDates].sort().forEach(ld=>{
+    if(visited.has(ld))return;
+    // 블록 시작점 찾기 (뒤로)
+    let start=ld; while(isRestDay(addDays(start,-1))) start=addDays(start,-1);
+    let cur=start, len=0, lc=0; const usedLeaves=[];
+    while(isRestDay(cur)){ if(leaveDates.has(cur)){lc++; usedLeaves.push(cur); visited.add(cur);} len++; cur=addDays(cur,1); }
+    const end=addDays(cur,-1);
+    if(lc>0 && len>=3) blocks.push({ start, end, len, lc, roi:len/lc });
+  });
+  blocks.sort((a,b)=>b.len-a.len);
+  const top=blocks.slice(0,8);
+  const mLabel=ds=>{ const p=ds.split('-'); return parseInt(p[1])+'/'+parseInt(p[2]); };
+  document.getElementById('labSandwich').innerHTML =
+    top.map(b=>'<div class="lab-sand-row"><div class="lab-sand-period">'+mLabel(b.start)+' ~ '+mLabel(b.end)+'<br><span style="font-size:11px;color:var(--text2);font-weight:400">'+b.start.slice(0,4)+'</span></div>'+
+      '<div class="lab-sand-detail">연속 휴무 <strong>'+b.len+'일</strong> · 사용 연차 '+b.lc+'일</div>'+
+      '<div class="lab-sand-roi">×'+b.roi.toFixed(1)+'</div></div>').join('') +
+    (blocks.length?'<div class="lab-sand-summary">총 '+blocks.length+'개 연휴 블록 · 1일 휴가로 만든 평균 연휴 <strong>'+(blocks.reduce((s,b)=>s+b.roi,0)/blocks.length).toFixed(1)+'일</strong> (ROI ×는 연휴길이÷사용연차)</div>':'<div class="lab-sand-summary">감지된 샌드위치 휴가 없음</div>');
+
+})();
+</script>
+
+<script>
+// 메인 탭 전환
+(function() {
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (btn.dataset.tab === 'lab' && window.__labCharts) {
+        setTimeout(() => window.__labCharts.forEach(c => c.resize()), 50);
+      }
+    });
+  });
+})();
+
+// 성향 프로필 사이드바 → 차트 패널 전환
+(function() {
+  document.querySelectorAll('.profile-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.profile-card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.chart-panel').forEach(p => p.classList.remove('active'));
+      card.classList.add('active');
+      const panelId = card.dataset.panel;
+      const panel = document.getElementById(panelId);
+      if (panel) {
+        panel.classList.add('active');
+        // Chart.js resize trigger
+        window.dispatchEvent(new Event('resize'));
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

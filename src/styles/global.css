@@ -1,0 +1,232 @@
+@import "tailwindcss";
+@import './fonts.css';
+
+/* === Theme Variables === */
+:root {
+  --bg: #fafaf8;
+  --text-primary: rgba(0, 0, 0, 0.85);
+  --text-body: rgba(0, 0, 0, 0.72);
+  --text-secondary: rgba(0, 0, 0, 0.45);
+  --text-tertiary: rgba(0, 0, 0, 0.25);
+  --border: rgba(0, 0, 0, 0.1);
+  --selection: rgba(0, 0, 0, 0.06);
+  --code-bg: rgba(0, 0, 0, 0.04);
+}
+
+html.dark {
+  --bg: #1c1c1a;
+  --text-primary: rgba(255, 255, 255, 0.95);
+  --text-body: rgba(255, 255, 255, 0.72);
+  --text-secondary: rgba(255, 255, 255, 0.45);
+  --text-tertiary: rgba(255, 255, 255, 0.25);
+  --border: rgba(255, 255, 255, 0.1);
+  --selection: rgba(255, 255, 255, 0.08);
+  --code-bg: rgba(255, 255, 255, 0.04);
+
+}
+
+/* === Base === */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  font-synthesis: none;
+}
+
+/* 배경색이 있는 모든 요소에 동일한 transition 적용 */
+body, header, footer, nav, aside, main, article, section {
+  transition: background-color 0.2s ease-out, border-color 0.2s ease-out, color 0.15s ease-out;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+::selection {
+  background-color: var(--selection);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+a:hover {
+  opacity: 0.65;
+}
+
+button {
+  transition: color 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+}
+
+
+/* === Border / Divider === */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+}
+
+/* === Code === */
+pre, code {
+  background-color: var(--code-bg);
+  font-family: 'SF Mono', SFMono-Regular, ui-monospace, monospace;
+  font-size: 0.875em;
+}
+
+pre {
+  padding: 1rem 1.25rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  color: var(--astro-code-foreground);
+  background-color: var(--astro-code-background);
+}
+
+/* shiki dual-theme (defaultColor: false) — 코드블록 라이트/다크 동기화 */
+pre.astro-code {
+  background-color: var(--shiki-light-bg);
+  color: var(--shiki-light);
+}
+pre.astro-code span { color: var(--shiki-light); }
+html.dark pre.astro-code {
+  background-color: var(--shiki-dark-bg);
+  color: var(--shiki-dark);
+}
+html.dark pre.astro-code span { color: var(--shiki-dark); }
+
+/* 개념 도식 (.dg) — mermaid 대체, 테마 변수로 다크 자동 */
+.dg { display: flex; align-items: stretch; gap: 7px; flex-wrap: wrap; padding: 14px; background: var(--code-bg); border-radius: 12px; margin: 1.25rem 0; }
+.dg-node { flex: 1; min-width: 84px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px 9px; background: var(--bg); border: 1px solid var(--border); border-radius: 9px; font-size: 0.85rem; font-weight: 600; color: var(--text-body); }
+.dg-node.key { border-color: #3b82f6; color: #3b82f6; }
+html.dark .dg-node.key { border-color: #60a5fa; color: #60a5fa; }
+.dg-arr { display: flex; align-items: center; color: var(--text-tertiary); font-size: 1rem; }
+.dg-stack { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.dg-stack .dg-node { padding: 7px; font-size: 0.8rem; min-width: 0; }
+@media (max-width: 520px) { .dg { flex-direction: column; } .dg-arr { transform: rotate(90deg); } }
+
+code:not(pre code) {
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+}
+
+/* === Page Transitions === */
+@supports (view-transition-name: none) {
+  @media not (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root) {
+      animation: chiri-fade-out 0.15s ease forwards;
+    }
+
+    ::view-transition-new(root) {
+      opacity: 0;
+      animation: chiri-fade-in 0.15s ease forwards;
+      will-change: opacity;
+    }
+  }
+}
+
+@keyframes chiri-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes chiri-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* === Mobile === */
+@media (max-width: 768px) {
+  .page-sidebar-spacer { display: none; }
+  .page-container { padding: 0 !important; }
+  .home-wrap { padding: 1rem 1.25rem !important; }
+}
+
+@media (max-width: 640px) {
+  html { font-size: 13px; }
+}
+
+
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── project topic tiles (global: ClientRouter-safe) ── */
+.topics { display: flex; flex-direction: column; gap: 1.5rem; max-width: 60rem; }
+.topic-label {
+  font-size: 0.75rem; font-weight: 500; color: var(--text-tertiary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin: 0 0 0.55rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.topic-count { color: var(--text-tertiary); opacity: 0.6; font-weight: 400; }
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+  gap: 0.25rem 0.15rem;
+}
+@media (max-width: 520px) {
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(3.6rem, 1fr)); }
+}
+.project-tile {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0.5rem 0.2rem 0.45rem; border-radius: 11px; gap: 0.4rem;
+  text-decoration: none; transition: background-color 0.15s ease;
+}
+.project-tile:hover { background: var(--selection); }
+.pt-icon {
+  width: 2.3rem; height: 2.3rem; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.05rem; line-height: 1;
+  color: var(--tint, #3b82f6);
+  background: color-mix(in srgb, var(--tint, #3b82f6) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tint, #3b82f6) 28%, transparent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.project-tile:hover .pt-icon {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--tint, #3b82f6) 30%, transparent);
+}
+.pt-name {
+  font-size: 0.67rem; color: var(--text-secondary); text-align: center;
+  line-height: 1.25; max-width: 4.5rem;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.project-tile:hover .pt-name { color: var(--text-primary); }
