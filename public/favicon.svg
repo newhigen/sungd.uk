@@ -1,10 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <style>
-    .fig { stroke: #141719; }
-    @media (prefers-color-scheme: dark) { .fig { stroke: #ededea; } }
+    .dot-line { stroke: #18181b; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .dot-point { fill: #18181b; }
+    @media (prefers-color-scheme: dark) {
+      .dot-line { stroke: #f4f4f5; }
+      .dot-point { fill: #f4f4f5; }
+    }
   </style>
-  <g class="fig" fill="none" stroke-width="3.8" stroke-linecap="round">
-    <circle cx="16" cy="9.6" r="5.9"/>
-    <path d="M3.2 29c0-7.1 5.7-12.8 12.8-12.8S28.8 21.9 28.8 29"/>
-  </g>
+  <path class="dot-line" d="M 3.2 22.4 Q 6.4 20.2 9.6 17.9 Q 13.2 16.7 16.9 15.5 Q 19.7 12.5 22.5 9.6 Q 25.8 13.4 28.8 17.2" />
+  <circle class="dot-point" cx="3.2" cy="22.4" r="1.8" />
+  <circle class="dot-point" cx="9.6" cy="17.9" r="1.8" />
+  <circle class="dot-point" cx="16.9" cy="15.5" r="1.8" />
+  <circle class="dot-point" cx="22.5" cy="9.6" r="1.8" />
+  <circle class="dot-point" cx="28.8" cy="17.2" r="1.8" />
 </svg>
