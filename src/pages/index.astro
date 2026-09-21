@@ -230,12 +230,12 @@
       text-transform: uppercase;
     }
 
-    /* Career & Education (완전 분리형) */
+    /* Career & Education (완전 분리형: 시안 A) */
     .career-wrap {
       margin-top: 36px;
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 22px;
     }
     .sec-heading {
       font-size: 0.75rem;
@@ -243,12 +243,16 @@
       font-weight: 700;
       letter-spacing: 0.08em;
       color: var(--text-tertiary);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 22px;
+      gap: 16px;
+    }
+    /* 학력 내부 항목 밀착: 8px */
+    .edu-timeline {
+      gap: 8px;
     }
     .timeline-entry {
       display: flex;
@@ -273,6 +277,13 @@
       color: var(--text-secondary);
       font-weight: 400;
     }
+    .tl-desc {
+      font-size: 0.8125rem;
+      font-family: var(--font-serif);
+      color: var(--text-secondary);
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+    }
     .tl-date {
       font-size: 0.8125rem;
       color: var(--text-tertiary);
@@ -280,36 +291,6 @@
       letter-spacing: -0.01em;
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
-    }
-
-    /* VUNO Teams Tree */
-    .vuno-teams {
-      list-style: none;
-      margin-top: 6px;
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-      border-left: 1.5px solid var(--line);
-      padding-left: 14px;
-      margin-left: 3px;
-    }
-    .vuno-team-item {
-      font-size: 0.8125rem;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: baseline;
-      gap: 6px;
-      letter-spacing: -0.01em;
-      line-height: 1.5;
-    }
-    .vuno-team-name {
-      font-weight: 600;
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-    }
-    .vuno-team-product {
-      color: var(--text-tertiary);
-      font-family: var(--font-serif);
     }
 
     /* Footer (가로선 제거, 순수 여백 피날레) */
@@ -431,47 +412,34 @@
         </p>
       </section>
 
-      <!-- Career & Education (완전 분리형) -->
+      <!-- Career & Education (완전 분리형: 시안 A) -->
       <div class="career-wrap">
         <section class="sec-exp">
           <h2 class="sec-heading">경력</h2>
           <div class="timeline">
             <div class="timeline-entry">
               <div class="tl-main">
-                <span class="tl-role-org">ML Engineer <span class="org">· 뷰노 (VUNO)</span></span>
+                <span class="tl-role-org">ML Engineer, <span class="org">뷰노 (VUNO)</span></span>
                 <span class="tl-date">2022 – 현재</span>
               </div>
-              <ul class="vuno-teams">
-                <li class="vuno-team-item">
-                  <span class="vuno-team-name">PXI (Chest) Team</span>
-                  <span class="vuno-team-product">· 흉부 X-ray 진단 AI</span>
-                </li>
-                <li class="vuno-team-item">
-                  <span class="vuno-team-name">BLU3 (Lung) Team</span>
-                  <span class="vuno-team-product">· 폐 CT 진단 AI</span>
-                </li>
-                <li class="vuno-team-item">
-                  <span class="vuno-team-name">Digital Oncology Team</span>
-                  <span class="vuno-team-product">· 디지털 병리 R&D</span>
-                </li>
-              </ul>
+              <p class="tl-desc">흉부 X-ray(PXI), 폐 CT(BLU3) 진단 AI 및 디지털 병리 R&D</p>
             </div>
           </div>
         </section>
 
         <section class="sec-edu">
           <h2 class="sec-heading">학력</h2>
-          <div class="timeline">
+          <div class="timeline edu-timeline">
             <div class="timeline-entry">
               <div class="tl-main">
-                <span class="tl-role-org">컴퓨터과학 석사 <span class="org">· 고려대학교</span></span>
+                <span class="tl-role-org">고려대학교 <span class="org">컴퓨터과학 석사</span></span>
                 <span class="tl-date">2020 – 2022</span>
               </div>
             </div>
 
             <div class="timeline-entry">
               <div class="tl-main">
-                <span class="tl-role-org">컴퓨터공학 학사 <span class="org">· 울산과학기술원 (UNIST)</span></span>
+                <span class="tl-role-org">울산과학기술원 (UNIST) <span class="org">컴퓨터공학 학사</span></span>
                 <span class="tl-date">2015 – 2020</span>
               </div>
             </div>
