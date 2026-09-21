@@ -291,6 +291,40 @@ a {
   margin-left: 4px;
 }
 
+/* ── 인라인 플로우 목록 (수상·논문 등 컴팩트 성취 목록) ── */
+.inline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inline-item {
+  font-size: var(--size-desc);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  word-break: keep-all;
+}
+
+.inline-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.inline-venue {
+  color: var(--text-secondary);
+}
+
+.inline-date {
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.inline-sep {
+  color: var(--text-tertiary);
+  margin: 0 4px;
+}
+
 /* ── 푸터 ── */
 footer {
   margin-top: 48px;
