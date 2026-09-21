@@ -205,78 +205,69 @@
       text-decoration-color: var(--accent);
     }
 
-    /* Epilogue (세 점 아스테리즘형) */
+    /* Epilogue (순수 여백형) */
     .epilogue-wrap {
       text-align: center;
-      margin-top: 44px;
-      margin-bottom: 8px;
+      margin-top: 52px;
+      margin-bottom: 24px;
       padding: 0 16px;
-    }
-    .asterism {
-      font-size: 0.875rem;
-      letter-spacing: 0.45em;
-      color: var(--text-tertiary);
-      margin-bottom: 12px;
-      display: block;
-      opacity: 0.75;
     }
     .epilogue-wrap .quote-text {
       font-family: var(--font-serif);
       font-size: 0.90625rem;
-      color: var(--text-primary);
-      line-height: 1.75;
+      color: var(--text-secondary);
+      line-height: 1.8;
       word-break: keep-all;
       font-weight: 400;
     }
     .epilogue-wrap .quote-author {
       display: block;
       margin-top: 8px;
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
       font-size: 0.6875rem;
       color: var(--text-tertiary);
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
 
-    /* Divider */
-    .section-divider {
-      border: none;
-      border-top: 1px solid var(--line);
-      margin: 36px 0;
+    /* Career & Education (완전 분리형) */
+    .career-wrap {
+      margin-top: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
     }
-
-    /* Section Title */
     .sec-heading {
-      font-size: 0.6875rem;
-      font-family: var(--font-mono);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      letter-spacing: 0.08em;
       color: var(--text-tertiary);
-      margin-bottom: 18px;
+      margin-bottom: 14px;
     }
-
-    /* Timeline */
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 22px;
     }
     .timeline-entry {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
     }
     .tl-main {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
+      gap: 12px;
     }
     .tl-role-org {
       font-size: 0.9375rem;
-      font-weight: 500;
+      font-family: var(--font-sans);
+      font-weight: 600;
       letter-spacing: -0.015em;
       color: var(--text-primary);
+      line-height: 1.5;
     }
     .tl-role-org .org {
       color: var(--text-secondary);
@@ -285,16 +276,19 @@
     .tl-date {
       font-size: 0.8125rem;
       color: var(--text-tertiary);
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
     }
 
     /* VUNO Teams Tree */
     .vuno-teams {
       list-style: none;
-      margin-top: 4px;
+      margin-top: 6px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 7px;
       border-left: 1.5px solid var(--line);
       padding-left: 14px;
       margin-left: 3px;
@@ -306,42 +300,54 @@
       align-items: baseline;
       gap: 6px;
       letter-spacing: -0.01em;
+      line-height: 1.5;
     }
     .vuno-team-name {
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-primary);
+      font-family: var(--font-sans);
     }
     .vuno-team-product {
       color: var(--text-tertiary);
+      font-family: var(--font-serif);
     }
 
-    /* Footer */
+    /* Footer (가로선 제거, 순수 여백 피날레) */
     footer {
-      margin-top: 44px;
-      padding-top: 22px;
-      border-top: 1px solid var(--line);
+      margin-top: 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     .social-links {
       display: flex;
+      align-items: center;
       gap: 16px;
     }
     .social-links a {
-      font-size: 0.8125rem;
       color: var(--text-tertiary);
-      text-decoration: none;
       transition: color 0.15s;
-      letter-spacing: -0.01em;
+      display: inline-flex;
+      align-items: center;
     }
     .social-links a:hover {
       color: var(--text-primary);
     }
+    .social-icon {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
     .footer-domain {
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       color: var(--text-tertiary);
-      font-family: var(--font-mono);
+      font-family: var(--font-sans);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      transition: color 0.15s;
+    }
+    .footer-domain:hover {
+      color: var(--text-primary);
     }
 
     @media (max-width: 480px) {
@@ -425,55 +431,57 @@
         </p>
       </section>
 
-      <hr class="section-divider" />
-
-      <!-- Experience & Education -->
-      <section>
-        <h2 class="sec-heading">Experience & Education</h2>
-        <div class="timeline">
-          
-          <div class="timeline-entry">
-            <div class="tl-main">
-              <span class="tl-role-org">ML Engineer <span class="org">· 뷰노 (VUNO)</span></span>
-              <span class="tl-date">2022 – 현재</span>
-            </div>
-            <ul class="vuno-teams">
-              <li class="vuno-team-item">
-                <span class="vuno-team-name">PXI (Chest) Team</span>
-                <span class="vuno-team-product">· 흉부 X-ray 진단 AI</span>
-              </li>
-              <li class="vuno-team-item">
-                <span class="vuno-team-name">BLU3 (Lung) Team</span>
-                <span class="vuno-team-product">· 폐 CT 진단 AI</span>
-              </li>
-              <li class="vuno-team-item">
-                <span class="vuno-team-name">Digital Oncology Team</span>
-                <span class="vuno-team-product">· 디지털 병리 R&D</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="timeline-entry">
-            <div class="tl-main">
-              <span class="tl-role-org">컴퓨터과학 석사 <span class="org">· 고려대학교</span></span>
-              <span class="tl-date">2020 – 2022</span>
+      <!-- Career & Education (완전 분리형) -->
+      <div class="career-wrap">
+        <section class="sec-exp">
+          <h2 class="sec-heading">경력</h2>
+          <div class="timeline">
+            <div class="timeline-entry">
+              <div class="tl-main">
+                <span class="tl-role-org">ML Engineer <span class="org">· 뷰노 (VUNO)</span></span>
+                <span class="tl-date">2022 – 현재</span>
+              </div>
+              <ul class="vuno-teams">
+                <li class="vuno-team-item">
+                  <span class="vuno-team-name">PXI (Chest) Team</span>
+                  <span class="vuno-team-product">· 흉부 X-ray 진단 AI</span>
+                </li>
+                <li class="vuno-team-item">
+                  <span class="vuno-team-name">BLU3 (Lung) Team</span>
+                  <span class="vuno-team-product">· 폐 CT 진단 AI</span>
+                </li>
+                <li class="vuno-team-item">
+                  <span class="vuno-team-name">Digital Oncology Team</span>
+                  <span class="vuno-team-product">· 디지털 병리 R&D</span>
+                </li>
+              </ul>
             </div>
           </div>
+        </section>
 
-          <div class="timeline-entry">
-            <div class="tl-main">
-              <span class="tl-role-org">컴퓨터공학 학사 <span class="org">· 울산과학기술원 (UNIST)</span></span>
-              <span class="tl-date">2015 – 2020</span>
+        <section class="sec-edu">
+          <h2 class="sec-heading">학력</h2>
+          <div class="timeline">
+            <div class="timeline-entry">
+              <div class="tl-main">
+                <span class="tl-role-org">컴퓨터과학 석사 <span class="org">· 고려대학교</span></span>
+                <span class="tl-date">2020 – 2022</span>
+              </div>
+            </div>
+
+            <div class="timeline-entry">
+              <div class="tl-main">
+                <span class="tl-role-org">컴퓨터공학 학사 <span class="org">· 울산과학기술원 (UNIST)</span></span>
+                <span class="tl-date">2015 – 2020</span>
+              </div>
             </div>
           </div>
-
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
-    <!-- Epilogue (시안 2: 세 점 아스테리즘형) -->
+    <!-- Epilogue (순수 여백형) -->
     <div class="epilogue-wrap">
-      <span class="asterism">· · ·</span>
       <p class="quote-text">"어떤 점도 앞을 내다보며 연결할 수는 없다. 지난 점들은 오직 뒤를 돌아볼 때만 연결된다."</p>
       <span class="quote-author">— Steve Jobs</span>
     </div>
@@ -481,9 +489,16 @@
     <!-- Footer -->
     <footer>
       <div class="social-links">
-        <a href="https://github.com/newhigen">GitHub</a>
-        <a href="https://linkedin.com/in/sungdukcho">LinkedIn</a>
-        <a href="mailto:newhigen@gmail.com">newhigen@gmail.com</a>
+        <a href="https://github.com/newhigen" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+        </a>
+        <a href="https://linkedin.com/in/sungdukcho" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <svg class="social-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.65 1.65 0 0 0-1.66 1.66 1.66 1.66 0 0 0 1.66 1.66 1.66 1.66 0 0 0 1.66-1.66 1.65 1.65 0 0 0-1.66-1.66z"/>
+          </svg>
+        </a>
       </div>
       <span class="footer-domain">sungd.uk</span>
     </footer>
