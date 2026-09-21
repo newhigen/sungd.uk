@@ -181,18 +181,7 @@
       font-weight: 700;
       color: var(--text-primary);
     }
-
-    /* Narrative Links (문단형 공간 연결) */
-    .narrative-block {
-      margin-top: 28px;
-      font-family: var(--font-serif);
-      font-size: 0.9375rem;
-      color: var(--text-secondary);
-      line-height: 1.85;
-      letter-spacing: -0.015em;
-      word-break: keep-all;
-    }
-    .narrative-block a {
+    .bio-p a {
       color: var(--text-primary);
       text-decoration: underline;
       text-decoration-color: var(--line);
@@ -200,7 +189,7 @@
       font-weight: 500;
       transition: all 0.15s ease;
     }
-    .narrative-block a:hover {
+    .bio-p a:hover {
       color: var(--accent);
       text-decoration-color: var(--accent);
     }
@@ -230,7 +219,7 @@
       text-transform: uppercase;
     }
 
-    /* Career & Education (완전 분리형: 시안 A) */
+    /* Career & Education (완전 분리형) */
     .career-wrap {
       margin-top: 36px;
       display: flex;
@@ -277,13 +266,6 @@
       color: var(--text-secondary);
       font-weight: 400;
     }
-    .tl-desc {
-      font-size: 0.8125rem;
-      font-family: var(--font-serif);
-      color: var(--text-secondary);
-      line-height: 1.55;
-      letter-spacing: -0.01em;
-    }
     .tl-date {
       font-size: 0.8125rem;
       color: var(--text-tertiary);
@@ -291,6 +273,35 @@
       letter-spacing: -0.01em;
       white-space: nowrap;
       font-variant-numeric: tabular-nums;
+    }
+
+    /* VUNO Teams Tree (점 없는 단정한 목록형) */
+    .vuno-teams {
+      list-style: none;
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      border-left: 1.5px solid var(--line);
+      padding-left: 14px;
+      margin-left: 3px;
+    }
+    .vuno-team-item {
+      font-size: 0.8125rem;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+    }
+    .vuno-team-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+    }
+    .vuno-team-product {
+      color: var(--text-tertiary);
+      font-family: var(--font-serif);
     }
 
     /* Footer (가로선 제거, 순수 여백 피날레) */
@@ -386,33 +397,26 @@
         <p class="bio-p">
           <strong class="lead-bold">의료영상 AI를 연구하고 제품으로 만듭니다. </strong>
           뷰노에서 4년간 흉부 X-ray와 폐 CT 소견 모델을 개발하며, 여러 연구가 재사용하는 DB 기반 파이프라인과 자동 평가 체계를 세웠습니다. 
-          단지 지표 몇 개를 높이는 것보다, 제품 관점에서 실제로 배포·최적화되고 팀이 반복 없이 안정적으로 실험할 수 있는 엔지니어링 기반을 다질 때 가장 큰 희열을 느낍니다.
+          단지 지표 몇 개를 높이는 것보다, 제품 관점에서 실제로 배포·최적화되고 팀이 반복 없이 안정적으로 실험할 수 있는 엔지니어링 기반을 다질 때 가장 큰 희열을 느낍니다. 
+          업무 세부 내역과 전체 경력은 <a href="/cv/">이력서(/cv) ↗</a>에서 확인하실 수 있습니다.
         </p>
 
         <p class="bio-p">
           <strong class="lead-bold">내 생각과 인지 방식에 딱 맞춘 도구를 직접 깎아 씁니다. </strong>
           일상의 마찰을 줄이고 작업 속도를 증강(augment)하기 위해, 터미널 세션 모니터부터 개발 콘솔, AI 에이전트 작업 공간까지 삶과 일에 필요한 시스템을 직접 지어 씁니다. 
-          단정한 도구와 시각적 질서가 생각의 속도를 높여준다고 믿습니다.
+          단정한 도구와 시각적 질서가 생각의 속도를 높여준다고 믿습니다. 
+          직접 만든 도구와 엔지니어링 노트는 <a href="https://dev.sungd.uk">dev.sungd.uk</a>에, 매일 써보는 최신 AI 도구 큐레이션은 <a href="https://ai.sungd.uk">ai.sungd.uk</a>에 기록합니다.
         </p>
 
         <p class="bio-p">
           <strong class="lead-bold">일하지 않을 때는 책을 읽고 사유하며 글을 남깁니다. </strong>
           인생을 어떻게 살고 일을 어떻게 해야 하는가에 대한 고민은 결국 엔지니어링과 맞닿아 있습니다. 
+          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk">writing.sungd.uk</a>에 남기고 있습니다. 
           함께 의미 있는 일을 즐겁게 해나갈 수 있는 동료로 기억되고 싶습니다.
         </p>
       </div>
 
-      <!-- 내러티브 도메인 공간 링크 -->
-      <section class="narrative-block">
-        <p>
-          직접 만든 사이드 프로젝트와 엔지니어링 노트는 <a href="https://dev.sungd.uk">dev.sungd.uk</a>에, 
-          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk">writing.sungd.uk</a>에 기록합니다. 
-          매일 써보는 최신 AI 도구 큐레이션은 <a href="https://ai.sungd.uk">ai.sungd.uk</a>에 모으고 있으며, 
-          업무 세부 내역과 전체 경력은 <a href="/cv/">이력서(/cv) ↗</a>에서 확인하실 수 있습니다.
-        </p>
-      </section>
-
-      <!-- Career & Education (완전 분리형: 시안 A) -->
+      <!-- Career & Education -->
       <div class="career-wrap">
         <section class="sec-exp">
           <h2 class="sec-heading">경력</h2>
@@ -422,7 +426,20 @@
                 <span class="tl-role-org">ML Engineer, <span class="org">뷰노 (VUNO)</span></span>
                 <span class="tl-date">2022 – 현재</span>
               </div>
-              <p class="tl-desc">흉부 X-ray(PXI), 폐 CT(BLU3) 진단 AI 및 디지털 병리 R&D</p>
+              <ul class="vuno-teams">
+                <li class="vuno-team-item">
+                  <span class="vuno-team-name">PXI (Chest) Team</span>
+                  <span class="vuno-team-product">흉부 X-ray 진단 AI</span>
+                </li>
+                <li class="vuno-team-item">
+                  <span class="vuno-team-name">BLU3 (Lung) Team</span>
+                  <span class="vuno-team-product">폐 CT 진단 AI</span>
+                </li>
+                <li class="vuno-team-item">
+                  <span class="vuno-team-name">Digital Oncology Team</span>
+                  <span class="vuno-team-product">디지털 병리 R&D</span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
