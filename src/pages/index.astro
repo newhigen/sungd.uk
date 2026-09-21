@@ -94,10 +94,14 @@
     /* Container: 단일 수직 축 */
     .page-wrap {
       width: 100%;
-      max-width: 490px;
+      max-width: 540px;
       min-height: 100vh;
       margin: 0 auto;
       padding: 56px 24px 80px;
+    }
+
+    .nowrap {
+      white-space: nowrap;
     }
 
     /* Profile Header */
@@ -396,8 +400,9 @@
       <div class="bio-flow">
         <p class="bio-p">
           <strong class="lead-bold">의료영상 AI를 연구하고 제품으로 만듭니다. </strong>
-          뷰노에서 4년간 흉부 X-ray와 폐 CT 소견 모델을 개발하며, 여러 연구가 재사용하는 DB 기반 파이프라인과 자동 평가 체계를 세웠습니다. 
+          뷰노에서 4년간 흉부 <span class="nowrap">X-ray</span>와 폐 CT 소견 모델을 개발하며, 여러 연구가 재사용하는 DB 기반 파이프라인과 자동 평가 체계를 세웠습니다. 
           단지 지표 몇 개를 높이는 것보다, 제품 관점에서 실제로 배포·최적화되고 팀이 반복 없이 안정적으로 실험할 수 있는 엔지니어링 기반을 다질 때 가장 큰 희열을 느낍니다. 
+          함께 의미 있는 일을 즐겁게 해나갈 수 있는 동료이고 싶습니다. 
           업무 세부 내역과 전체 경력은 <a href="/cv/">이력서</a>에서 확인하실 수 있습니다.
         </p>
 
@@ -411,8 +416,7 @@
         <p class="bio-p">
           <strong class="lead-bold">일하지 않을 때는 책을 읽고 사유하며 글을 남깁니다. </strong>
           인생을 어떻게 살고 일을 어떻게 해야 하는가에 대한 고민은 결국 엔지니어링과 맞닿아 있습니다. 
-          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk">writing.sungd.uk</a>에 남기고 있습니다. 
-          함께 의미 있는 일을 즐겁게 해나갈 수 있는 동료로 기억되고 싶습니다.
+          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk">writing.sungd.uk</a>에 남기고 있습니다.
         </p>
       </div>
 
@@ -429,7 +433,7 @@
               <ul class="vuno-teams">
                 <li class="vuno-team-item">
                   <span class="vuno-team-name">PXI (Chest) Team</span>
-                  <span class="vuno-team-product">흉부 X-ray 진단 AI</span>
+                  <span class="vuno-team-product">흉부 <span class="nowrap">X-ray</span> 진단 AI</span>
                 </li>
                 <li class="vuno-team-item">
                   <span class="vuno-team-name">BLU3 (Lung) Team</span>
