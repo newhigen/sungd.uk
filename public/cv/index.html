@@ -4,12 +4,21 @@
 <meta charset="utf-8">
 <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="조성덕 이력서">
+<meta name="description" content="조성덕 — ML Engineer @ VUNO. 이력서">
 <title>조성덕 | ML Engineer</title>
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="stylesheet" href="/style.css">
 <link rel="alternate" hreflang="en" href="https://sungd.uk/cv/en/">
 <link rel="alternate" hreflang="ko" href="https://sungd.uk/cv/">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+<!-- Styles -->
+<link rel="stylesheet" href="/style.css">
+
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZG9YP9KQ4X"></script>
 <script>
@@ -19,11 +28,11 @@
   // 내 기기 표시: 어느 사이트든 ?me=1 로 한 번 열면 .sungd.uk 쿠키가 심긴다 (?me=0 으로 해제)
   (function(){
     try {
-      var m = new URLSearchParams(location.search).get('me')
-      if (m === '1') document.cookie = 'sd_owner=1; domain=.sungd.uk; path=/; max-age=63072000; samesite=lax; secure'
-      if (m === '0') document.cookie = 'sd_owner=; domain=.sungd.uk; path=/; max-age=0; samesite=lax; secure'
+      var m = new URLSearchParams(location.search).get('me');
+      if (m === '1') document.cookie = 'sd_owner=1; domain=.sungd.uk; path=/; max-age=63072000; samesite=lax; secure';
+      if (m === '0') document.cookie = 'sd_owner=; domain=.sungd.uk; path=/; max-age=0; samesite=lax; secure';
     } catch (e) {}
-    window.__sdOwner = /(?:^|;\s*)sd_owner=1(?:;|$)/.test(document.cookie)
+    window.__sdOwner = /(?:^|;\s*)sd_owner=1(?:;|$)/.test(document.cookie);
   })();
   gtag('set', 'user_properties', { visitor_type: window.__sdOwner ? 'owner' : 'visitor' });
 
@@ -32,205 +41,179 @@
 </script>
 </head>
 <body>
-<div class="resume">
+<div class="cv-wrap">
 
-  <div class="col-left">
-    <aside class="side">
-      <div class="side-top">
+  <nav class="nav-top">
+    <a href="/" class="back-home">← sungd.uk</a>
+    <a href="/cv/en/" class="lang-switch">EN</a>
+  </nav>
+
+  <header class="profile-header">
+    <img class="avatar" src="/avatar.jpg" alt="조성덕" width="60" height="60">
+    <div class="meta">
+      <div class="name-row">
+        <h1 class="name-ko">조성덕</h1>
+        <span class="name-en">Sungduk Cho</span>
+      </div>
+      <div class="role-line">
+        <span>ML Engineer @ VUNO</span>
+        <span>·</span>
+        <a class="contact-link" href="mailto:newhigen@gmail.com">newhigen@gmail.com</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="cv-sections">
+
+    <!-- 경력 -->
+    <section id="experience">
+      <div class="sec-head">
+        <h2 class="sec-title">경력</h2>
+      </div>
+      <div class="item-list">
         <div>
-          <h1 class="name">조성덕</h1>
-          <p class="tagline">4년 경력의 ML Engineer</p>
+          <div class="item-row">
+            <span class="item-main">ML Engineer, <span class="org">뷰노 (VUNO)</span></span>
+            <span class="item-date">2022. 3 – 현재</span>
+          </div>
+          <ul class="bullet-tree">
+            <li class="bullet-item">
+              <span class="bullet-name">PXI (Chest) Team</span>
+              <span class="bullet-desc">흉부 <span class="nowrap">X-ray</span> 진단 AI 제품 연구개발</span>
+            </li>
+            <li class="bullet-item">
+              <span class="bullet-name">BLU3 (Lung) Team</span>
+              <span class="bullet-desc">폐 CT 소견 모델 및 DB 파이프라인 구축</span>
+            </li>
+            <li class="bullet-item">
+              <span class="bullet-name">Digital Oncology Team</span>
+              <span class="bullet-desc">디지털 병리 R&D 및 다중 연구 자동 평가 체계</span>
+            </li>
+          </ul>
         </div>
-        <a class="lang" href="/cv/en/">EN</a>
-      </div>
-      <p class="contact">newhigen@gmail.com</p>
-    </aside>
-    <nav class="nav">
-      <a href="#experience">경력</a>
-      <a href="#education">학력</a>
-      <a href="#awards">수상</a>
-      <a href="#publications">논문</a>
-      <a href="#languages">외국어</a>
-      <a class="out" href="/projects/">프로젝트 ↗</a>
-    </nav>
-  </div>
 
-  <main>
-
-  <section class="section" id="experience">
-    <div class="section-head">
-      <h2 class="section-title">경력</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="jobs">
-
-      <div>
-        <div class="job-row">
-          <span class="job-role">ML Engineer</span>
-          <span class="job-org">뷰노</span>
-          <span class="job-dates">2022. 3 – 현재</span>
-          <span class="job-dur" data-from="2022.3"></span>
-        </div>
-        <p class="job-desc">흉부 X-ray · 폐 CT · 디지털 병리 진단 AI 제품 연구개발</p>
-      </div>
-
-      <div>
-        <div class="job-row">
-          <span class="job-role">Research Assistant</span>
-          <span class="job-org">고려대 연구실</span>
-          <span class="job-dates">2019. 6 – 2022. 2</span>
-          <span class="job-dur" data-from="2019.6" data-to="2022.2"></span>
-        </div>
-        <p class="job-desc">딥러닝 기반 의료 영상 처리 연구 및 국제 챌린지 주최</p>
-      </div>
-
-    </div>
-  </section>
-
-  <section class="section" id="education">
-    <div class="section-head">
-      <h2 class="section-title">학력</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="rows">
-      <div class="row">
-        <span>컴퓨터과학 석사, 고려대학교</span>
-        <span class="row-period">2020 – 2022</span>
-      </div>
-      <div class="row">
-        <span>컴퓨터공학 학사, 울산과학기술원</span>
-        <span class="row-period">2015 – 2020</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- 숨김: Anthropic·MongoDB 워크숍 수료증. Experience 내용을 채운 뒤 노출 여부 재검토 -->
-  <section class="section" hidden>
-    <div class="section-head">
-      <h2 class="section-title">수료</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="entries gap-sm">
-      <div class="entry">
-        <span class="entry-year">2026</span>
-        <a class="course-title" href="https://www.credly.com/badges/4c1bebb2-029d-4340-b8d7-28dfd25b5d62/public_url" target="_blank" rel="noopener noreferrer">Introduction to Subagents <sup>Anthropic</sup></a>
-      </div>
-      <div class="entry">
-        <span class="entry-year"></span>
-        <a class="course-title" href="https://www.credly.com/badges/4c1bebb2-029d-4340-b8d7-28dfd25b5d62/public_url" target="_blank" rel="noopener noreferrer">Introduction to Agent Skills <sup>Anthropic</sup></a>
-      </div>
-      <div class="entry">
-        <span class="entry-year">2025</span>
-        <a class="course-title" href="https://www.credly.com/badges/4c1bebb2-029d-4340-b8d7-28dfd25b5d62/public_url" target="_blank" rel="noopener noreferrer">Claude Code in Action <sup>Anthropic</sup></a>
-      </div>
-      <div class="entry">
-        <span class="entry-year"></span>
-        <a class="course-title" href="https://verify.skilljar.com/c/fiqyk3xkq64r" target="_blank" rel="noopener noreferrer">Building AI Agents with MongoDB <sup>MongoDB</sup></a>
-      </div>
-      <div class="entry">
-        <span class="entry-year"></span>
-        <a class="course-title" href="https://verify.skilljar.com/c/aducvhf6396h" target="_blank" rel="noopener noreferrer">Building RAG Apps Using MongoDB <sup>MongoDB</sup></a>
-      </div>
-      <div class="entry">
-        <span class="entry-year"></span>
-        <a class="course-title" href="https://verify.skilljar.com/c/tq9qfui7nrwo" target="_blank" rel="noopener noreferrer">Building AI-Powered Search with MongoDB Vector Search <sup>MongoDB</sup></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="awards">
-    <div class="section-head">
-      <h2 class="section-title">수상</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="entries gap-lg">
-      <div class="entry">
-        <span class="entry-year">2022</span>
         <div>
-          <div class="award-title">1등 · 국제 병리영상 챌린지 <sup>Radboud University</sup></div>
-          <div class="sub">TIGER Challenge</div>
+          <div class="item-row">
+            <span class="item-main">Research Assistant, <span class="org">고려대학교 연구실</span></span>
+            <span class="item-date">2019. 6 – 2022. 2</span>
+          </div>
+          <p class="item-desc">딥러닝 기반 의료영상 처리 연구 및 국제 챌린지 주최</p>
         </div>
       </div>
-      <div class="entry">
-        <span class="entry-year">2021</span>
-        <div>
-          <div class="award-title">1등 · 고려대 창업경진대회 <sup>서울특별시, 성북구, 서울주택도시공사, 고려대학교</sup></div>
-          <div class="sub">제11회 고려대 안암동 캠퍼스타운 창업입주 경진대회</div>
-        </div>
-      </div>
-      <div class="entry">
-        <span class="entry-year">2020</span>
-        <div>
-          <div class="award-title">1등 · 서울대치과병원 치아영상 챌린지 <sup>HealthHub, 서울대학교병원 치과병원</sup></div>
-          <div class="sub">Healthhub Datathon, Track B: Panoramic Dental X-ray</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="publications">
-    <div class="section-head">
-      <h2 class="section-title">논문</h2>
-      <a class="scholar" href="https://scholar.google.com/citations?user=zsfFJ-cAAAAJ&hl=ko&oi=ao" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" fill="currentColor" width="13" height="13" aria-hidden="true">
-          <path d="M454.9 362.5C454.9 362.5 454.9 362.6 455 362.6C464.2 382 469.4 403.7 469.4 426.6C469.3 509.1 402.5 576 320 576C237.5 576 170.7 509.1 170.7 426.7C170.7 403.8 175.9 382.1 185.1 362.7C186.8 359.1 188.7 355.5 190.7 352C195.1 344.4 200.1 337.3 205.7 330.7C233.1 298.1 274.2 277.4 320.1 277.4C353.7 277.4 384.7 288.5 409.7 307.3C418.8 314.2 427.1 322 434.5 330.8C440.1 337.4 445.1 344.6 449.5 352.1C451.5 355.5 453.3 359.1 455 362.6L454.9 362.5zM481.3 343.7C451.2 285.3 390.3 245.3 320 245.3C249.7 245.3 188.8 285.3 158.7 343.7L64 266.7L320 64L576 266.7L481.3 343.8L481.3 343.7z"/>
-        </svg>
-        <span>Google Scholar ↗</span>
-      </a>
-      <div class="rule"></div>
-    </div>
-    <div class="entries gap-md">
-      <div class="entry">
-        <span class="entry-year">2025</span>
-        <div>
-          <div class="pub-title">Tumor-infiltrating lymphocytes in breast cancer through artificial intelligence: biomarker analysis from the results of the TIGER challenge <sup>컨소시엄</sup></div>
-          <div class="sub">Nature Communications</div>
+    <!-- 학력 -->
+    <section id="education">
+      <div class="sec-head">
+        <h2 class="sec-title">학력</h2>
+      </div>
+      <div class="item-list compact">
+        <div class="item-row">
+          <span class="item-main">고려대학교 <span class="org">컴퓨터과학 석사</span></span>
+          <span class="item-date">2020 – 2022</span>
+        </div>
+        <div class="item-row">
+          <span class="item-main">울산과학기술원 (UNIST) <span class="org">컴퓨터공학 학사</span></span>
+          <span class="item-date">2015 – 2020</span>
         </div>
       </div>
-      <div class="entry">
-        <span class="entry-year">2024</span>
-        <div>
-          <div class="pub-title">Joint-Embedding Predictive Architecture for Self-Supervised Learning of Mask Classification Architecture <sup>2저자</sup></div>
-          <div class="sub">arXiv</div>
-        </div>
-      </div>
-      <div class="entry">
-        <span class="entry-year">2023</span>
-        <div>
-          <div class="pub-title">PAIP 2020: Microsatellite instability prediction in colorectal cancer <sup>공1저자</sup></div>
-          <div class="sub">Medical Image Analysis <sup>국제 저널</sup></div>
-        </div>
-      </div>
-      <div class="entry">
-        <span class="entry-year">2021</span>
-        <div>
-          <div class="pub-title">Deepscribble: interactive pathology image segmentation using deep neural networks with scribbles <sup>1저자</sup></div>
-          <div class="sub">IEEE ISBI <sup>국제 학회</sup></div>
-        </div>
-      </div>
-      <div class="entry">
-        <span class="entry-year"></span>
-        <div>
-          <div class="pub-title">Development and operation of a digital platform for sharing pathology image data <sup>7저자</sup></div>
-          <div class="sub">BMC Medical Informatics <sup>국제 저널</sup></div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="languages">
-    <div class="section-head">
-      <h2 class="section-title">외국어</h2>
-      <div class="rule"></div>
-    </div>
-    <div class="lang-row">
-      <span>영어</span>
-      <span class="lang-level">OPIc AL</span>
-    </div>
-  </section>
+    <!-- 수상 -->
+    <section id="awards">
+      <div class="sec-head">
+        <h2 class="sec-title">수상</h2>
+      </div>
+      <div class="item-list">
+        <div>
+          <div class="item-row">
+            <span class="item-main">1등, 국제 병리영상 챌린지 (TIGER Challenge)</span>
+            <span class="item-date">2022</span>
+          </div>
+          <p class="item-desc">Radboud University 주최 유방암 림프구 분석 AI 챌린지</p>
+        </div>
+        <div>
+          <div class="item-row">
+            <span class="item-main">1등, 고려대 안암동 캠퍼스타운 창업경진대회</span>
+            <span class="item-date">2021</span>
+          </div>
+          <p class="item-desc">서울특별시, 성북구, 서울주택도시공사, 고려대학교</p>
+        </div>
+        <div>
+          <div class="item-row">
+            <span class="item-main">1등, 서울대치과병원 파노라마 치아영상 챌린지</span>
+            <span class="item-date">2020</span>
+          </div>
+          <p class="item-desc">Healthhub Datathon Track B (서울대학교병원 치과병원)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 논문 -->
+    <section id="publications">
+      <div class="sec-head">
+        <h2 class="sec-title">논문</h2>
+        <a class="sec-link" href="https://scholar.google.com/citations?user=zsfFJ-cAAAAJ&hl=ko&oi=ao" target="_blank" rel="noopener noreferrer">Google Scholar ↗</a>
+      </div>
+      <div class="item-list">
+        <div>
+          <div class="item-row">
+            <span class="item-main">Tumor-infiltrating lymphocytes in breast cancer through AI <span class="badge-tag">(컨소시엄)</span></span>
+            <span class="item-date">2025</span>
+          </div>
+          <p class="item-desc">Nature Communications</p>
+        </div>
+        <div>
+          <div class="item-row">
+            <span class="item-main">Joint-Embedding Predictive Architecture for Mask Classification <span class="badge-tag">(2저자)</span></span>
+            <span class="item-date">2024</span>
+          </div>
+          <p class="item-desc">arXiv</p>
+        </div>
+        <div>
+          <div class="item-row">
+            <span class="item-main">PAIP 2020: Microsatellite instability prediction in colorectal cancer <span class="badge-tag">(공1저자)</span></span>
+            <span class="item-date">2023</span>
+          </div>
+          <p class="item-desc">Medical Image Analysis (국제 저널)</p>
+        </div>
+        <div>
+          <div class="item-row">
+            <span class="item-main">Deepscribble: interactive pathology image segmentation <span class="badge-tag">(1저자)</span></span>
+            <span class="item-date">2021</span>
+          </div>
+          <p class="item-desc">IEEE ISBI (국제 학회)</p>
+        </div>
+        <div>
+          <div class="item-row">
+            <span class="item-main">Development and operation of a digital platform for sharing pathology image data <span class="badge-tag">(7저자)</span></span>
+            <span class="item-date">2021</span>
+          </div>
+          <p class="item-desc">BMC Medical Informatics (국제 저널)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 외국어 -->
+    <section id="languages">
+      <div class="sec-head">
+        <h2 class="sec-title">외국어</h2>
+      </div>
+      <div class="item-list compact">
+        <div class="item-row">
+          <span class="item-main">영어</span>
+          <span class="item-date">OPIc AL</span>
+        </div>
+      </div>
+    </section>
 
   </main>
+
+  <footer>
+    <a href="/" class="back-home">← sungd.uk</a>
+    <a href="/projects/" class="sec-link">프로젝트 ↗</a>
+  </footer>
+
 </div>
-<script src="/script.js"></script>
 </body>
 </html>
