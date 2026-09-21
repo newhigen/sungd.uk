@@ -17,7 +17,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
   <!-- Google Analytics -->
@@ -40,6 +40,19 @@
   </script>
 
   <style>
+    @font-face {
+      font-family: 'MaruBuri';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri-Regular.woff') format('woff');
+      font-weight: 400;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'MaruBuri';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri-SemiBold.woff') format('woff');
+      font-weight: 600;
+      font-display: swap;
+    }
+
     :root {
       --bg: #fafafa;
       --text-primary: #18181b;
@@ -49,7 +62,8 @@
       --hover-bg: rgba(0, 0, 0, 0.035);
       --accent: #2563eb;
       
-      --font-sans: "Inter Tight", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      --font-sans: "Plus Jakarta Sans", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      --font-serif: "MaruBuri", serif;
       --font-mono: "JetBrains Mono", Menlo, monospace;
       color-scheme: light dark;
     }
@@ -119,7 +133,7 @@
     }
     .name-ko {
       font-size: 1.375rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: -0.025em;
       color: var(--text-primary);
       line-height: 1.2;
@@ -137,23 +151,15 @@
       gap: 6px;
       letter-spacing: -0.01em;
     }
-    .dot-sep {
-      color: var(--text-tertiary);
-      font-size: 0.6875rem;
-    }
-    .loc {
-      color: var(--text-tertiary);
-      font-size: 0.8125rem;
-      font-family: var(--font-mono);
-    }
 
     /* Signature Tagline */
     .signature-tagline {
-      font-size: 1.1875rem;
-      font-weight: 600;
+      font-family: var(--font-sans);
+      font-size: 1.25rem;
+      font-weight: 700;
       color: var(--text-primary);
       margin-bottom: 30px;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.025em;
       line-height: 1.45;
     }
 
@@ -177,20 +183,22 @@
       text-transform: uppercase;
     }
     .bio-p {
+      font-family: var(--font-serif);
       font-size: 0.9375rem;
       color: var(--text-secondary);
-      line-height: 1.82;
-      letter-spacing: -0.022em;
+      line-height: 1.85;
+      letter-spacing: -0.015em;
       word-break: keep-all;
     }
 
     /* Narrative Links (문단형 공간 연결) */
     .narrative-block {
       margin-top: 28px;
+      font-family: var(--font-serif);
       font-size: 0.9375rem;
       color: var(--text-secondary);
-      line-height: 1.82;
-      letter-spacing: -0.02em;
+      line-height: 1.85;
+      letter-spacing: -0.015em;
       word-break: keep-all;
     }
     .narrative-block a {
@@ -204,6 +212,39 @@
     .narrative-block a:hover {
       color: var(--accent);
       text-decoration-color: var(--accent);
+    }
+
+    /* Epilogue (세 점 아스테리즘형) */
+    .epilogue-wrap {
+      text-align: center;
+      margin-top: 44px;
+      margin-bottom: 8px;
+      padding: 0 16px;
+    }
+    .asterism {
+      font-size: 0.875rem;
+      letter-spacing: 0.45em;
+      color: var(--text-tertiary);
+      margin-bottom: 12px;
+      display: block;
+      opacity: 0.75;
+    }
+    .epilogue-wrap .quote-text {
+      font-family: var(--font-serif);
+      font-size: 0.90625rem;
+      color: var(--text-primary);
+      line-height: 1.75;
+      word-break: keep-all;
+      font-weight: 400;
+    }
+    .epilogue-wrap .quote-author {
+      display: block;
+      margin-top: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      color: var(--text-tertiary);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
 
     /* Divider */
@@ -334,6 +375,9 @@
         flex-wrap: wrap;
         gap: 2px 8px;
       }
+      .epilogue-wrap {
+        margin-top: 32px;
+      }
     }
   </style>
 </head>
@@ -351,8 +395,6 @@
         </div>
         <div class="role-line">
           <span>ML Engineer @ VUNO</span>
-          <span class="dot-sep">·</span>
-          <span class="loc">Seoul, Korea</span>
         </div>
       </div>
     </header>
@@ -446,6 +488,13 @@
         </div>
       </section>
     </main>
+
+    <!-- Epilogue (시안 2: 세 점 아스테리즘형) -->
+    <div class="epilogue-wrap">
+      <span class="asterism">· · ·</span>
+      <p class="quote-text">"어떤 점도 앞을 내다보며 연결할 수는 없다. 지난 점들은 오직 뒤를 돌아볼 때만 연결된다."</p>
+      <span class="quote-author">— Steve Jobs</span>
+    </div>
 
     <!-- Footer -->
     <footer>
