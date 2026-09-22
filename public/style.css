@@ -234,21 +234,29 @@ a {
   min-width: 0;
 }
 
-/* Google Scholar 링크 (PC 우측 상단 절대 배치) */
-.sec-link.pub-scholar-link {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 0.75rem;
+/* Google Scholar 인라인 공식 로고 링크 */
+.pub-title-wrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 7px;
+}
+.scholar-inline-btn {
+  display: inline-flex;
+  align-items: center;
   color: var(--text-tertiary);
-  text-decoration: underline;
-  text-underline-offset: 2.5px;
-  text-decoration-color: var(--line);
+  text-decoration: none;
+  padding: 1px 2px;
+  border-radius: 4px;
+  transform: translateY(1px);
   transition: all 0.15s ease;
 }
-.sec-link.pub-scholar-link:hover {
-  color: var(--accent);
-  text-decoration-color: var(--accent);
+.scholar-inline-btn:hover {
+  color: #4285F4;
+  transform: translateY(1px) scale(1.12);
+}
+.scholar-logo-svg {
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 /* ── 리스트 & 항목 ── */
@@ -519,6 +527,12 @@ a {
   flex-direction: column;
 }
 
+.pub-style-a {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
 .pub-group-title {
   font-size: 0.75rem;
   font-weight: 600;
@@ -545,11 +559,11 @@ a {
 }
 
 .pub-code {
-  font-size: 0.8125rem;
-  font-weight: 400;
-  color: var(--text-tertiary);
-  font-family: monospace;
-  letter-spacing: -0.02em;
+  font-size: 0.78125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
   line-height: 1.45;
 }
 
@@ -620,11 +634,6 @@ footer a:hover {
     margin-bottom: 0;
   }
 
-  .sec-link.pub-scholar-link {
-    position: static;
-    font-size: 0.75rem;
-  }
-
   /* 본문 항목 간 상하 간격 압축 */
   .item-list {
     gap: 13px;
@@ -645,6 +654,9 @@ footer a:hover {
   }
   .pub-group-title {
     margin-bottom: 6px;
+  }
+  .pub-style-a {
+    gap: 10px;
   }
 
   /* 수상 연도 컬럼 압축 (논문 pub-entry 제외) */
