@@ -613,27 +613,28 @@ footer a:hover {
     gap: 5px;
   }
 
-  /* 논문 [J1] 2025 가로배치 폭 모바일 압축 (제목 가로폭 극대화) */
-  .pub-entry {
-    grid-template-columns: 64px 1fr;
-    gap: 10px;
-  }
-  .pub-left-col {
-    gap: 5px;
-  }
-
   .pub-group-wrap {
-    gap: 16px;
+    gap: 14px;
   }
-
   .pub-group-title {
     margin-bottom: 6px;
   }
 
-  /* 수상 연도 컬럼 압축 */
-  .entry-row {
+  /* 수상 연도 컬럼 압축 (논문 pub-entry 제외) */
+  .entry-row:not(.pub-entry) {
     grid-template-columns: 40px 1fr;
     gap: 10px;
+  }
+
+  /* 논문 [J1] 2025 가로배치 폭 모바일 압축 (겹침 방지: 68px 확보 및 우선순위 보장) */
+  .pub-entry,
+  .entry-row.pub-entry {
+    grid-template-columns: 68px 1fr !important;
+    gap: 10px !important;
+  }
+  .pub-left-col {
+    gap: 5px;
+    white-space: nowrap;
   }
 
   /* 스킬 모바일 압축 */
