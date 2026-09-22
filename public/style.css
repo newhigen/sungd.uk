@@ -276,6 +276,17 @@ a {
   word-break: keep-all;
 }
 
+/* ── 요약문 (Summary) ── */
+.summary-box {
+  font-size: var(--size-desc);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  word-break: keep-all;
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
 /* ── 팀별 상세 블록 & 성과 bullet ── */
 .team-group {
   margin-top: 14px;
@@ -291,6 +302,25 @@ a {
   display: flex;
   flex-direction: column;
   gap: 5px;
+}
+
+.team-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.team-dates {
+  font-size: 0.78125rem;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.team-desc-line {
+  font-size: 0.78125rem;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
 }
 
 .team-title {
@@ -533,6 +563,11 @@ footer a:hover {
 
   .profile-header {
     margin-bottom: 20px;
+  }
+
+  .summary-box {
+    margin-bottom: 18px;
+    padding-bottom: 16px;
   }
 
   /* 대섹션 그룹 간격 압축 */
