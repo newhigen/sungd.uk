@@ -97,7 +97,9 @@
       max-width: 540px;
       min-height: 100vh;
       margin: 0 auto;
-      padding: 56px 24px 80px;
+      padding: 72px 24px;
+      display: flex;
+      flex-direction: column;
     }
 
     .nowrap {
@@ -110,7 +112,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 28px;
+      margin-bottom: 40px;
     }
     .profile-left {
       display: flex;
@@ -267,7 +269,6 @@
     .epilogue-wrap {
       text-align: center;
       margin-top: 42px;
-      margin-bottom: 24px;
       padding: 0 16px;
     }
     .epilogue-wrap .quote-text {
@@ -289,8 +290,10 @@
     }
 
     /* Footer (가로선 제거, 순수 여백 피날레) */
+    /* 화면이 본문보다 크면 바닥에 붙는다 */
     footer {
-      margin-top: 36px;
+      margin-top: auto;
+      padding-top: 36px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -327,12 +330,12 @@
     }
 
     @media (max-width: 480px) {
-      .page-wrap { padding: 40px 20px 60px; }
+      .page-wrap { padding: 32px 20px calc(16px + env(safe-area-inset-bottom)); }
       .profile-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
-        margin-bottom: 22px;
+        margin-bottom: 30px;
       }
       .avatar {
         width: 52px;
@@ -349,6 +352,7 @@
       .epilogue-wrap {
         margin-top: 32px;
       }
+      footer { padding-top: 28px; }
     }
   </style>
 </head>
