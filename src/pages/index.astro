@@ -231,6 +231,36 @@
       color: var(--accent);
       text-decoration-color: var(--accent);
     }
+    .bio-inline-site {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 3px;
+      margin-right: 2px;
+      color: var(--text-primary);
+      text-decoration: underline;
+      text-decoration-color: var(--line);
+      text-underline-offset: 3.5px;
+      font-weight: 400;
+      font-family: var(--font-serif);
+      font-size: 0.9375rem;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+    .bio-inline-site:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
+    .bio-inline-site svg {
+      width: 11px;
+      height: 11px;
+      opacity: 0.7;
+      transform: translateY(1.5px);
+      flex-shrink: 0;
+      transition: opacity 0.15s ease;
+    }
+    .bio-inline-site:hover svg {
+      opacity: 1;
+    }
 
 
     /* Epilogue (순수 여백형) */
@@ -371,20 +401,20 @@
           뷰노에서 4년간 흉부 <span class="nowrap">X-ray</span>와 폐 CT 소견 모델을 개발하며, 여러 연구가 재사용하는 DB 기반 파이프라인과 자동 평가 체계를 세웠습니다. 
           단지 지표 몇 개를 높이는 것보다, 제품 관점에서 실제로 배포·최적화되고 팀이 반복 없이 안정적으로 실험할 수 있는 엔지니어링 기반을 다질 때 가장 큰 희열을 느낍니다. 
           함께 의미 있는 일을 즐겁게 해나갈 수 있는 동료이고 싶습니다. 
-          전체 경력은 <a href="/cv/">CV</a>에서 확인하실 수 있습니다.
+          전체 경력은 <a href="/cv/" class="bio-inline-site" title="전체 이력서 & 논문"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>cv</span></a>에서 확인하실 수 있습니다.
         </p>
 
         <p class="bio-p">
           <strong class="lead-bold">내 생각과 인지 방식에 딱 맞춘 도구를 직접 깎아 씁니다. </strong>
           일상의 마찰을 줄이고 작업 속도를 증강(augment)하기 위해, 터미널 세션 모니터부터 개발 콘솔, AI 에이전트 작업 공간까지 삶과 일에 필요한 시스템을 직접 지어 씁니다. 
           단정한 도구와 시각적 질서가 생각의 속도를 높여준다고 믿습니다. 
-          직접 만든 도구와 엔지니어링 노트는 <a href="https://dev.sungd.uk">dev.sungd.uk</a>에, 매일 써보는 최신 AI 도구 큐레이션은 <a href="https://ai.sungd.uk">ai.sungd.uk</a>에 기록합니다.
+          직접 만든 도구와 엔지니어링 노트는 <a href="https://dev.sungd.uk" target="_blank" rel="noopener noreferrer" class="bio-inline-site" title="직접 만든 도구 & 시스템"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg><span>dev</span></a>에, 매일 써보는 최신 AI 도구 큐레이션은 <a href="https://ai.sungd.uk" target="_blank" rel="noopener noreferrer" class="bio-inline-site" title="매일 써보는 AI 도구 큐레이션"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"/></svg><span>ai</span></a>에 기록합니다.
         </p>
 
         <p class="bio-p">
           <strong class="lead-bold">일하지 않을 때는 책을 읽고 사유하며 글을 남깁니다. </strong>
           인생을 어떻게 살고 일을 어떻게 해야 하는가에 대한 고민은 결국 엔지니어링과 맞닿아 있습니다. 
-          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk">writing.sungd.uk</a>에 남기고 있습니다.
+          책과 생각에 대해 쓴 글들은 <a href="https://writing.sungd.uk" target="_blank" rel="noopener noreferrer" class="bio-inline-site" title="독서 & 사유 에세이"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg><span>writing</span></a>에 남기고 있습니다.
         </p>
       </div>
     </main>
