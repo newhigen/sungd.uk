@@ -575,6 +575,32 @@ a {
   line-height: 1.45;
 }
 
+.pub-authors {
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-sans);
+  line-height: 1.4;
+  margin: 1px 0 2px;
+  word-break: keep-all;
+}
+
+.pub-authors .author-me {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: var(--text-tertiary);
+}
+
+.pub-footnote {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  margin-top: 14px;
+  padding-left: 92px;
+}
+
 /* ── 푸터 ── */
 footer {
   margin-top: 48px;
@@ -688,5 +714,9 @@ footer a:hover {
   .skill-cat {
     font-size: 0.78125rem;
     letter-spacing: -0.01em;
+  }
+
+  .pub-footnote {
+    padding-left: 0;
   }
 }
