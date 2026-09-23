@@ -80,6 +80,56 @@ a {
   margin-bottom: 32px;
 }
 
+.nav-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.copy-md-btn,
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.5px;
+  height: 24px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  appearance: none;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  vertical-align: middle;
+}
+
+.copy-md-btn:hover,
+.lang-switch:hover {
+  color: var(--text-primary);
+  background: var(--hover-bg);
+  border-color: var(--line);
+}
+
+.copy-md-btn svg {
+  flex-shrink: 0;
+  width: 11px;
+  height: 11px;
+  stroke-width: 2.2;
+}
+
+.copy-md-btn.copied {
+  color: #10b981;
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
 .back-home {
   display: inline-flex;
   align-items: center;
@@ -90,21 +140,6 @@ a {
 }
 .back-home:hover {
   color: var(--text-primary);
-}
-
-.lang-switch {
-  display: inline-block;
-  padding: 2px 8px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  transition: all 0.15s ease;
-}
-.lang-switch:hover {
-  color: var(--text-primary);
-  background: var(--hover-bg);
 }
 
 /* ── 프로필 헤더 ── */
@@ -652,6 +687,28 @@ a {
   padding-left: 32px;
 }
 
+/* 연구실 프로젝트 인용 태그([J1] 등) 클릭 시 은은한 숨 쉬는 펄스 하이라이트 */
+@keyframes target-pulse {
+  0% {
+    background-color: rgba(37, 99, 235, 0.16);
+    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.16);
+    border-radius: 4px;
+  }
+  65% {
+    background-color: rgba(37, 99, 235, 0.05);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.05);
+  }
+  100% {
+    background-color: transparent;
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.pub-entry:target {
+  animation: target-pulse 2.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  scroll-margin-top: 60px;
+}
+
 /* ── 푸터 ── */
 footer {
   margin-top: 48px;
@@ -765,5 +822,84 @@ footer a:hover {
 
   .pub-footnote {
     padding-left: 32px;
+  }
+}
+
+/* ── 인쇄 및 PDF 저장 전용 스타일 (Cmd + P) ── */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm 14mm 12mm;
+  }
+
+  :root {
+    --bg: #ffffff !important;
+    --text-primary: #111111 !important;
+    --text-secondary: #3f3f46 !important;
+    --text-tertiary: #71717a !important;
+    --line: rgba(0, 0, 0, 0.12) !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+    font-size: 13.5px !important;
+    line-height: 1.5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .cv-wrap {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 웹 전용 내비게이션, 푸터, 버튼 숨김 */
+  .nav-top,
+  footer,
+  .scholar-inline-btn,
+  .copy-md-btn,
+  .preview-controller,
+  .confirm-bar,
+  .enh-controller {
+    display: none !important;
+  }
+
+  header {
+    margin-bottom: 16px !important;
+  }
+
+  .summary {
+    font-size: 0.84rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 22px !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .cv-sections {
+    margin-top: 18px !important;
+    gap: 20px !important;
+  }
+
+  /* 2단 마진 인쇄 폭 최적화 */
+  .cv-sections > section {
+    grid-template-columns: 50px 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* 항목 중간에 어색한 페이지 분할 방지 */
+  .team-group,
+  .entry-row,
+  .item-row,
+  .skill-row,
+  .pub-entry {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  a {
+    color: inherit !important;
+    text-decoration: none !important;
   }
 }
