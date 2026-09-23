@@ -277,6 +277,21 @@ a {
   gap: 12px;
 }
 
+#languages .item-row {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+#languages .lang-score {
+  font-size: var(--size-main);
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+#languages .item-date {
+  font-size: 0.75rem;
+}
+
 .item-main {
   font-size: var(--size-main);
   font-weight: 600;
@@ -468,27 +483,20 @@ a {
   gap: 12px;
 }
 
-.entry-row {
+#awards .entry-row {
   display: grid;
-  grid-template-columns: 46px 1fr;
-  gap: 14px;
+  grid-template-columns: 1fr auto;
+  gap: 2px 14px;
   align-items: baseline;
 }
 
-.entry-year {
-  font-size: var(--size-date);
-  color: var(--text-tertiary);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+#awards .entry-body {
+  display: contents;
 }
 
-.entry-body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.entry-title {
+#awards .entry-title {
+  grid-column: 1;
+  grid-row: 1;
   font-size: var(--size-desc);
   font-weight: 400;
   color: var(--text-primary);
@@ -496,19 +504,31 @@ a {
   word-break: keep-all;
 }
 
-.entry-title a {
+#awards .entry-title a {
   color: inherit;
   text-decoration: none;
   transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 
-.entry-title a:hover {
+#awards .entry-title a:hover {
   text-decoration: underline;
   text-underline-offset: 2.5px;
   text-decoration-color: var(--text-tertiary);
 }
 
-.entry-venue {
+#awards .entry-year {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: right;
+  font-size: var(--size-date);
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+#awards .entry-venue {
+  grid-column: 1 / -1;
+  grid-row: 2;
   font-size: 0.8125rem;
   color: var(--text-tertiary);
   line-height: 1.4;
@@ -546,36 +566,50 @@ a {
 
 .pub-entry {
   display: grid;
-  grid-template-columns: 78px 1fr;
-  gap: 14px;
+  grid-template-columns: 24px 1fr auto;
+  gap: 2px 8px;
   align-items: baseline;
 }
 
 .pub-left-col {
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  align-items: baseline;
+  display: contents;
 }
 
 .pub-code {
+  grid-column: 1;
+  grid-row: 1;
   font-size: 0.78125rem;
   font-weight: 600;
   color: var(--text-secondary);
   font-family: var(--font-sans);
   letter-spacing: -0.01em;
   line-height: 1.45;
+  white-space: nowrap;
 }
 
 .pub-year {
-  font-size: 0.78125rem;
+  grid-column: 3;
+  grid-row: 1;
+  text-align: right;
+  font-size: var(--size-date);
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
   line-height: 1.45;
 }
 
+.pub-entry .entry-body {
+  display: contents;
+}
+
+.pub-entry .entry-title {
+  grid-column: 2;
+  grid-row: 1;
+}
+
 .pub-authors {
+  grid-column: 2 / -1;
+  grid-row: 2;
   font-size: 0.625rem;
   color: var(--text-tertiary);
   font-family: var(--font-sans);
@@ -592,13 +626,18 @@ a {
   text-decoration-color: var(--text-tertiary);
 }
 
+.pub-entry .entry-venue {
+  grid-column: 2 / -1;
+  grid-row: 3;
+}
+
 .pub-footnote {
   font-size: 0.6875rem;
   color: var(--text-tertiary);
   font-family: var(--font-sans);
   letter-spacing: -0.01em;
   margin-top: 14px;
-  padding-left: 92px;
+  padding-left: 32px;
 }
 
 /* ── 푸터 ── */
@@ -685,21 +724,17 @@ footer a:hover {
     gap: 10px;
   }
 
-  /* 수상 연도 컬럼 압축 (논문 pub-entry 제외) */
-  .entry-row:not(.pub-entry) {
-    grid-template-columns: 40px 1fr;
-    gap: 10px;
+  /* 수상 연도 우측 정렬 모바일 유지 */
+  #awards .entry-row {
+    grid-template-columns: 1fr auto;
+    gap: 2px 10px;
   }
 
-  /* 논문 [J1] 2025 가로배치 폭 모바일 압축 (겹침 방지: 72px 확보 및 우선순위 보장) */
+  /* 논문 [J1] 24px + 본문 1fr + 우측 연도 모바일 3열 유지 */
   .pub-entry,
   .entry-row.pub-entry {
-    grid-template-columns: 72px 1fr !important;
-    gap: 10px !important;
-  }
-  .pub-left-col {
-    gap: 5px;
-    white-space: nowrap;
+    grid-template-columns: 24px 1fr auto !important;
+    gap: 2px 8px !important;
   }
 
   /* 스킬 모바일 압축 */
@@ -717,6 +752,6 @@ footer a:hover {
   }
 
   .pub-footnote {
-    padding-left: 0;
+    padding-left: 32px;
   }
 }
