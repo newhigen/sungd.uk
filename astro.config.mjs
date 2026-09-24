@@ -12,7 +12,6 @@ export default defineConfig({
   site: 'https://sungd.uk',
   redirects: {
     '/resume': '/cv',
-    '/en': '/cv/en',
   },
   vite: {
     plugins: [tailwindcss()],
