@@ -46,10 +46,6 @@
   <nav class="nav-top">
     <a href="/" class="back-home">← sungd.uk</a>
     <div class="nav-right">
-      <button type="button" class="copy-md-btn" id="copyMdBtn" title="이력서 전문을 Markdown 형식으로 복사">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-        <span>Copy MD</span>
-      </button>
       <a href="/cv/en/" class="lang-switch">EN</a>
     </div>
   </nav>
@@ -377,75 +373,13 @@
 
   <footer>
     <a href="/" class="back-home">← sungd.uk</a>
-    <a href="https://dev.sungd.uk" target="_blank" rel="noopener noreferrer" class="sec-link">프로젝트 ↗</a>
+    <span class="footer-links">
+      <a href="/activity/" class="sec-link">활동</a>
+      <a href="https://dev.sungd.uk" target="_blank" rel="noopener noreferrer" class="sec-link">프로젝트 ↗</a>
+    </span>
   </footer>
 
 </div>
 
-<script>
-  document.getElementById('copyMdBtn')?.addEventListener('click', function() {
-    const btn = this;
-    const cvMarkdown = `# 조성덕 (Sungduk Cho)
-ML Engineer @ VUNO | newhigen@gmail.com | https://sungd.uk
-
-4년 동안 의료영상 AI를 연구하고 제품으로 만들어온 ML Engineer입니다. 흉부 X-ray와 폐 CT 소견 모델 개발부터 제품 탑재·최적화, 그리고 팀이 재사용하는 데이터·평가 파이프라인과 사내 도구를 구축해왔습니다.
-
-## 경력
-- **ML Engineer, 뷰노 (VUNO)** (2022. 3 – 현재, 4년 7개월)
-  - PXI (Chest) Team (2024. 9 – 현재)
-    - 흉부 X-ray 진단 AI 제품 (VUNO Med®-Chest X-ray™)
-    - 소견 모델 연구개발 및 제품 탑재를 위한 ONNX·OpenVINO 직렬화·최적화
-    - 신규 소견 연구에 재사용 가능한 DB 기반 학습·평가 파이프라인 구축 및 메트릭 표준화
-    - 팀 개발 생산성과 인프라 가시성을 높이는 사내 도구 및 코드 리뷰 문화 정착
-  - BLU3 (Lung) Team (2022. 11 – 2024. 8)
-    - 폐 CT 진단 AI 제품 (VUNO Med®-LungCT AI™)
-    - 3D 폐 영상 처리·분석 공용 파이프라인 구축 및 다중 모델 재사용 지원
-    - 외부 평가 데이터셋의 라벨 오류를 정량 분석해 해외 병원의 재라벨링을 유도하고 데이터 신뢰도 체계 수립
-    - 데이터 무결성 확보를 위한 팀 DB 도입 및 외부 대학병원 온사이트 검증
-  - Digital Oncology Team (2022. 3 – 2022. 10)
-    - 디지털 병리학 연구개발
-    - TIGER 국제 챌린지 생존분석 트랙 1등 (추론 파이프라인 및 TIL 분석 구현) [J1]
-    - 다단계 모델을 연결하는 컨테이너 파이프라인 구축 및 오픈소스 공개
-    - 병리 영상(WSI) 처리를 위한 재사용 컴포넌트 라이브러리 설계
-- **Research Assistant, 고려대학교 고성능비주얼컴퓨팅 연구실** (2019. 6 – 2022. 2)
-  - Interactive Segmentation 연구: 의사의 라벨링 비용을 낮추는 딥러닝 모델 개발 및 인터랙티브 툴 구현 [C1]
-  - 국제 의료 데이터 챌린지 2회 주최: 3개 병원 의사들의 정성평가 웹 툴 설계·구현 및 결과 분석 [J2], 대용량 병리 영상 데이터셋 공유 및 챌린지 운영을 위한 디지털 플랫폼 구축 [J3]
-
-## 스킬
-- ML & Serving: Python, PyTorch, ONNX, OpenVINO
-- Data & MLOps: MongoDB, Airflow, MLflow, W&B
-- DevOps & CI/CD: Docker, Git, GitHub Actions
-- AI Tools & Agents: Claude Code, Codex, Gemini
-
-## 학력
-- 고려대학교 컴퓨터과학 석사 (2020 – 2022)
-- 울산과학기술원(UNIST) 컴퓨터공학 학사 (2015 – 2020)
-
-## 수상
-- 1등, 국제 병리영상 챌린지 (TIGER Challenge) | Radboud University (2022)
-- 1등, 고려대 안암동 캠퍼스타운 창업경진대회 | 서울특별시·성북구·SH공사·고려대학교 (2021)
-- 1등, 서울대치과병원 파노라마 치아영상 챌린지 | Healthhub Datathon Track B, 서울대학교치과병원 (2020)
-
-## 논문
-- [J1] Analysis of computational tumor-infiltrating lymphocytes in breast cancer from the results of the TIGER challenge — Nature Communications (2025)
-- [J2] PAIP 2020: Microsatellite instability prediction in colorectal cancer — Medical Image Analysis (2023)
-- [J3] Development and operation of a digital platform for sharing pathology image data — BMC Medical Informatics and Decision Making (2021)
-- [C1] DeepScribble: Interactive Pathology Image Segmentation Using Deep Neural Networks with Scribbles — IEEE ISBI (2021)
-- [P1] Joint-Embedding Predictive Architecture for Self-Supervised Learning of Mask Classification Architecture — arXiv (2024)
-
-## 외국어
-- 영어: OPIc Advanced Low (2025. 7)
-`;
-    navigator.clipboard?.writeText(cvMarkdown).then(() => {
-      const originalHtml = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied!</span>';
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.innerHTML = originalHtml;
-      }, 1800);
-    });
-  });
-</script>
 </body>
 </html>
