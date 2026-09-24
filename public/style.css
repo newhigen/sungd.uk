@@ -857,7 +857,6 @@ footer a:hover {
 .lang-score {
   font-family: var(--font-date);
 }
-.header-contact-right a.contact-link,
 a.sec-link {
   text-decoration: underline;
   text-decoration-thickness: 0.3em;
