@@ -50,7 +50,7 @@
     </div>
   </nav>
 
-  <header class="profile-header">
+  <header class="profile-header act-head">
     <div class="profile-left">
       <div class="meta">
         <div class="name-row">
@@ -60,12 +60,11 @@
         <div class="role-line"><span>Conferences and courses</span></div>
       </div>
     </div>
+    <div class="act-toggle" role="group" aria-label="View">
+      <button type="button" data-v="topic" aria-pressed="true"><svg class="act-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>By topic</button>
+      <button type="button" data-v="year" aria-pressed="false"><svg class="act-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>By year</button>
+    </div>
   </header>
-
-  <div class="act-toggle" role="group" aria-label="View">
-    <button type="button" data-v="topic" aria-pressed="true">By topic</button>
-    <button type="button" data-v="year" aria-pressed="false">By year</button>
-  </div>
 
   <main class="cv-sections act-view" data-view="topic">
     <section id="conferences">
