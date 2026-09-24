@@ -46,10 +46,6 @@
   <nav class="nav-top">
     <a href="/" class="back-home">← sungd.uk</a>
     <div class="nav-right">
-      <button type="button" class="copy-md-btn" id="copyMdBtn" title="Copy full CV as Markdown">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-        <span>Copy MD</span>
-      </button>
       <a href="/cv/" class="lang-switch">KO</a>
     </div>
   </nav>
@@ -376,75 +372,13 @@
 
   <footer>
     <a href="/" class="back-home">← sungd.uk</a>
-    <a href="https://dev.sungd.uk" target="_blank" rel="noopener noreferrer" class="sec-link">Projects ↗</a>
+    <span class="footer-links">
+      <a href="/activity/en/" class="sec-link">Activity</a>
+      <a href="https://dev.sungd.uk" target="_blank" rel="noopener noreferrer" class="sec-link">Projects ↗</a>
+    </span>
   </footer>
 
 </div>
 
-<script>
-  document.getElementById('copyMdBtn')?.addEventListener('click', function() {
-    const btn = this;
-    const cvMarkdown = `# Sungduk Cho
-ML Engineer @ VUNO | newhigen@gmail.com | https://sungd.uk
-
-ML Engineer with 4 years of experience researching and productizing medical AI. Built and operated core finding models for chest X-ray and lung CT from scratch, standardizing team DB-based training/evaluation pipelines and internal engineering tools.
-
-## Experience
-- **ML Engineer, VUNO** (Mar 2022 – Present, 4 yrs 7 mos)
-  - PXI (Chest) Team (Sep 2024 – Present)
-    - Medical device AI product: VUNO Med®-Chest X-ray™
-    - Researched and developed finding models; optimized and serialized with ONNX & OpenVINO for on-device deployment
-    - Built DB-based training/evaluation pipelines and standardized validation metrics for reuse across multiple research topics
-    - Fostered code review culture and created internal tools to improve team developer productivity and infrastructure visibility
-  - BLU3 (Lung) Team (Nov 2022 – Aug 2024)
-    - Medical device AI product: VUNO Med®-LungCT AI™
-    - Built and maintained shared 3D lung imaging processing and analysis pipelines, supporting multi-model reuse
-    - Quantitatively diagnosed label errors in external evaluation datasets, leading to relabeling by overseas hospitals and establishing data reliability framework
-    - Implemented team database for data integrity and performed on-site validation at overseas university hospitals
-  - Digital Oncology Team (Mar 2022 – Oct 2022)
-    - Digital pathology R&D
-    - Won 1st place in TIGER Challenge Survival Analysis Track (inference pipeline & TIL analysis) [J1]
-    - Built multi-stage container pipelines and published open-source implementation
-    - Designed reusable component library for whole slide image (WSI) processing
-- **Research Assistant, Korea University High Performance Visual Computing Lab** (Jun 2019 – Feb 2022)
-  - Interactive Segmentation: Developed deep learning models reducing physician labeling costs with interactive tools [C1]
-  - Hosted 2 International Medical Data Challenges: Designed web evaluation tools for multi-hospital physicians [J2]; built and operated digital platform for sharing large-scale pathology datasets [J3]
-
-## Skills
-- ML & Serving: Python, PyTorch, ONNX, OpenVINO
-- Data & MLOps: MongoDB, Airflow, MLflow, W&B
-- DevOps & CI/CD: Docker, Git, GitHub Actions
-- AI Tools & Agents: Claude Code, Codex, Gemini
-
-## Education
-- M.E. in Computer Science and Engineering, Korea University (2020 – 2022)
-- B.S. in Computer Science & Engineering, UNIST (2015 – 2020)
-
-## Awards
-- 1st Place, International Pathology Image Challenge (TIGER Challenge) | Radboud University (2022)
-- 1st Place, Korea University Startup Competition | Seoul Metropolitan Government, Seongbuk-gu, SH Corporation, Korea University (2021)
-- 1st Place, Dental Panoramic X-ray AI Challenge | Healthhub Datathon Track B, Seoul National University Dental Hospital (2020)
-
-## Publications
-- [J1] Analysis of computational tumor-infiltrating lymphocytes in breast cancer from the results of the TIGER challenge — Nature Communications (2025)
-- [J2] PAIP 2020: Microsatellite instability prediction in colorectal cancer — Medical Image Analysis (2023)
-- [J3] Development and operation of a digital platform for sharing pathology image data — BMC Medical Informatics and Decision Making (2021)
-- [C1] DeepScribble: Interactive Pathology Image Segmentation Using Deep Neural Networks with Scribbles — IEEE ISBI (2021)
-- [P1] Joint-Embedding Predictive Architecture for Self-Supervised Learning of Mask Classification Architecture — arXiv (2024)
-
-## Languages
-- English: OPIc Advanced Low (Jul 2025)
-`;
-    navigator.clipboard?.writeText(cvMarkdown).then(() => {
-      const originalHtml = btn.innerHTML;
-      btn.classList.add('copied');
-      btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Copied!</span>';
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.innerHTML = originalHtml;
-      }, 1800);
-    });
-  });
-</script>
 </body>
 </html>

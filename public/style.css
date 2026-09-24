@@ -100,7 +100,6 @@ a {
   gap: 6px;
 }
 
-.copy-md-btn,
 .lang-switch {
   display: inline-flex;
   align-items: center;
@@ -124,24 +123,10 @@ a {
   vertical-align: middle;
 }
 
-.copy-md-btn:hover,
 .lang-switch:hover {
   color: var(--text-primary);
   background: var(--hover-bg);
   border-color: var(--line);
-}
-
-.copy-md-btn svg {
-  flex-shrink: 0;
-  width: 11px;
-  height: 11px;
-  stroke-width: 2.2;
-}
-
-.copy-md-btn.copied {
-  color: #10b981;
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.08);
 }
 
 .back-home {
@@ -559,23 +544,23 @@ a {
 }
 
 /* ── 수상 (좌측 수상명 / 우측 연도 그리드) ── */
-#awards .entry-row {
+:is(#awards, #conferences, #certifications) .entry-row {
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 2px 14px;
   align-items: baseline;
 }
 
-#awards .entry-body {
+:is(#awards, #conferences, #certifications) .entry-body {
   display: contents;
 }
 
-#awards .entry-title {
+:is(#awards, #conferences, #certifications) .entry-title {
   grid-column: 1;
   grid-row: 1;
 }
 
-#awards .entry-year {
+:is(#awards, #conferences, #certifications) .entry-year {
   grid-column: 2;
   grid-row: 1;
   text-align: right;
@@ -585,7 +570,7 @@ a {
   letter-spacing: -0.01em;
 }
 
-#awards .entry-venue {
+:is(#awards, #conferences, #certifications) .entry-venue {
   grid-column: 1 / -1;
   grid-row: 2;
 }
@@ -735,6 +720,11 @@ footer a:hover {
   color: var(--text-primary);
 }
 
+.footer-links {
+  display: flex;
+  gap: 16px;
+}
+
 /* ═══════════════════════════════════════════════════════
    모바일 반응형 최적화 (화면 폭 700px 이하)
    ═══════════════════════════════════════════════════════ */
@@ -806,7 +796,7 @@ footer a:hover {
   }
 
   /* 수상 연도 우측 정렬 모바일 유지 */
-  #awards .entry-row {
+  :is(#awards, #conferences, #certifications) .entry-row {
     grid-template-columns: 1fr auto;
     gap: 2px 10px;
   }
@@ -913,7 +903,6 @@ html[lang="en"] .item-main {
   .nav-top,
   footer,
   .scholar-inline-btn,
-  .copy-md-btn,
   .preview-controller,
   .confirm-bar,
   .enh-controller {
