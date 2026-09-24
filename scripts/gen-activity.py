@@ -35,10 +35,10 @@ PLACE = {
 }
 T = {
     'ko': dict(title='조성덕 | 활동', desc='조성덕 — 학회 참석과 수료', h1='활동', sub='조성덕', lead='학회 참석과 수료',
-               topic='주제별', year='연도별', conf='학회', tech='테크', med='의학', cert='수료', online='온라인',
+               home='/', topic='주제별', year='연도별', conf='학회', tech='테크', med='의학', cert='수료', online='온라인',
                month=lambda m: f'{m}월', sw=('/activity/en/', 'EN'), cv=('/cv/', '이력서'), seg='보기'),
     'en': dict(title='Sungduk Cho | Activity', desc='Sungduk Cho — Conferences and courses', h1='Activity', sub='Sungduk Cho', lead='Conferences and courses',
-               topic='By topic', year='By year', conf='Conferences', tech='Tech', med='Medical', cert='Courses', online='Virtual',
+               home='/en/', topic='By topic', year='By year', conf='Conferences', tech='Tech', med='Medical', cert='Courses', online='Virtual',
                month=lambda m: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m-1], sw=('/activity/', 'KO'), cv=('/cv/en/', 'CV'), seg='View'),
 }
 PIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.99-5.54 10.19-7.4 11.8a1 1 0 0 1-1.2 0C9.54 20.19 4 14.99 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>'
@@ -115,7 +115,7 @@ def page(lang, head):
 <div class="cv-wrap">
 
   <nav class="nav-top">
-    <a href="/" class="back-home">← sungd.uk</a>
+    <a href="{t['home']}" class="back-home">← sungd.uk</a>
     <div class="nav-right">
       <a href="{t['sw'][0]}" class="lang-switch">{t['sw'][1]}</a>
     </div>
@@ -139,7 +139,7 @@ def page(lang, head):
 {topic}{year}
 
   <footer>
-    <a href="/" class="back-home">← sungd.uk</a>
+    <a href="{t['home']}" class="back-home">← sungd.uk</a>
     <a href="{t['cv'][0]}" class="sec-link">{t['cv'][1]}</a>
   </footer>
 
