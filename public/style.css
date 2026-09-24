@@ -841,7 +841,6 @@ footer a:hover {
 /* ── 제목, 날짜 숫자, 링크 형광펜 ── */
 .name-ko,
 .sec-title,
-.entry-title,
 .team-title,
 .skill-cat,
 .pub-group-title {
@@ -865,9 +864,20 @@ a.sec-link {
   text-decoration-skip-ink: none;
 }
 
-/* 영문 섹션 제목(Publications 99px + Scholar 아이콘)이 왼쪽 칸을 넘지 않게 */
+/* 영문: 섹션 제목을 15px 로 줄이고 Scholar 아이콘을 제목 아래로 내려 왼쪽 칸을 88px 에 맞춘다.
+   영문 글자가 한글보다 커 보여 학력, 경력 줄도 한 단계 줄인다. */
 html[lang="en"] {
-  --side-col-w: 124px;
+  --side-col-w: 88px;
+}
+html[lang="en"] .sec-title {
+  font-size: 0.9375rem;
+}
+html[lang="en"] .pub-title-wrap {
+  flex-direction: column;
+  gap: 6px;
+}
+html[lang="en"] .item-main {
+  font-size: 0.90625rem;
 }
 
 @media print {
@@ -931,7 +941,7 @@ html[lang="en"] {
     grid-template-columns: 50px 1fr !important;
   }
   html[lang="en"] .cv-sections > section {
-    grid-template-columns: 124px 1fr !important;
+    grid-template-columns: 84px 1fr !important;
     gap: 14px !important;
   }
 
