@@ -957,15 +957,15 @@ html[lang="en"] .item-main {
 .act-view[hidden] { display: none !important; }
 
 .act-grp { font-size: 0.75rem; font-weight: 600; color: var(--text-tertiary); margin: 0 0 8px; }
-.act-grid { display: grid; grid-template-columns: 40px 34px 1fr; column-gap: 10px; margin-bottom: 20px; }
+.act-view > section { align-items: baseline; }
+.act-grid { display: grid; grid-template-columns: 40px 34px 1fr; column-gap: 10px; align-items: baseline; margin-bottom: 20px; }
 .act-grid.no-year { grid-template-columns: 34px 1fr; }
-.act-y, .act-m { font-size: var(--size-date); color: var(--text-tertiary); line-height: 1.55; padding-top: 2px; }
+.act-y, .act-m { font-size: var(--size-date); color: var(--text-tertiary); line-height: 1.55; }
 .act-y { font-family: var(--font-date); }
 .act-m { font-family: var(--font-sans); }
 .act-i { padding-bottom: 3px; }
 .act-newmonth { padding-top: 2px; }
 .act-newyear { padding-top: 10px; }
-.act-y.act-newyear, .act-m.act-newyear { padding-top: 12px; }
 
 .act-name { font-size: var(--size-desc); color: var(--text-primary); line-height: 1.55; }
 .act-name a { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -977,4 +977,4 @@ html[lang="en"] .item-main {
 /* 연도별 보기: 주제 칸 | 월 | 항목 — 주제별 보기(연도, 월, 항목)와 같은 틀 */
 .act-grid.by-topic { grid-template-columns: 40px 34px 1fr; }
 html[lang="en"] .act-grid.by-topic { grid-template-columns: 58px 34px 1fr; }
-.act-t { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); line-height: 1.55; padding-top: 3px; }
+.act-t { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); line-height: 1.55; }
