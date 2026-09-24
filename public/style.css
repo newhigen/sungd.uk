@@ -956,10 +956,9 @@ html[lang="en"] .item-main {
 .act-toggle button[aria-pressed="true"] { background: var(--hover-bg); color: var(--text-primary); }
 .act-view[hidden] { display: none !important; }
 
-.act-grp { font-size: 0.75rem; font-weight: 600; color: var(--text-tertiary); margin: 0 0 8px; }
+.act-grp { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin: 0 0 8px; }
 .act-view > section { align-items: baseline; }
 .act-grid { display: grid; grid-template-columns: 40px 34px 1fr; column-gap: 10px; align-items: baseline; margin-bottom: 20px; }
-.act-grid.no-year { grid-template-columns: 34px 1fr; }
 .act-y, .act-m { font-size: var(--size-date); color: var(--text-tertiary); line-height: 1.55; }
 .act-y { font-family: var(--font-date); }
 .act-m { font-family: var(--font-sans); }
@@ -975,6 +974,11 @@ html[lang="en"] .item-main {
 .act-online { margin-left: 3px; white-space: nowrap; font-size: 0.625rem; color: var(--text-tertiary); line-height: 0; }
 .act-year-title { font-family: var(--font-date); font-size: var(--size-sec); font-weight: 500; color: var(--text-primary); }
 /* 연도별 보기: 주제 칸 | 월 | 항목 — 주제별 보기(연도, 월, 항목)와 같은 틀 */
-.act-grid.by-topic { grid-template-columns: 40px 34px 1fr; }
-html[lang="en"] .act-grid.by-topic { grid-template-columns: 58px 34px 1fr; }
-.act-t { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); line-height: 1.55; }
+.act-grid.by-topic { grid-template-columns: 52px 34px 1fr; }
+html[lang="en"] .act-grid.by-topic { grid-template-columns: 72px 34px 1fr; }
+.act-t { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); line-height: 1.55; white-space: nowrap; }
+/* 주제 아이콘과 발행처 로고. 연도별 보기에선 과정 이름 뒤에 작은 로고로 발행처를 보인다 */
+.act-ic { width: 12px; height: 12px; margin-right: 4px; vertical-align: -1.5px; }
+.act-logo { width: 12px; height: 12px; margin-right: 5px; vertical-align: -1.5px; }
+.act-issuer { margin-left: 7px; color: var(--text-tertiary); }
+.act-issuer .act-logo { width: 11px; height: 11px; margin: 0; }
