@@ -960,9 +960,14 @@ html[lang="en"] .item-main {
 }
 
 /* ── 활동 페이지 (/activity) ── */
-.act-toggle { display: inline-flex; gap: 2px; padding: 2px; margin: -8px 0 30px; border: 1px solid var(--line); border-radius: 7px; }
-.act-toggle button { appearance: none; border: 0; background: transparent; font: inherit; font-size: 0.78125rem; font-weight: 600; color: var(--text-tertiary); padding: 4px 10px; border-radius: 5px; cursor: pointer; }
-.act-toggle button[aria-pressed="true"] { background: var(--hover-bg); color: var(--text-primary); }
+/* 보기 전환: 머리 오른쪽 끝, 회색 트랙 위에 고른 쪽만 흰 알약 */
+.profile-header.act-head { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+.act-head .name-row { flex-wrap: wrap; row-gap: 0; }
+.act-head .name-en { white-space: nowrap; }
+.act-toggle { display: inline-flex; flex-shrink: 0; gap: 2px; padding: 3px; background: var(--hover-bg); border-radius: 8px; }
+.act-toggle button { appearance: none; border: 0; background: transparent; font: inherit; font-size: 0.78125rem; font-weight: 600; color: var(--text-tertiary); padding: 4px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+.act-toggle button[aria-pressed="true"] { background: var(--bg); color: var(--text-primary); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 0 0 0.5px rgba(0, 0, 0, 0.06); }
+.act-toggle .act-ic { width: 13px; height: 13px; margin: 0; }
 .act-view[hidden] { display: none !important; }
 
 .act-grp { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin: 0 0 2px; }

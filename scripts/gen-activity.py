@@ -50,6 +50,8 @@ IC = {
     'tech': SV + '<path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>',  # code-xml
     'med': SV + '<path d="M11 2v2"/><path d="M5 2v2"/><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"/><path d="M8 15a6 6 0 0 0 12 0v-3"/><circle cx="20" cy="10" r="2"/></svg>',  # stethoscope
     'cert': SV + '<path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>',  # badge-check
+    'topic': SV + '<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>',  # layers
+    'year': SV + '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>',  # calendar
     'Anthropic': LG('M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z', 'Anthropic'),
     'MongoDB': LG('M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0111.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 003.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.045-.765-1.76-.765-2.405z', 'MongoDB'),
 }
@@ -119,7 +121,7 @@ def page(lang, head):
     </div>
   </nav>
 
-  <header class="profile-header">
+  <header class="profile-header act-head">
     <div class="profile-left">
       <div class="meta">
         <div class="name-row">
@@ -129,12 +131,11 @@ def page(lang, head):
         <div class="role-line"><span>{t['lead']}</span></div>
       </div>
     </div>
+    <div class="act-toggle" role="group" aria-label="{t['seg']}">
+      <button type="button" data-v="topic" aria-pressed="true">{IC['topic']}{t['topic']}</button>
+      <button type="button" data-v="year" aria-pressed="false">{IC['year']}{t['year']}</button>
+    </div>
   </header>
-
-  <div class="act-toggle" role="group" aria-label="{t['seg']}">
-    <button type="button" data-v="topic" aria-pressed="true">{t['topic']}</button>
-    <button type="button" data-v="year" aria-pressed="false">{t['year']}</button>
-  </div>
 {topic}{year}
 
   <footer>
