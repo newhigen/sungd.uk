@@ -961,7 +961,9 @@ html[lang="en"] .item-main {
 .act-toggle button[aria-pressed="true"] { background: var(--hover-bg); color: var(--text-primary); }
 .act-view[hidden] { display: none !important; }
 
-.act-grp { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin: 0 0 8px; }
+.act-grp { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin: 0 0 2px; }
+/* 폰: 섹션 제목(학회)과 소제목(테크) 사이를 벌려 소제목이 아래 목록에 붙어 보이게 */
+@media (max-width: 700px) { .act-view > section { row-gap: 16px; } }
 .act-view > section { align-items: baseline; }
 .act-grid { display: grid; grid-template-columns: 40px 34px 1fr; column-gap: 10px; align-items: baseline; margin-bottom: 20px; }
 .act-y, .act-m { font-size: var(--size-date); color: var(--text-tertiary); line-height: 1.55; }
