@@ -338,6 +338,49 @@ a {
   font-weight: 400;
 }
 
+/* 직함 칸 폭을 고정해 회사가 한 세로줄에 선다. 스킬 칸과 같은 폭(가장 긴 직함 「컴퓨터과학 석사」에 맞춤) */
+.item-row:has(.is-grid) {
+  display: grid;
+  grid-template-columns: 100px 1fr auto;
+  gap: 0 12px;
+  align-items: baseline;
+}
+.item-main.is-grid {
+  display: contents;
+  word-break: keep-all;
+}
+.org-more {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0 2px;
+  margin-left: 3px;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  vertical-align: -1px;
+}
+.org-more svg {
+  width: 13px;
+  height: 13px;
+  display: block;
+  transition: transform 0.15s;
+}
+.org-more[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+.org-more:hover {
+  color: var(--text-primary);
+}
+.item-main .org-desc {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-top: 2px;
+  font-size: 0.78125rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--text-tertiary);
+}
+
 .item-date {
   font-size: var(--size-date);
   color: var(--text-tertiary);
@@ -464,13 +507,14 @@ a {
 
 .skill-row {
   display: grid;
-  grid-template-columns: 130px 1fr;
+  grid-template-columns: 100px 1fr;
   gap: 12px;
   align-items: baseline;
   font-size: 0.84375rem;
 }
 
 .skill-cat {
+  white-space: nowrap;
   color: var(--text-tertiary);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -821,8 +865,17 @@ footer a:hover {
   .skills-wrap {
     gap: 8px;
   }
+  .item-row:has(.is-grid) {
+    grid-template-columns: 86px 1fr auto;
+    gap: 0 10px;
+  }
+  /* 폰에선 경력만 「ML Engineer」 폭에 맞춰 회사를 당긴다 */
+  #experience .item-row:has(.is-grid) {
+    grid-template-columns: 80px 1fr auto;
+    gap: 0 8px;
+  }
   .skill-row {
-    grid-template-columns: 106px 1fr;
+    grid-template-columns: 86px 1fr;
     gap: 10px;
     font-size: 0.8125rem;
   }
