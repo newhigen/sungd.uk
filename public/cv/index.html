@@ -84,7 +84,7 @@
           <!-- 뷰노 -->
           <div>
             <div class="item-row">
-              <span class="item-main">ML Engineer, <span class="org">뷰노 (VUNO)</span></span>
+              <span class="item-main is-grid"><span>ML Engineer</span><span class="org">뷰노<button type="button" class="org-more" aria-expanded="false" aria-label="회사 소개"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></span><span class="org-desc" hidden>의료 영상과 생체신호 AI 의료기기를 만드는 기업, 코스닥 상장</span></span>
               <span class="item-date">2022. 3 – 현재 (4년 7개월)</span>
             </div>
 
@@ -136,7 +136,7 @@
           <!-- 고려대학교 연구실 -->
           <div>
             <div class="item-row">
-              <span class="item-main">Research Assistant, <span class="org">고려대학교 고성능비주얼컴퓨팅 연구실</span></span>
+              <span class="item-main is-grid"><span>Researcher</span><span class="org">HVCL 연구실 <span class="nowrap">@ 고려대<button type="button" class="org-more" aria-expanded="false" aria-label="회사 소개"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button></span></span><span class="org-desc" hidden>고성능비주얼컴퓨팅 연구실, 의료 영상 딥러닝과 시각화 연구</span></span>
               <span class="item-date">2019. 6 – 2022. 2</span>
             </div>
             <div class="team-group">
@@ -194,11 +194,11 @@
       <div class="sec-content">
         <div class="item-list compact">
           <div class="item-row">
-            <span class="item-main">컴퓨터과학 석사, <span class="org">고려대학교</span></span>
+            <span class="item-main is-grid"><span>컴퓨터과학 석사</span><span class="org">고려대학교</span></span>
             <span class="item-date">2020 – 2022</span>
           </div>
           <div class="item-row">
-            <span class="item-main">컴퓨터공학 학사, <span class="org">울산과학기술원</span></span>
+            <span class="item-main is-grid"><span>컴퓨터공학 학사</span><span class="org">울산과학기술원</span></span>
             <span class="item-date">2015 – 2020</span>
           </div>
         </div>
@@ -381,5 +381,15 @@
 
 </div>
 
+<script>
+  // 회사 소개 꺾쇠: 누르면 회사 줄 밑에 소개 한 줄을 펼친다
+  document.querySelectorAll('.org-more').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', open);
+      btn.closest('.item-main').querySelector('.org-desc').hidden = !open;
+    });
+  });
+</script>
 </body>
 </html>
