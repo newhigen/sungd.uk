@@ -405,7 +405,7 @@ a {
 
 /* ── 요약문 (Summary) ── */
 .summary-box {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: var(--size-desc);
   color: var(--text-secondary);
   line-height: 1.7;
