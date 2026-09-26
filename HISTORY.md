@@ -2,6 +2,18 @@
 
 sungd.uk 변천사. 최신이 맨 위.
 
+## 2026-09-26 — 영문판 맞추기, cv PDF 받기, 링크 미리보기
+
+- **무엇**
+  - 영문 cv 경력과 학력 머리를 한국어판처럼 직함 | 회사 | 날짜 칸으로 바꾸고 회사 소개 꺾쇠를 달았다(Researcher | HVCL @ Korea Univ., M.E. in CS | Korea University). 영문 스킬 이름이 길어 PC 칸은 112px.
+  - 영문 홈 첫 문단을 한국어 L2 에 맞췄다(research to product, TIGER 1st place, interactive segmentation).
+  - cv 오른쪽 위에 PDF 받기 버튼. PDF 는 `pnpm cv-pdf` 로 로컬에서 만들어 커밋한다.
+  - 홈과 cv 에 og 태그를 달아 링크를 붙이면 「조성덕 — 이력서」 같은 제목과 아바타 썸네일이 뜬다.
+- **왜**: 이직 준비로 이력서 링크와 파일을 보낼 일이 많아졌다.
+- **결정**
+  - 링크 미리보기용 큰 카드 이미지를 여러 모양으로 그려 봤지만 모두 버렸다. 이미 있는 아바타를 썸네일로 쓰는 쪽을 골랐다.
+  - 배포(GitHub Actions)에는 브라우저가 없어 PDF 를 빌드 때 만들지 않는다. cv 를 고치면 `pnpm cv-pdf` 를 다시 돌려야 한다.
+
 ## 2026-09-26 — 홈 인용을 원문으로, 바닥 줄 맞추기
 
 - **무엇**: 홈 인용(Steve Jobs)을 두 판 모두 영어 원문 italic 으로 가운데에 두고, 출처 줄을 「Steve Jobs, Stanford Commencement, 2005」로 바꿔 Stanford Report 원고에 링크했다. 바닥 언어 링크를 sungd.uk 와 같은 크기와 굵기로 맞추고, 영문판 「한국어」를 「KO」로 바꿨다.

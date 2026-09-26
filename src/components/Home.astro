@@ -11,6 +11,13 @@ const en = lang === 'en';
   <meta name="google-site-verification" content="VLi2Q2MCHzrYvm80ry_lSLF1AueEC0iJDzkSxVWIqY8" />
   <meta name="description" content={en ? "Sungduk Cho — ML Engineer. I work by building the tools I use." : "조성덕 — ML Engineer. 직접 쓸 도구를 만들면서 일합니다."} />
   <title>sungd.uk</title>
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="sungd.uk" />
+  <meta property="og:title" content={en ? "Sungduk Cho — ML Engineer" : "조성덕 — ML Engineer"} />
+  <meta property="og:description" content={en ? "I work by building the tools I use." : "직접 쓸 도구를 만들면서 일합니다."} />
+  <meta property="og:url" content={en ? "https://sungd.uk/en/" : "https://sungd.uk/"} />
+  <meta property="og:image" content="https://sungd.uk/avatar.jpg" />
+  <meta name="twitter:card" content="summary" />
   <link rel="icon" type="image/png" href="/favicon-dark.png?v=4" media="(prefers-color-scheme: dark)" />
   <link rel="icon" type="image/png" href="/favicon-light.png?v=4" media="(prefers-color-scheme: light)" />
   <link rel="icon" type="image/png" href="/favicon.png?v=4" />
@@ -445,7 +452,7 @@ const en = lang === 'en';
 {en ? <>
         <p class="bio-p">
           <strong class="lead-bold">I research medical imaging AI and turn it into products. </strong>
-          Over <span class="num">4</span> years at VUNO, I built finding-detection models for chest <span class="nowrap">X-ray</span> and lung CT, along with the DB-based pipelines and automated evaluation that many studies now reuse.
+          Over <span class="num">4</span> years at VUNO, I took chest <span class="nowrap">X-ray</span> and lung CT finding models from research all the way to product, and in my first year I won 1st place in the TIGER international challenge with the digital pathology team. In graduate school, I researched interactive segmentation that cuts physicians' labeling cost.
           What excites me most is not pushing a few metrics higher, but laying the engineering groundwork that gets models deployed and optimized in real products and lets the team experiment reliably without redoing work.
           I want to be a colleague who makes meaningful work enjoyable.
           My full background is in <a href="/cv/en/" class="bio-inline-site" title="Full CV & publications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg><span>cv</span></a>.

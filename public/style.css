@@ -512,6 +512,9 @@ a {
   align-items: baseline;
   font-size: 0.84375rem;
 }
+/* 영문 스킬 이름(AI Tools & Agents)이 100px 을 넘어 영문판은 칸을 넓힌다 */
+html[lang="en"] .item-row:has(.is-grid) { grid-template-columns: 112px 1fr auto; }
+html[lang="en"] .skill-row { grid-template-columns: 112px 1fr; }
 
 .skill-cat {
   white-space: nowrap;
@@ -879,6 +882,9 @@ footer a:hover {
     gap: 10px;
     font-size: 0.8125rem;
   }
+  html[lang="en"] .item-row:has(.is-grid) { grid-template-columns: 86px 1fr auto; }
+  html[lang="en"] #experience .item-row:has(.is-grid) { grid-template-columns: 80px 1fr auto; }
+  html[lang="en"] .skill-row { grid-template-columns: 86px 1fr; }
   .skill-cat {
     font-size: 0.78125rem;
     letter-spacing: -0.01em;
@@ -963,6 +969,7 @@ html[lang="en"] .item-main {
 
   /* 웹 전용 내비게이션, 푸터, 버튼 숨김 */
   .nav-top,
+  .org-more,
   footer,
   .scholar-inline-btn,
   .preview-controller,
