@@ -338,6 +338,12 @@ a {
   font-weight: 400;
 }
 
+/* 학력은 경력보다 한 단계 작게, 학위도 굵게 하지 않는다 (화면, 폰, PDF 모두) */
+#education .item-main {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
 /* 직함 칸 폭을 고정해 회사가 한 세로줄에 선다. 스킬 칸과 같은 폭(가장 긴 직함 「컴퓨터과학 석사」에 맞춤) */
 .item-row:has(.is-grid) {
   display: grid;
@@ -813,12 +819,6 @@ footer a:hover {
   .cv-sections > section {
     grid-template-columns: 1fr;
     gap: 10px;
-  }
-
-  /* 학력은 경력보다 한 단계 작게, 학위도 굵게 하지 않는다 */
-  #education .item-main {
-    font-size: 0.875rem;
-    font-weight: 400;
   }
 
   .sec-head {
