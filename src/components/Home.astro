@@ -19,7 +19,7 @@ const en = lang === 'en';
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link rel="preload" href="/fonts/MaruBuri-Regular.subset.woff2" as="font" type="font/woff2" crossorigin />
 
   <!-- Google Analytics -->
@@ -276,9 +276,11 @@ const en = lang === 'en';
     /* Epilogue (순수 여백형) */
     .epilogue-wrap {
       margin-top: 64px;
+      text-align: center;
     }
     .epilogue-wrap .quote-text {
-      font-family: var(--font-serif);
+      font-family: "Plus Jakarta Sans", var(--font-serif);
+      font-style: italic;
       font-size: 0.90625rem;
       color: var(--text-secondary);
       line-height: 1.8;
@@ -291,8 +293,10 @@ const en = lang === 'en';
       font-family: var(--font-sans);
       font-size: 0.6875rem;
       color: var(--text-tertiary);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      text-decoration: none;
+    }
+    .epilogue-wrap .quote-author:hover {
+      color: var(--text-primary);
     }
 
     /* Footer (가로선 제거, 순수 여백 피날레) */
@@ -336,7 +340,7 @@ const en = lang === 'en';
     }
     .footer-right {
       display: flex;
-      align-items: center;
+      align-items: baseline;
       gap: 14px;
     }
     .in-ko {
@@ -344,8 +348,8 @@ const en = lang === 'en';
       color: var(--text-tertiary);
     }
     .lang-link {
-      font-size: 0.75rem;
-      font-weight: 600;
+      font-size: 0.8125rem;
+      font-weight: 500;
       color: var(--text-tertiary);
       font-family: var(--font-sans);
       text-decoration: none;
@@ -486,12 +490,11 @@ const en = lang === 'en';
 
     <!-- Epilogue (순수 여백형) -->
     <div class="epilogue-wrap">
-      <p class="quote-text">
-        {en ? <>“You can't connect the dots looking forward;<br />
-        you can only connect them looking backwards.”</> : <>“어떤 점도 앞을 내다보며 연결할 수는 없다.<br />
-        지난 점들은 오직 뒤를 돌아볼 때만 연결된다.”</>}
+      <p class="quote-text" lang="en">
+        “You can’t connect the dots looking forward;<br />
+        you can only connect them looking backwards.”
       </p>
-      <span class="quote-author">— Steve Jobs</span>
+      <a class="quote-author" lang="en" href="https://news.stanford.edu/stories/2005/06/youve-got-find-love-jobs-says" target="_blank" rel="noopener noreferrer">— Steve Jobs, Stanford Commencement, 2005</a>
     </div>
 
     <!-- Footer -->
@@ -509,7 +512,7 @@ const en = lang === 'en';
         </a>
       </div>
       <div class="footer-right">
-        <a href={en ? "/" : "/en/"} class="lang-link" lang={en ? "ko" : "en"}>{en ? "한국어" : "EN"}</a>
+        <a href={en ? "/" : "/en/"} class="lang-link" lang={en ? "ko" : "en"}>{en ? "KO" : "EN"}</a>
         <span class="footer-domain">sungd.uk</span>
       </div>
     </footer>
