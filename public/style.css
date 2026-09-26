@@ -812,7 +812,13 @@ footer a:hover {
   /* 대섹션 1열 상단 스택 전환 & 이중 마진 제거 */
   .cv-sections > section {
     grid-template-columns: 1fr;
-    gap: 6px;
+    gap: 10px;
+  }
+
+  /* 학력은 경력보다 한 단계 작게, 학위도 굵게 하지 않는다 */
+  #education .item-main {
+    font-size: 0.875rem;
+    font-weight: 400;
   }
 
   .sec-head {
