@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "cv-pdf": "astro build && node scripts/build-cv-pdf.mjs && astro build"
   },
   "dependencies": {
@@ -23,6 +24,8 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "playwright": "^1.63.0"
+    "@astrojs/check": "^0.9.10",
+    "playwright": "^1.63.0",
+    "typescript": "^6.0.3"
   }
 }
