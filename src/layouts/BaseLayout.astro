@@ -117,7 +117,7 @@ const { title, description = '조성덕 — 소개와 만든 것들' } = Astro.p
           const wrapper = document.createElement('div');
           wrapper.className = 'mermaid-diagram flex justify-center py-4 bg-white dark:bg-slate-900 rounded-lg my-4 border border-slate-200 dark:border-slate-800';
           wrapper.innerHTML = svg;
-          diagram.parentNode.replaceChild(wrapper, diagram);
+          diagram.replaceWith(wrapper);
         }
       };
       
