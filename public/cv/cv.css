@@ -112,7 +112,7 @@ html.cvp-a4 .cvp-stage { display: block; }
   .cvp-flow .st { font-size: 13px; }
   /* 머리 링크: 아이콘만 한 줄, 이메일은 글자로 맨 끝 */
   .cvp-flow .hd { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 20px; }
-  .cvp-flow .hd .nm { width: 100%; order: -2; }
+  .cvp-flow .hd .nm { width: 100%; order: -2; text-align: center; }
   .cvp-flow .hd .who, .cvp-flow .hd .sd, .cvp-flow .hd .sd.r, .cvp-flow .hd .ln { display: contents; }
   .cvp-flow .hd .ti { width: 100%; text-align: center; color: #333; order: -1; margin-bottom: 6px; }
   .cvp-flow .hd .lk:not(.em) span { display: none; }
