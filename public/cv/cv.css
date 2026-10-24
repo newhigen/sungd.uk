@@ -56,7 +56,7 @@ html.cvp-a4 .cvp-stage { display: block; }
 .cv .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
 .cv .row > .r { white-space: nowrap; flex: none; text-align: right; font-size: 12.5px; color: #555; font-variant-numeric: tabular-nums; }
 
-.cv .hd { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 16px; }
+.cv .hd { display: grid; grid-template-columns: 1fr auto 1fr; align-items: last baseline; gap: 16px; }
 .cv .hd .nm { font-size: 28px; font-weight: 700; line-height: 1.1; text-align: center; }
 .cv .hd .sd { font-size: 12.5px; color: #333; display: flex; flex-direction: column; gap: 2px; }
 .cv .hd .sd.r { align-items: flex-end; text-align: right; }
@@ -96,6 +96,7 @@ html.cvp-a4 .cvp-stage { display: block; }
   .cv .hd .ln, .cv .hd .sd.r .ln { justify-content: center; }
   .cv .row { flex-wrap: wrap; row-gap: 0; }
   .cv .row > .r { width: 100%; text-align: left; }
+  .cv .pub .row > .r { padding-left: 34px; }
 }
 
 @media (max-width: 819px) {
