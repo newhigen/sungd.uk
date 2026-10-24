@@ -115,6 +115,7 @@ html.cvp-a4 .cvp-stage { display: block; }
   .cvp-flow .hd .lk:not(.em) span { display: none; }
   .cvp-flow .hd .lk:not(.em) svg { width: 19px; height: 19px; }
   .cvp-flow .hd .em { order: 1; }
+  .cvp-flow .hd .lk[href="https://sungd.uk"] { display: none; }   /* 이미 sungd.uk 안이라 폰에선 뺀다. 맨 위 ← sungd.uk 가 대신한다 */
   html.cvp-a4 .cvp-viewer { padding: 16px 16px 28px; }
   .cvp-bar footer { padding: 24px 0 40px; }
 }
