@@ -16,10 +16,10 @@ const en = lang === 'en';
   <meta property="og:title" content={en ? "Sungduk Cho — ML Engineer" : "조성덕 — ML Engineer"} />
   <meta property="og:description" content={en ? "I work by building the tools I use." : "직접 쓸 도구를 만들면서 일합니다."} />
   <meta property="og:url" content={en ? "https://sungd.uk/en/" : "https://sungd.uk/"} />
-  <link rel="icon" type="image/png" href="/favicon-dark.png?v=4" media="(prefers-color-scheme: dark)" />
-  <link rel="icon" type="image/png" href="/favicon-light.png?v=4" media="(prefers-color-scheme: light)" />
-  <link rel="icon" type="image/png" href="/favicon.png?v=4" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=4" />
+  <link rel="icon" type="image/png" href="/favicon-dark.png?v=5" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" type="image/png" href="/favicon-light.png?v=5" media="(prefers-color-scheme: light)" />
+  <link rel="icon" type="image/png" href="/favicon.png?v=5" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=5" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -169,11 +169,6 @@ const en = lang === 'en';
       border: 1px solid var(--line);
       background: var(--card-bg, #ffffff);
       flex-shrink: 0;
-    }
-    @media (prefers-color-scheme: dark) {
-      .avatar {
-        filter: invert(1) brightness(0.9);
-      }
     }
     .meta {
       display: flex;
@@ -406,7 +401,7 @@ const en = lang === 'en';
     <!-- Profile Header -->
     <header class="profile-header">
       <div class="profile-left">
-        <img class="avatar" src="/avatar.jpg?v=3" alt={en ? "Sungduk Cho" : "조성덕"} />
+        <img class="avatar" src="/avatar.jpg?v=4" alt={en ? "Sungduk Cho" : "조성덕"} />
         <div class="meta">
           <div class="name-row">
             <h1 class="name-ko">{en ? 'Sungduk Cho' : '조성덕'}</h1>
