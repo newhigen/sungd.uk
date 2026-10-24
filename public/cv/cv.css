@@ -26,7 +26,6 @@ body.cvp { background: #fff; word-break: keep-all; }
 .cvp-bar { max-width: 794px; margin: 0 auto; padding: 28px 24px 0; }
 .cvp-bar .nav-top { margin-bottom: 20px; }
 .cvp-bar footer { margin: 0; padding: 28px 0 48px; }
-.cvp-view[hidden] { display: none; }
 
 /* ── 보기: A4 종이(회색 바탕 위 쪽마다 한 장) ── */
 .cvp-viewer { padding: 0 24px 8px; }
