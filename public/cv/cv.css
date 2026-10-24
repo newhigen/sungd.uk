@@ -1,0 +1,117 @@
+/* sungd.uk/cv — 업계 관례 형식(The Pragmatic Engineer's Resume Template 결)
+   한 단, 섹션 제목 아래 선, 날짜 오른쪽. 글꼴은 마루 부리 하나.
+   데스크톱은 A4 종이 보기(cv.js 가 쪽을 나눈다), 폰은 웹 보기가 기본이다. */
+
+@font-face { font-family: "MaruBuri Web"; src: url("https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "MaruBuri Web"; src: url("https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "MaruBuri Web"; src: url("https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+/* 이력서는 종이처럼 늘 밝게 둔다 */
+:root { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #ffffff;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4f4f4f;
+    --text-tertiary: #9a9a9a;
+    --line: rgba(0, 0, 0, 0.08);
+    --hover-bg: rgba(0, 0, 0, 0.035);
+    --accent: #1a1a1a;
+  }
+}
+
+body.cvp { background: #fff; word-break: keep-all; }
+
+/* ── 사이트 머리와 바닥 ── */
+.cvp-bar { max-width: 794px; margin: 0 auto; padding: 28px 24px 0; }
+.cvp-bar .nav-top { margin-bottom: 20px; }
+.cvp-bar footer { margin: 0; padding: 28px 0 48px; }
+.cvp-view[hidden] { display: none; }
+
+/* ── 보기: A4 종이(회색 바탕 위 쪽마다 한 장) ── */
+.cvp-viewer { padding: 0 24px 8px; }
+.cvp-flow { max-width: 746px; margin: 0 auto; }
+.cvp-stage { display: none; margin: 0 auto; }
+html.cvp-a4 .cvp-viewer { background: #D5D8DD; padding: 28px 24px 40px; }
+html.cvp-a4 .cvp-flow { display: none; }
+html.cvp-a4 .cvp-stage { display: block; }
+.cvp-pages { width: 794px; transform-origin: 0 0; }
+.cvp-page { width: 794px; height: 1123px; background: #fff; position: relative; overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,.18), 0 6px 18px rgba(0,0,0,.10); }
+.cvp-page + .cvp-page { margin-top: 24px; }
+.cvp-page > .cv { position: absolute; inset: 57px 68px; }   /* 위아래 15mm, 좌우 18mm */
+.cvp-pno { position: absolute; bottom: 22px; right: 68px; font: 12px var(--font-sans); color: #9AA0A8; }
+.cvp-measure { position: absolute; left: -10000px; top: 0; width: 658px; visibility: hidden; }
+
+/* ── 이력서 본문 ── */
+.cv {
+  --cv-accent: #1F5BAD;
+  font-family: "MaruBuri Web", "Noto Serif KR", serif;
+  font-size: 13.5px; line-height: 1.5; color: #1a1a1a;
+  container-type: inline-size;
+}
+.cv a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: rgba(0,0,0,.35); }
+.cv .b { margin-top: 4px; }
+.cv .b:first-child { margin-top: 0; }
+.cv .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.cv .row > .r { white-space: nowrap; flex: none; text-align: right; font-size: 12.5px; color: #555; font-variant-numeric: tabular-nums; }
+
+.cv .hd { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 16px; }
+.cv .hd .nm { font-size: 28px; font-weight: 700; line-height: 1.1; text-align: center; }
+.cv .hd .sd { font-size: 12.5px; color: #333; display: flex; flex-direction: column; gap: 2px; }
+.cv .hd .sd.r { align-items: flex-end; text-align: right; }
+.cv .hd .ln { display: flex; flex-wrap: wrap; gap: 3px 12px; }
+.cv .hd .sd.r .ln { justify-content: flex-end; }
+.cv .lk { display: inline-flex; align-items: center; gap: 5px; }
+.cv .lk svg { display: block; width: 12px; height: 12px; flex: none; color: #444; }
+
+.cv .st { font-size: 15px; font-weight: 700; color: var(--cv-accent); border-bottom: 1px solid var(--cv-accent); padding-bottom: 3px; margin-top: 18px; }
+.cv .st + .b { margin-top: 8px; }
+.cv .org { margin-top: 10px; }
+.cv .org .l b { font-weight: 700; }
+.cv .grp { margin-top: 6px; }
+.cv .gt { font-weight: 600; }
+.cv .gp { color: #555; }
+.cv ul { list-style: none; margin: 3px 0 0 15px; padding: 0; }
+.cv li { position: relative; margin-top: 2px; }
+.cv li::before { content: "•"; position: absolute; left: -11px; color: #555; }
+.cv .sk div + div { margin-top: 2px; }
+.cv .sk .k { font-weight: 600; }
+.cv .edu .l b, .cv .aw .l b, .cv .lang .l b { font-weight: 600; }
+.cv .pg { margin-top: 8px; font-size: 12px; font-weight: 600; color: #555; }
+.cv .pub .ttl { display: flex; }
+.cv .pub .code { flex: none; width: 34px; color: #555; font-variant-numeric: tabular-nums; }
+.cv .pub .au { color: #444; font-size: 12.5px; padding-left: 34px; }
+.cv .vn { color: #666; }
+.cv .me { font-weight: 700; }
+.cv .fn { margin-top: 6px; font-size: 12px; color: #555; }
+.cv sup.cite { font-size: .68em; line-height: 0; margin-left: 2px; }
+.cv sup.cite a { text-decoration: none; }
+.cv .sym { font-size: .8em; }
+
+@container (max-width: 460px) {
+  .cv .hd { grid-template-columns: 1fr; gap: 4px; text-align: center; }
+  .cv .hd .nm { order: -1; }
+  .cv .hd .sd, .cv .hd .sd.r { align-items: center; text-align: center; }
+  .cv .hd .ln, .cv .hd .sd.r .ln { justify-content: center; }
+  .cv .row { flex-wrap: wrap; row-gap: 0; }
+  .cv .row > .r { width: 100%; text-align: left; }
+}
+
+@media (max-width: 819px) {
+  .cvp-bar { padding: 20px 16px 0; }
+  .cvp-viewer { padding: 0 16px 8px; }
+  html.cvp-a4 .cvp-viewer { padding: 16px 16px 28px; }
+  .cvp-bar footer { padding: 24px 0 40px; }
+}
+
+/* ── 인쇄와 PDF: 종이 보기와 같은 여백으로, 블록이 쪽 끝에서 잘리지 않게 ── */
+@media print {
+  @page { size: A4 portrait; margin: 15mm 18mm; }
+  body.cvp { background: #fff !important; font-size: 13.5px !important; line-height: 1.5 !important; }
+  .cvp-bar, .cvp-stage, .cvp-measure { display: none !important; }
+  .cvp-viewer, html.cvp-a4 .cvp-viewer { background: #fff; padding: 0; }
+  .cvp-flow, html.cvp-a4 .cvp-flow { display: block !important; max-width: none; margin: 0; }
+  .cv .b { break-inside: avoid; }
+  .cv .st, .cv .pg, .cv .org { break-after: avoid; }
+}
