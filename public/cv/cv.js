@@ -1,19 +1,16 @@
-// cv 보기 전환: A4 종이(데스크톱 기본) ↔ 웹(폰 기본).
+// cv 보기: 820px 이상은 A4 종이, 그 아래는 웹. 폭으로만 정하고 전환 단추는 두지 않는다.
 // A4 는 본문 블록(.b)을 재서 쪽 높이(297mm − 위아래 15mm)를 넘는 블록을 통째로 다음 쪽으로 넘긴다.
 // 섹션 제목처럼 data-keep 이 붙은 블록은 다음 블록과 같은 쪽에 둔다. 인쇄와 PDF 는 cv.css 의 print 규칙이 맡는다.
 (function () {
-  var KEY = 'cvView';
   var PAGE_H = 1123 - 114; // A4 높이 − 위아래 여백
   var root = document.documentElement;
   var flow = document.getElementById('cvp-flow');
   var stage = document.getElementById('cvp-stage');
   var viewer = document.getElementById('cvp-viewer');
-  var btn = document.getElementById('cvp-view');
   var narrow = window.matchMedia('(max-width: 819px)');
-  var ko = root.lang === 'ko';
+  try { localStorage.removeItem('cvView'); } catch (e) {} // 단추가 있던 때 저장한 값
 
-  function saved() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-  function mode() { return saved() || (narrow.matches ? 'web' : 'a4'); }
+  function mode() { return narrow.matches ? 'web' : 'a4'; }
 
   function paginate() {
     var m = document.createElement('div');
@@ -86,19 +83,12 @@
   function apply() {
     var m = mode();
     root.classList.toggle('cvp-a4', m === 'a4');
-    btn.hidden = false;
-    btn.textContent = m === 'a4' ? (ko ? '웹' : 'Web') : 'A4';
-    btn.setAttribute('aria-label', m === 'a4' ? (ko ? '웹으로 보기' : 'View as web page') : (ko ? 'A4 종이로 보기' : 'View as A4 pages'));
     if (m === 'a4') build(); else stage.innerHTML = '';
   }
 
-  btn.addEventListener('click', function () {
-    try { localStorage.setItem(KEY, mode() === 'a4' ? 'web' : 'a4'); } catch (e) {}
-    apply();
-  });
   var t;
   window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fit, 60); });
-  if (narrow.addEventListener) narrow.addEventListener('change', function () { if (!saved()) apply(); });
+  if (narrow.addEventListener) narrow.addEventListener('change', apply);
   apply();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (mode() === 'a4') build(); });
 })();
