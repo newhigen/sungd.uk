@@ -89,6 +89,17 @@
   var t;
   window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fit, 60); });
   if (narrow.addEventListener) narrow.addEventListener('change', apply);
+  // 이메일은 링크 대신 눌러서 복사(쪽마다 복제되므로 문서에 한 번 건다)
+  function copy(el) {
+    var v = el.getAttribute('data-copy'), t = el.querySelector('span');
+    if (!navigator.clipboard) return;
+    navigator.clipboard.writeText(v).then(function () {
+      t.textContent = el.getAttribute('data-done');
+      setTimeout(function () { t.textContent = v; }, 1200);
+    }).catch(function () {});
+  }
+  document.addEventListener('click', function (e) { var el = e.target.closest && e.target.closest('.em'); if (el) copy(el); });
+  document.addEventListener('keydown', function (e) { var el = e.target.closest && e.target.closest('.em'); if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); copy(el); } });
   apply();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (mode() === 'a4') build(); });
 })();

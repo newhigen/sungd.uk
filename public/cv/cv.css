@@ -63,6 +63,7 @@ html.cvp-a4 .cvp-stage { display: block; }
 .cv .hd .sd.r .ln { justify-content: flex-end; }
 .cv .lk { display: inline-flex; align-items: center; gap: 5px; }
 .cv .lk svg { display: block; width: 12px; height: 12px; flex: none; color: #444; }
+.cv .em { cursor: copy; }
 
 .cv .st { font-size: 15px; font-weight: 700; color: var(--cv-accent); border-bottom: 1px solid var(--cv-accent); padding-bottom: 3px; margin-top: 18px; }
 .cv .st + .b { margin-top: 8px; }
@@ -101,6 +102,21 @@ html.cvp-a4 .cvp-stage { display: block; }
 @media (max-width: 819px) {
   .cvp-bar { padding: 20px 16px 0; }
   .cvp-viewer { padding: 0 16px 8px; }
+  /* 폰: 회색 바탕 위 흰 종이 한 장, 글자는 한 단 작게 */
+  html:not(.cvp-a4) .cvp-viewer { background: #D5D8DD; padding: 12px 10px 24px; }
+  html:not(.cvp-a4) .cvp-flow { background: #fff; padding: 22px 18px 28px; box-shadow: 0 1px 3px rgba(0,0,0,.18), 0 6px 18px rgba(0,0,0,.10); }
+  .cvp-flow.cv { font-size: 12.5px; }
+  .cvp-flow .row > .r, .cvp-flow .hd .sd, .cvp-flow .pub .au { font-size: 11.5px; }
+  .cvp-flow .hd .nm { font-size: 24px; }
+  .cvp-flow .st { font-size: 14px; }
+  /* 머리 링크: 아이콘만 한 줄, 이메일은 글자로 맨 끝 */
+  .cvp-flow .hd { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 20px; }
+  .cvp-flow .hd .nm { width: 100%; order: -2; }
+  .cvp-flow .hd .sd, .cvp-flow .hd .sd.r, .cvp-flow .hd .ln { display: contents; }
+  .cvp-flow .hd .sd > span { width: 100%; text-align: center; order: -1; margin-bottom: 6px; }
+  .cvp-flow .hd .lk:not(.em) span { display: none; }
+  .cvp-flow .hd .lk:not(.em) svg { width: 19px; height: 19px; }
+  .cvp-flow .hd .em { order: 1; }
   html.cvp-a4 .cvp-viewer { padding: 16px 16px 28px; }
   .cvp-bar footer { padding: 24px 0 40px; }
 }
