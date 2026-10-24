@@ -102,13 +102,11 @@ html.cvp-a4 .cvp-stage { display: block; }
 @media screen and (max-width: 819px) {
   .cvp-bar { padding: 20px 16px 0; }
   .cvp-viewer { padding: 0 16px 8px; }
-  /* 폰: 회색 바탕 위 흰 종이 한 장, 글자는 한 단 작게 */
-  html:not(.cvp-a4) .cvp-viewer { background: #D5D8DD; padding: 12px 10px 24px; }
-  html:not(.cvp-a4) .cvp-flow { background: #fff; padding: 22px 18px 28px; box-shadow: 0 1px 3px rgba(0,0,0,.18), 0 6px 18px rgba(0,0,0,.10); }
-  .cvp-flow.cv { font-size: 12.5px; }
-  .cvp-flow .row > .r, .cvp-flow .hd .sd, .cvp-flow .pub .au { font-size: 11.5px; }
-  .cvp-flow .hd .nm { font-size: 24px; }
-  .cvp-flow .st { font-size: 14px; }
+  /* 폰: 종이 없이 화면을 채우고, 글자는 A4 보다 작게 */
+  .cvp-flow.cv { font-size: 11.5px; }
+  .cvp-flow .row > .r, .cvp-flow .hd .sd, .cvp-flow .pub .au { font-size: 10.5px; }
+  .cvp-flow .hd .nm { font-size: 21px; }
+  .cvp-flow .st { font-size: 13px; }
   /* 머리 링크: 아이콘만 한 줄, 이메일은 글자로 맨 끝 */
   .cvp-flow .hd { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 20px; }
   .cvp-flow .hd .nm { width: 100%; order: -2; }
