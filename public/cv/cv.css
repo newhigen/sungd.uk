@@ -99,7 +99,7 @@ html.cvp-a4 .cvp-stage { display: block; }
   .cv .pub .row > .r { padding-left: 34px; }
 }
 
-@media (max-width: 819px) {
+@media screen and (max-width: 819px) {
   .cvp-bar { padding: 20px 16px 0; }
   .cvp-viewer { padding: 0 16px 8px; }
   /* 폰: 회색 바탕 위 흰 종이 한 장, 글자는 한 단 작게 */
