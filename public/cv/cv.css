@@ -75,6 +75,9 @@ html.cvp-a4 .cvp-stage { display: block; }
 .cv .grp { margin-top: 6px; padding-left: 12px; } /* 팀 줄은 회사 줄보다 한 단 들여 쓴다 */
 .cv .gt { font-weight: 600; }
 .cv .gp { color: #555; }
+.cv .grp .row > .r { font-size: 11.5px; color: #888; } /* 팀 날짜는 회사 날짜보다 작고 옅게 */
+.cv .now { font-weight: 700; color: #1a1a1a; } /* 지금 회사의 「현재」 */
+.cv .dur { font-size: .92em; color: #888; margin-right: .5em; } /* 회사 기간, 날짜 앞 */
 .cv ul { list-style: none; margin: 3px 0 0 15px; padding: 0; }
 .cv li { position: relative; margin-top: 2px; }
 .cv li::before { content: "•"; position: absolute; left: -11px; color: #555; }
@@ -108,6 +111,7 @@ html.cvp-a4 .cvp-stage { display: block; }
   /* 폰: 종이 없이 화면을 채우고, 글자는 A4 보다 작게 */
   .cvp-flow.cv { font-size: 11.5px; }
   .cvp-flow .row > .r, .cvp-flow .hd .sd, .cvp-flow .hd .ti, .cvp-flow .pub .au { font-size: 10.5px; }
+  .cvp-flow .grp .row > .r { font-size: 10px; }
   .cvp-flow .hd .nm { font-size: 21px; }
   .cvp-flow .st { font-size: 13px; }
   /* 머리 링크: 아이콘만 한 줄, 이메일은 글자로 맨 끝 */
