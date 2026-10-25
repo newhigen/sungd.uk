@@ -132,4 +132,5 @@ html.cvp-a4 .cvp-stage { display: block; }
   .cvp-flow, html.cvp-a4 .cvp-flow { display: block !important; max-width: none; margin: 0; }
   .cv .b { break-inside: avoid; }
   .cv .st, .cv .pg, .cv .org { break-after: avoid; }
+  .cv .aw:has(+ .aw) { break-after: avoid; } /* 수상은 몇 줄뿐이라 한 쪽에 모은다 */
 }
