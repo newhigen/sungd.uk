@@ -72,7 +72,7 @@ html.cvp-a4 .cvp-stage { display: block; }
 .cv .st + .b { margin-top: 8px; }
 .cv .org { margin-top: 10px; }
 .cv .org .l b { font-weight: 700; }
-.cv .grp { margin-top: 6px; }
+.cv .grp { margin-top: 6px; padding-left: 12px; } /* 팀 줄은 회사 줄보다 한 단 들여 쓴다 */
 .cv .gt { font-weight: 600; }
 .cv .gp { color: #555; }
 .cv ul { list-style: none; margin: 3px 0 0 15px; padding: 0; }
